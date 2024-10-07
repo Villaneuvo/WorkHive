@@ -10,12 +10,182 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id               Int                     @id @default(autoincrement())
+  email            String                  @unique
+  password         String
+  name             String
+  role             Role                    @default(USER)
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  verified         Boolean                 @default(false)
+  profile          Profile?
+  subscriptions    Subscription[]
+  jobApplications  JobApplication[]
+  skillAssessments SkillAssessmentResult[]
+  cvUrl            String?
+  applications     ApplyList[]
+  jobSaved         JobSaved[]
+  skillBadges      SkillBadge[]
+  Admin            Admin?
+  Developer        Developer?
+}
 
-  @@map("samples") // if you want to use snake_case format
+model Profile {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @unique
+  user          User     @relation(fields: [userId], references: [id])
+  dob           DateTime
+  gender        String
+  education     String
+  address       String
+  profilePicUrl String?
+  updatedAt     DateTime @updatedAt
+}
+
+model Admin {
+  id          Int       @id @default(autoincrement())
+  userId      Int       @unique
+  user        User      @relation(fields: [userId], references: [id])
+  companyName String
+  phoneNumber String
+  jobs        JobPost[]
+}
+
+model JobPost {
+  id                  Int              @id @default(autoincrement())
+  title               String
+  description         String
+  bannerUrl           String?
+  category            String
+  cityLocation        String
+  salary              Float?
+  applicationDeadline DateTime
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  adminId             Int
+  admin               Admin            @relation(fields: [adminId], references: [id])
+  jobApplications     JobApplication[]
+  tags                JobTag[]
+  ApplyList           ApplyList[]
+  JobSaved            JobSaved[]
+}
+
+model JobTag {
+  id        Int     @id @default(autoincrement())
+  name      String
+  jobPostId Int
+  jobPost   JobPost @relation(fields: [jobPostId], references: [id])
+}
+
+model JobApplication {
+  id             Int               @id @default(autoincrement())
+  jobId          Int
+  userId         Int
+  job            JobPost           @relation(fields: [jobId], references: [id])
+  user           User              @relation(fields: [userId], references: [id])
+  status         ApplicationStatus @default(PENDING)
+  cvUrl          String
+  expectedSalary Float
+  createdAt      DateTime          @default(now())
+}
+
+model Subscription {
+  id               Int              @id @default(autoincrement())
+  userId           Int
+  user             User             @relation(fields: [userId], references: [id])
+  subscriptionType SubscriptionType
+  startDate        DateTime         @default(now())
+  endDate          DateTime
+  isActive         Boolean          @default(true)
+  Developer        Developer?       @relation(fields: [developerId], references: [id])
+  developerId      Int?
+}
+
+model SkillAssessment {
+  id                    Int                     @id @default(autoincrement())
+  skillName             String
+  questions             Question[]
+  SkillAssessmentResult SkillAssessmentResult[]
+  Developer             Developer?              @relation(fields: [developerId], references: [id])
+  developerId           Int?
+}
+
+model Question {
+  id                Int             @id @default(autoincrement())
+  content           String
+  skillAssessmentId Int
+  skillAssessment   SkillAssessment @relation(fields: [skillAssessmentId], references: [id])
+}
+
+model SkillAssessmentResult {
+  id           Int             @id @default(autoincrement())
+  userId       Int
+  assessmentId Int
+  user         User            @relation(fields: [userId], references: [id])
+  assessment   SkillAssessment @relation(fields: [assessmentId], references: [id])
+  score        Int
+  passed       Boolean
+  createdAt    DateTime        @default(now())
+}
+
+model SkillBadge {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  badgeName String
+  createdAt DateTime @default(now())
+}
+
+model ApplyList {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  jobPostId Int
+  status    ApplyStatus
+  jobPost   JobPost     @relation(fields: [jobPostId], references: [id])
+  user      User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Developer {
+  id                  Int               @id @default(autoincrement())
+  userId              Int               @unique
+  user                User              @relation(fields: [userId], references: [id])
+  manageAssessments   SkillAssessment[]
+  manageSubscriptions Subscription[]
+}
+
+model JobSaved {
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  jobId   Int
+  user    User     @relation(fields: [userId], references: [id])
+  jobPost JobPost  @relation(fields: [jobId], references: [id])
+  savedAt DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+  DEVELOPER
+}
+
+enum SubscriptionType {
+  STANDARD
+  PROFESSIONAL
+}
+
+enum ApplicationStatus {
+  PENDING
+  INTERVIEW
+  ACCEPTED
+  REJECTED
+}
+
+enum ApplyStatus {
+  SUBMITTED
+  REVIEWING
+  ACCEPTED
+  REJECTED
 }
