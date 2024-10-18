@@ -1,10 +1,7 @@
-import App from './app';
+import app from './app';
 
-const main = () => {
-  // init db here
+const PORT = process.env.PORT || 3000;
 
-  const app = new App();
-  app.start();
-};
-
-main();
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

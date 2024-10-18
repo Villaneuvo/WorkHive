@@ -1,18 +1,9 @@
-/*
-  Warnings:
-
-  - You are about to drop the `samples` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE `samples`;
-
 -- CreateTable
 CREATE TABLE `User` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `email` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL DEFAULT 'User',
     `role` ENUM('USER', 'ADMIN', 'DEVELOPER') NOT NULL DEFAULT 'USER',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -57,6 +48,8 @@ CREATE TABLE `JobPost` (
     `bannerUrl` VARCHAR(191) NULL,
     `category` VARCHAR(191) NOT NULL,
     `cityLocation` VARCHAR(191) NOT NULL,
+    `provinceLocation` VARCHAR(191) NOT NULL,
+    `type` VARCHAR(191) NOT NULL,
     `salary` DOUBLE NULL,
     `applicationDeadline` DATETIME(3) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
