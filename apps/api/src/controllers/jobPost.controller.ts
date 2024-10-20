@@ -8,11 +8,21 @@ export async function getAllPosts(req: Request, res: Response) {
         const cityLocation = req.query.cityLocation as string || "Ambatukam";
         const offset = (page - 1) * limit;
         const title = req.query.title as string;
+        const category = req.query.category as string;
+        const provinceLocation = req.query.provinceLocation as string;
 
         const whereClause: any = {};
 
         if (title) {
             whereClause.title = title
+        }
+
+        if (category) {
+            whereClause.category = category
+        }
+
+        if (provinceLocation) {
+            whereClause.provinceLocation = provinceLocation
         }
 
         if (cityLocation) {
@@ -58,3 +68,175 @@ export async function getAllPosts(req: Request, res: Response) {
         res.status(500).json({ message: "Failed to retrive posts", error })
     }
 }
+
+export async function getAllCompanies(req: Request, res: Response) {
+    try {
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const offset = (page - 1) * limit;
+
+        // New query parameters for search and sorting
+        const searchName = req.query.companyName as string || '';
+        const searchLocation = req.query.companyLocation as string || '';
+        const sortOrder = req.query.sort === 'desc' ? 'desc' : 'asc'; // Defaults to ascending
+
+        const [companies, totalCompanies] = await Promise.all([
+            prisma.admin.findMany({
+                where: {
+                    companyName: {
+                        contains: searchName, // Search by company name
+                    },
+                    companyCityLocation: {
+                        contains: searchLocation, // Search by location
+                    },
+                },
+                select: {
+                    id: true,
+                    companyName: true,
+                    companyDescription: true,
+                    companyCityLocation: true,
+                    companyProvince: true,
+                    companyBannerImg: true,
+                    phoneNumber: true,
+                },
+                skip: offset,
+                take: limit,
+                orderBy: {
+                    companyName: sortOrder, // Sort by company name
+                },
+            }),
+            prisma.admin.count({
+                where: {
+                    companyName: {
+                        contains: searchName,
+                    },
+                    companyCityLocation: {
+                        contains: searchLocation,
+                    },
+                },
+            }),
+        ]);
+
+        res.status(200).json({
+            data: companies,
+            pagination: {
+                totalItems: totalCompanies,
+                totalPages: Math.ceil(totalCompanies / limit),
+                currentPage: page,
+                pageSize: limit,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error', error });
+    }
+}
+
+
+// Get a single job post by id
+export async function getPostById(req: Request, res: Response) {
+    try {
+        const postId = req.params.id;
+        const jobPost = await prisma.jobPost.findUnique({
+            where: {
+                id: parseInt(postId)
+            },
+            include: {
+                admin: {
+                    select: {
+                        companyName: true,
+                        phoneNumber: true,
+                    },
+                },
+                tags: true,
+            }
+        });
+
+        if (!jobPost) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        res.status(200).json(jobPost);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to retrive post", error })
+    }
+}
+
+// Get a single company by id
+export async function getCompanyById(req: Request, res: Response) {
+    try {
+        const companyId = req.params.id;
+        const company = await prisma.admin.findUnique({
+            where: {
+                id: parseInt(companyId)
+            },
+            select: {
+                id: true,
+                companyName: true,
+                companyDescription: true,
+                companyCityLocation: true,
+                companyProvince: true,
+                companyBannerImg: true,
+                phoneNumber: true,
+            }
+        });
+
+        if (!company) {
+            return res.status(404).json({ message: "Company not found" });
+        }
+
+        res.status(200).json(company);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to retrive company", error })
+    }
+}
+
+export async function getAllJobPostsByAdmin(req: Request, res: Response) {
+    try {
+        const { adminId } = req.params;
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        const offset = (page - 1) * limit;
+        const { search, category } = req.query;
+        const whereClause: any = {};
+
+        whereClause.adminId = +adminId;
+
+        if (search) {
+            whereClause.OR = [{ title: { contains: search as string } }];
+        }
+        if (category) {
+            whereClause.category = category as string;
+        }
+        const [jobPosts, totalJobPosts] = await Promise.all([
+            prisma.jobPost.findMany({
+                where: whereClause,
+                include: {
+                    admin: {
+                        select: {
+                            companyName: true,
+                            phoneNumber: true,
+                        },
+                    },
+                    tags: true,
+                },
+                skip: offset,
+                take: limit,
+            }),
+            prisma.jobPost.count({
+                where: whereClause,
+            }),
+        ]);
+        res.status(200).json({
+            data: jobPosts,
+            pagination: {
+                totalItems: totalJobPosts,
+                totalPages: Math.ceil(totalJobPosts / limit),
+                currentPage: page,
+                pageSize: limit,
+            },
+        });
+    } catch (e) {
+        res.status(500).json({ message: 'Internal server error', error: e });
+    }
+}
+

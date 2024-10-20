@@ -34,6 +34,10 @@ CREATE TABLE `Admin` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
     `companyName` VARCHAR(191) NOT NULL,
+    `companyDescription` TEXT NOT NULL,
+    `companyBannerImg` VARCHAR(191) NOT NULL,
+    `companyCityLocation` VARCHAR(191) NOT NULL,
+    `companyProvince` VARCHAR(191) NOT NULL,
     `phoneNumber` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `Admin_userId_key`(`userId`),

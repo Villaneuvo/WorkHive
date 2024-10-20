@@ -2,12 +2,12 @@
 
 import { useEffect, useReducer, useRef } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import Image from "next/image";
 import axios from "axios";
 import { ACTIONS } from "../utils/action-search";
 import { reducer, initialState } from "../utils/reducer-search";
 import { fetchProviceLocation } from "../utils/fetch-province-location";
 import { SearchJobPosition } from "@/utils/interfaces";
+import { SearchBarLocationResult, SearchBarResultPosition } from "./SearchBarResult";
 
 export default function SearchBar() {
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -96,12 +96,12 @@ export default function SearchBar() {
         dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: true });
     };
 
-    const handleSelectPosition = (position: string) => {
+    const handleSelectPosition: React.Dispatch<React.SetStateAction<string>> = (position) => {
         dispatch({ type: ACTIONS.SET_POSITION_INPUT, payload: position });
         dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: false });
     };
 
-    const handleSelectLocation = (location: string) => {
+    const handleSelectLocation: React.Dispatch<React.SetStateAction<string>> = (location) => {
         dispatch({ type: ACTIONS.SET_LOCATION_INPUT, payload: location });
         dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: false });
     };
@@ -159,15 +159,11 @@ export default function SearchBar() {
                             <li className="text-text-main px-4 py-2 text-sm leading-5">Tidak ada hasil</li>
                         ) : (
                             locationList.map((location: string) => (
-                                <li
+                                <SearchBarLocationResult
                                     key={location}
-                                    className="text-text-main cursor-pointer px-4 py-2 text-sm leading-5 hover:bg-gray-50"
-                                    onClick={() => handleSelectLocation(location)}
-                                >
-                                    <div className="ml-3 text-base">
-                                        <span>{location}</span>
-                                    </div>
-                                </li>
+                                    location={location}
+                                    handleSelectLocation={handleSelectLocation}
+                                />
                             ))
                         )}
                     </ul>
@@ -187,30 +183,11 @@ export default function SearchBar() {
                             <li className="text-text-main px-4 py-2 text-sm leading-5">Tidak ada hasil</li>
                         ) : (
                             positionList.map((position: SearchJobPosition) => (
-                                <li
+                                <SearchBarResultPosition
                                     key={position.id}
-                                    className="text-text-main cursor-pointer px-4 py-2 text-sm leading-5 hover:bg-gray-50"
-                                    onClick={() => handleSelectPosition(position.title)}
-                                >
-                                    <div className="ml-3 flex flex-row items-center gap-x-5 text-base">
-                                        <div className="h-fit w-fit overflow-hidden rounded-md border border-gray-900/25 bg-white p-5">
-                                            <Image
-                                                width={60}
-                                                height={60}
-                                                alt={position?.title}
-                                                src={position?.bannerUrl}
-                                                className="group-hover:opacity-75"
-                                            />
-                                        </div>
-                                        <div className="flex flex-col gap-y-1 text-xs">
-                                            <span className="text-sm font-semibold">{position.title}</span>
-                                            <span>{position.admin.companyName}</span>
-                                            <span>
-                                                {position.cityLocation}, {position.provinceLocation}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </li>
+                                    position={position}
+                                    handleSelectPosition={handleSelectPosition}
+                                />
                             ))
                         )}
                     </ul>
