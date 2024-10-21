@@ -1,8 +1,9 @@
+import { adminRegister, userRegister } from '@/controllers/auth.controller';
 import express from 'express';
-import { register } from 'tsconfig-paths';
 
 const router = express.Router();
 
-router.post('/register', register);
+router.post('/register', userRegister);
+router.post('/admin/register', adminRegister);
 
 export default router;
