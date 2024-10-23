@@ -14,7 +14,12 @@ const nextConfig = {
                 protocol: "http",
                 hostname: "res.cloudinary.com",
             },
+            {
+                protocol: "https",
+                hostname: "skillicons.dev",
+            },
         ],
+        dangerouslyAllowSVG: true,
     },
 };
 

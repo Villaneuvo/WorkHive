@@ -21,14 +21,14 @@ const leftNavigation = {
             alt: "a magnifier icon",
             name: "Cari Lowongan",
             desc: "Temukan lowongan impian dari berbagai industri",
-            href: "#",
+            href: "/jobs",
         },
         {
             image: BuildingOfficeIcon,
             alt: "an office building icon",
             name: "Cari Perusahaan",
             desc: "Temukan lowongan dari perusahaan impianmu",
-            href: "#",
+            href: "/company",
         },
     ],
     webFeature: [
@@ -49,7 +49,7 @@ export default function Header() {
         <header className={`${!isOpen ? "shadow-[rgba(0,0,15,0.15)_0px_2px_4px_0px]" : "none"} py-2`}>
             <nav className="max-w-8xl mx-auto flex justify-between px-6 py-6 text-sm text-gray-700 lg:px-8">
                 <div className="flex items-center">
-                    <Link href={"#"}>
+                    <Link href="/">
                         <Image src="/logo.svg" alt="logo" width={200} height={200} className="w-20 sm:w-52" />
                     </Link>
                     <PopoverGroup className="hidden lg:flex lg:gap-x-8">
@@ -60,25 +60,24 @@ export default function Header() {
                             </PopoverButton>
 
                             <PopoverPanel
-                                className="absolute -left-8 top-full z-10 mt-12 w-screen max-w-sm overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                                className="absolute -left-8 top-full z-10 mt-5 w-screen max-w-sm overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
                                 transition
                             >
                                 <div className="p-4">
                                     {leftNavigation.jobseeker.map((item) => (
-                                        <div
+                                        <Link
+                                            href={item.href}
                                             key={item.name}
-                                            className="group relative flex items-center gap-x-4 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                                            className="relative flex items-center gap-x-4 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
                                         >
                                             <div>
                                                 <item.image className="text-reseda-green h-5 w-5" />
                                             </div>
                                             <div className="flex flex-col gap-y-2">
-                                                <Link href={item.href} className="block font-semibold text-gray-900">
-                                                    {item.name}
-                                                </Link>
+                                                <span className="block font-semibold text-gray-900">{item.name}</span>
                                                 <span className="text-xs">{item.desc}</span>
                                             </div>
-                                        </div>
+                                        </Link>
                                     ))}
                                 </div>
                             </PopoverPanel>

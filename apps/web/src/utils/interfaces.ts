@@ -36,6 +36,24 @@ export interface SearchJobPosition {
     provinceLocation: string;
 }
 
+export interface SkillAssessment {
+    id: number;
+    skillName: string;
+    description?: string;
+    questions: Question[];
+}
+
+export interface Question {
+    id: number;
+    questionText: string;
+    choices: Choice[]
+}
+
+export interface Choice {
+    id: number;
+    text: string;
+    questionId: number;
+}
 export interface Params {
     page: number;
     limit: number;

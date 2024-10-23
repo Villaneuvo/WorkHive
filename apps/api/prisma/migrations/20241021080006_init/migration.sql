@@ -102,6 +102,7 @@ CREATE TABLE `Subscription` (
 CREATE TABLE `SkillAssessment` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `skillName` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
     `developerId` INTEGER NULL,
 
     PRIMARY KEY (`id`)
@@ -110,8 +111,18 @@ CREATE TABLE `SkillAssessment` (
 -- CreateTable
 CREATE TABLE `Question` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `content` VARCHAR(191) NOT NULL,
-    `skillAssessmentId` INTEGER NOT NULL,
+    `questionText` VARCHAR(191) NOT NULL,
+    `correctAnswerId` INTEGER NOT NULL,
+    `skillAssessmentId` INTEGER NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Choice` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `text` VARCHAR(191) NOT NULL,
+    `questionId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -119,11 +130,10 @@ CREATE TABLE `Question` (
 -- CreateTable
 CREATE TABLE `SkillAssessmentResult` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `userId` INTEGER NOT NULL,
-    `assessmentId` INTEGER NOT NULL,
     `score` INTEGER NOT NULL,
     `passed` BOOLEAN NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `userId` INTEGER NOT NULL,
+    `skillAssessmentId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -131,9 +141,8 @@ CREATE TABLE `SkillAssessmentResult` (
 -- CreateTable
 CREATE TABLE `SkillBadge` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `badge` VARCHAR(191) NOT NULL,
     `userId` INTEGER NOT NULL,
-    `badgeName` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -197,13 +206,16 @@ ALTER TABLE `Subscription` ADD CONSTRAINT `Subscription_developerId_fkey` FOREIG
 ALTER TABLE `SkillAssessment` ADD CONSTRAINT `SkillAssessment_developerId_fkey` FOREIGN KEY (`developerId`) REFERENCES `Developer`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Question` ADD CONSTRAINT `Question_skillAssessmentId_fkey` FOREIGN KEY (`skillAssessmentId`) REFERENCES `SkillAssessment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Question` ADD CONSTRAINT `Question_skillAssessmentId_fkey` FOREIGN KEY (`skillAssessmentId`) REFERENCES `SkillAssessment`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Choice` ADD CONSTRAINT `Choice_questionId_fkey` FOREIGN KEY (`questionId`) REFERENCES `Question`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `SkillAssessmentResult` ADD CONSTRAINT `SkillAssessmentResult_skillAssessmentId_fkey` FOREIGN KEY (`skillAssessmentId`) REFERENCES `SkillAssessment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `SkillAssessmentResult` ADD CONSTRAINT `SkillAssessmentResult_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `SkillAssessmentResult` ADD CONSTRAINT `SkillAssessmentResult_assessmentId_fkey` FOREIGN KEY (`assessmentId`) REFERENCES `SkillAssessment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `SkillBadge` ADD CONSTRAINT `SkillBadge_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

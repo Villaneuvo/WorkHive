@@ -11,24 +11,24 @@ datasource db {
 }
 
 model User {
-  id               Int                     @id @default(autoincrement())
-  email            String                  @unique
-  password         String
-  name             String                  @default("User")
-  role             Role                    @default(USER)
-  createdAt        DateTime                @default(now())
-  updatedAt        DateTime                @updatedAt
-  verified         Boolean                 @default(false)
-  profile          Profile?
-  subscriptions    Subscription[]
-  jobApplications  JobApplication[]
-  skillAssessments SkillAssessmentResult[]
-  cvUrl            String?
-  applications     ApplyList[]
-  jobSaved         JobSaved[]
-  skillBadges      SkillBadge[]
-  Admin            Admin?
-  Developer        Developer?
+  id                    Int                     @id @default(autoincrement())
+  email                 String                  @unique
+  password              String
+  name                  String                  @default("User")
+  role                  Role                    @default(USER)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  verified              Boolean                 @default(false)
+  profile               Profile?
+  subscriptions         Subscription[]
+  jobApplications       JobApplication[]
+  SkillAssessmentResult SkillAssessmentResult[]
+  cvUrl                 String?
+  applications          ApplyList[]
+  jobSaved              JobSaved[]
+  skillBadges           SkillBadge[]
+  Admin                 Admin?
+  Developer             Developer?
 }
 
 model Profile {
@@ -111,6 +111,7 @@ model Subscription {
 model SkillAssessment {
   id                    Int                     @id @default(autoincrement())
   skillName             String
+  description           String
   questions             Question[]
   SkillAssessmentResult SkillAssessmentResult[]
   Developer             Developer?              @relation(fields: [developerId], references: [id])
@@ -118,29 +119,36 @@ model SkillAssessment {
 }
 
 model Question {
-  id                Int             @id @default(autoincrement())
-  content           String
-  skillAssessmentId Int
-  skillAssessment   SkillAssessment @relation(fields: [skillAssessmentId], references: [id])
+  id                Int              @id @default(autoincrement())
+  questionText      String
+  choices           Choice[]
+  correctAnswerId   Int // Referensi ke Choice.id yang benar
+  SkillAssessment   SkillAssessment? @relation(fields: [skillAssessmentId], references: [id])
+  skillAssessmentId Int?
+}
+
+model Choice {
+  id         Int      @id @default(autoincrement())
+  text       String
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
 }
 
 model SkillAssessmentResult {
-  id           Int             @id @default(autoincrement())
-  userId       Int
-  assessmentId Int
-  user         User            @relation(fields: [userId], references: [id])
-  assessment   SkillAssessment @relation(fields: [assessmentId], references: [id])
-  score        Int
-  passed       Boolean
-  createdAt    DateTime        @default(now())
+  id                Int             @id @default(autoincrement())
+  score             Int // Nilai assessment
+  passed            Boolean // True jika score >= 75
+  userId            Int
+  SkillAssessment   SkillAssessment @relation(fields: [skillAssessmentId], references: [id])
+  skillAssessmentId Int
+  User              User            @relation(fields: [userId], references: [id])
 }
 
 model SkillBadge {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  badgeName String
-  createdAt DateTime @default(now())
+  id     Int    @id @default(autoincrement())
+  badge  String // Nama atau deskripsi badge
+  userId Int
+  User   User   @relation(fields: [userId], references: [id])
 }
 
 model ApplyList {

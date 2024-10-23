@@ -51,7 +51,7 @@ export default function SearchBar() {
         fetchData();
     }, [positionInput]);
 
-    // Debounce for PostionInput Handling
+    // Debounce for PositionInput Handling
     useEffect(() => {
         const timer = setTimeout(() => {
             dispatch({ type: ACTIONS.SET_DEBOUNCE_INPUT, payload: positionInput });
@@ -60,12 +60,13 @@ export default function SearchBar() {
     }, [positionInput]);
 
     useEffect(() => {
-        if (debounceInput === "") {
-            dispatch({ type: ACTIONS.SET_POSITION_LIST, payload: [] });
+        if (debounceInput === "" && locationInput === "") {
+            dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: false });
         } else {
             dispatch({ type: ACTIONS.SET_POSITION_LIST, payload: positionList });
+            dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: true });
         }
-    }, [debounceInput, positionList]);
+    }, [debounceInput, positionList, locationInput]);
 
     // Debounce for location input
     useEffect(() => {
