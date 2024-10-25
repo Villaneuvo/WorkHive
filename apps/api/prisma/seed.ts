@@ -72,19 +72,15 @@ async function main() {
     const job1 = await prisma.jobPost.create({
         data: {
             title: 'Software Engineer',
-            description:
-                'We are looking for a skilled Software Engineer to join our team.',
-            category: 'Engineering',
+            description: 'We are looking for a skilled Software Engineer to join our team.',
+            category: 'Technology',
             cityLocation: 'New York',
             salary: 80000,
             applicationDeadline: new Date('2024-12-31'),
             adminId: admin?.id || 1,
+            published: true,
             tags: {
-                create: [
-                    { name: 'JavaScript' },
-                    { name: 'React' },
-                    { name: 'Node.js' },
-                ],
+                create: [{ name: 'JavaScript' }, { name: 'React' }, { name: 'Node.js' }],
             },
         },
     });
@@ -92,19 +88,70 @@ async function main() {
     const job2 = await prisma.jobPost.create({
         data: {
             title: 'Data Scientist',
-            description:
-                'Analyze and interpret complex data to help our business grow.',
-            category: 'Data Science',
+            description: 'Analyze and interpret complex data to help our business grow.',
+            category: 'Technology',
             cityLocation: 'San Francisco',
             salary: 90000,
             applicationDeadline: new Date('2024-12-31'),
             adminId: admin?.id || 1,
             tags: {
-                create: [
-                    { name: 'Python' },
-                    { name: 'Machine Learning' },
-                    { name: 'Data Analysis' },
-                ],
+                create: [{ name: 'Python' }, { name: 'Machine Learning' }, { name: 'Data Analysis' }],
+            },
+        },
+    });
+
+    await prisma.jobPost.create({
+        data: {
+            title: 'Mining Construction Supervisor',
+            description: 'We are seeking an experienced Construction Supervisor in the mining sector.',
+            category: 'Construction',
+            cityLocation: 'Balikpapan',
+            salary: 90000000,
+            applicationDeadline: new Date('2024-11-30'),
+            adminId: admin?.id || 1,
+            tags: {
+                create: [{ name: 'Construction' }, { name: 'Mining' }, { name: 'Safety' }],
+            },
+        },
+    });
+    await prisma.jobPost.create({
+        data: {
+            title: 'Backend Developer',
+            description: 'We are looking for a Backend Developer with Node.js expertise.',
+            category: 'Technology',
+            cityLocation: 'Chicago',
+            salary: 8500000,
+            applicationDeadline: new Date('2024-10-31'),
+            adminId: admin?.id || 1,
+            tags: {
+                create: [{ name: 'Node.js' }, { name: 'Express' }, { name: 'MongoDB' }],
+            },
+        },
+    });
+    await prisma.jobPost.create({
+        data: {
+            title: 'Product Manager',
+            description: 'Join us as a Product Manager to lead our development team.',
+            category: 'Others',
+            cityLocation: 'Boston',
+            salary: 9500000,
+            applicationDeadline: new Date('2024-12-15'),
+            adminId: admin?.id || 1,
+            tags: {
+                create: [{ name: 'Leadership' }, { name: 'Strategy' }],
+            },
+        },
+    });
+    await prisma.jobPost.create({
+        data: {
+            title: 'Internship DevOps Engineer',
+            description: 'We are seeking an Freshgraduate DevOps Engineer.',
+            category: 'Technology',
+            cityLocation: 'Austin',
+            applicationDeadline: new Date('2024-12-01'),
+            adminId: admin?.id || 1,
+            tags: {
+                create: [{ name: 'AWS' }, { name: 'Docker' }, { name: 'Kubernetes' }],
             },
         },
     });
@@ -117,8 +164,7 @@ async function main() {
                 create: [
                     { content: 'What is a closure in JavaScript?' },
                     {
-                        content:
-                            'Explain the difference between var, let, and const.',
+                        content: 'Explain the difference between var, let, and const.',
                     },
                 ],
             },
