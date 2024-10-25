@@ -2,16 +2,18 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table';
 import { Input, InputGroup } from '@/components/input';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/button';
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Select } from '@/components/select';
 import axios from 'axios';
 import { formatCurrency, formatDate } from '@/utils/helpers';
 import PaginationNumber from '@/components/section/jobpost-list-table/PaginationNumber';
+import { useRouter } from 'next/navigation';
 
-export default function JobPostListTable() {
+export default function JobPostListTable({ adminId }: { adminId: string }) {
     // TODO: Tampilan sudah OK atau belum? pagination warna apa? (masih biru)
+    // TODO: Tambahkan Authorization Admin
     const [jobPosts, setJobPosts] = useState([]);
     const [currPage, setCurrPage] = useState(1);
     const [limit, setLimit] = useState(10);
@@ -19,40 +21,28 @@ export default function JobPostListTable() {
     const [totalEntries, setTotalEntries] = useState(0);
     const [category, setCategory] = useState('All');
     const [search, setSearch] = useState('');
-    const [sort, setSort] = useState('');
+    const [sort, setSort] = useState('asc');
+    const router = useRouter();
 
     useEffect(() => {
         async function fetchData() {
             const params: any = { page: currPage, limit };
             if (category !== 'All') params.category = category;
             if (search) params.search = search;
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/1`, { params });
+            if (sort) params.sort = sort;
+            const response = await axios.get(
+                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/adminId/${adminId}`,
+                {
+                    params,
+                },
+            );
             setJobPosts(response.data.data);
             setTotalPages(response.data.pagination.totalPages);
             setTotalEntries(response.data.pagination.totalItems);
         }
         fetchData();
-    }, [currPage, limit, category, search]);
+    }, [currPage, limit, category, search, sort]);
 
-    const handleSort = () => {
-        if (sort === 'asc') {
-            setJobPosts((prev) =>
-                [...prev].sort(
-                    (a: JobPost, b: JobPost) =>
-                        new Date(b.applicationDeadline).getTime() - new Date(a.applicationDeadline).getTime(),
-                ),
-            );
-            setSort('desc');
-            return;
-        }
-        setJobPosts((prev) =>
-            [...prev].sort(
-                (a: JobPost, b: JobPost) =>
-                    new Date(a.applicationDeadline).getTime() - new Date(b.applicationDeadline).getTime(),
-            ),
-        );
-        setSort('asc');
-    };
     return (
         <div className="p-5">
             <div className="flex-row items-center justify-between space-x-2 space-y-2 md:flex">
@@ -66,8 +56,12 @@ export default function JobPostListTable() {
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </InputGroup>
-                <div className="flex items-center justify-end space-x-5">
-                    <Button onClick={handleSort}>Sort By Due Date</Button>
+                <div className="flex items-center justify-end space-x-4">
+                    {/* TODO: Router push kemana? */}
+                    <Button onClick={() => router.push(`/create-job-post`)}>Create Job Post</Button>
+                    <Button onClick={() => (sort === 'asc' ? setSort('desc') : setSort('asc'))}>
+                        Sort By Due Date
+                    </Button>
                     <div className="flex items-center justify-center space-x-2">
                         <p>Category</p>
                         <Select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -103,7 +97,11 @@ export default function JobPostListTable() {
                             <TableCell>{formatDate(jobPost.applicationDeadline)}</TableCell>
                             <TableCell>{jobPost.jobApplications.length}</TableCell>
                             <TableCell>
-                                <p className="h-fit w-fit rounded bg-red-600 px-2 py-1 text-white">Not Published</p>
+                                {jobPost.published ? (
+                                    <p className="h-fit w-fit rounded bg-green-600 px-2 py-1 text-white">Published</p>
+                                ) : (
+                                    <p className="h-fit w-fit rounded bg-red-600 px-2 py-1 text-white">Not Published</p>
+                                )}
                             </TableCell>
                         </TableRow>
                     ))}

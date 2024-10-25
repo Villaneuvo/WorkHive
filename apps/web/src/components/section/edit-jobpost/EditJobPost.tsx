@@ -7,14 +7,13 @@ import { Textarea } from '@/components/textarea';
 import { Text } from '@/components/text';
 import * as Headless from '@headlessui/react';
 import { Button } from '@/components/button';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
 
-export default function CreateJobPost({ adminId }: { adminId: string }) {
-    // TODO: Tampilan sudah OK atau belum?
+export default function EditJobPost({ id, adminId }: { id: string; adminId: string }) {
     const router = useRouter();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -22,56 +21,62 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
     const [category, setCategory] = useState('Administrative');
     const [cityLocation, setCityLocation] = useState('');
     const [salary, setSalary] = useState('');
-    const [inputTags, setInputTags] = useState('');
-    const [tags, setTags] = useState<string[]>([]);
     const [deadline, setDeadline] = useState('');
-    const [tagError, setTagError] = useState('');
 
-    const handleTagKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (!inputTags) return;
-            if (tags.includes(inputTags)) return;
-            setTags([...tags, inputTags]);
-            setInputTags('');
-            setTagError('');
+    useEffect(() => {
+        async function fetchJobPost() {
+            try {
+                const params = {
+                    adminId: +adminId,
+                };
+                const response = await axios.get(
+                    `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/admin/${id}`,
+                    {
+                        params,
+                    },
+                );
+                const jobData = response.data;
+                setTitle(jobData.title);
+                setDescription(jobData.description);
+                setCategory(jobData.category);
+                setCityLocation(jobData.cityLocation);
+                setSalary(jobData.salary || '');
+                setDeadline(new Date(jobData.applicationDeadline).toISOString().split('T')[0]);
+                setBanner(jobData.bannerUrl || '');
+            } catch (error) {
+                console.error('Error fetching job post:', error);
+            }
         }
-    };
+        fetchJobPost();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (tags.length === 0) {
-            setTagError('At least one tag is required.');
-            return;
-        }
         const data = {
             title,
             description,
             category,
             cityLocation,
-            tags,
             applicationDeadline: deadline,
             adminId: +adminId,
             ...(banner !== '' && { bannerUrl: banner }),
-            ...(salary !== '' && salary !== '0' && { salary: +salary }),
+            ...(salary !== '' && { salary: +salary }),
         };
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts`, data);
-            router.push(`/`); // TODO: Redirect to where?
+            await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/admin/${id}`, data);
+            // router.push(`/jobposts/1`); TODO: Redirect to the job post detail page
         } catch (error) {
             console.error(error);
         }
     };
+
     return (
         <div className="flex min-h-screen w-full items-center justify-center">
             <div className="max-w-lg p-3">
                 <form onSubmit={handleSubmit}>
                     <Fieldset>
-                        <Legend>Submit Your Job Listing</Legend>
-                        <Text>
-                            Increase your chances of finding the perfect candidate by providing detailed information
-                            about your job opening.
-                        </Text>
+                        <Legend>Edit Job Posting</Legend>
+                        <Text>Update the details of your job posting to make it more accurate and appealing.</Text>
                         <FieldGroup className="space-y-5">
                             <Headless.Field>
                                 <Label>Job Title</Label>
@@ -85,9 +90,7 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                     onChange={(e) => setDescription(e.target.value)}
                                     required
                                 />
-                                <Description>
-                                    If you have unique requirements or details, please share them here!
-                                </Description>
+                                <Description>Add any special details or requirements for the job here.</Description>
                             </Headless.Field>
                             <Headless.Field className="flex flex-col">
                                 <Label>Banner</Label>
@@ -96,7 +99,6 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                                         onSuccess={(result, widget) => {
                                             if (result?.event === 'success') {
-                                                result?.info;
                                                 const url = (result?.info as CloudinaryUrl)?.url;
                                                 setBanner(url);
                                             }
@@ -111,7 +113,7 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                                         open();
                                                     }}
                                                 >
-                                                    Upload Banner
+                                                    Upload New Banner
                                                 </button>
                                             );
                                         }}
@@ -132,7 +134,6 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                 <Description>This field is optional.</Description>
                             </Headless.Field>
                             <Headless.Field>
-                                {/* TODO: Apakah dibuat enum seperti tidak masalah? */}
                                 <Label>Category</Label>
                                 <Select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
                                     <option value="Technology">Technology</option>
@@ -141,9 +142,7 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                     <option value="Service">Service</option>
                                     <option value="Other">Other</option>
                                 </Select>
-                                <Description>
-                                    Categories help candidates quickly understand the nature of the job.
-                                </Description>
+                                <Description>Choose the category that best fits your job.</Description>
                             </Headless.Field>
                             <Headless.Field>
                                 <Label>City</Label>
@@ -162,35 +161,7 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                     value={salary}
                                     onChange={(e) => setSalary(e.target.value)}
                                 />
-                                <Description>
-                                    If there is no salary, please leave this field empty or enter 0. This field is
-                                    optional.
-                                </Description>
-                            </Headless.Field>
-                            <Headless.Field>
-                                <Label>Tags</Label>
-                                <Description>Press enter to add tags. Click on the tag to remove it.</Description>
-                                <Input
-                                    type="text"
-                                    name="tags"
-                                    value={inputTags}
-                                    onChange={(e) => setInputTags(e.target.value)}
-                                    onKeyDown={handleTagKeyDown}
-                                    placeholder="Press enter to add tags"
-                                    invalid={tagError !== ''}
-                                />
-                                <div className="my-2 flex space-x-2">
-                                    {tags.map((tag) => (
-                                        <button
-                                            key={tag}
-                                            className="rounded-full bg-gray-200 px-2 py-1"
-                                            onClick={() => setTags(tags.filter((item) => item !== tag))}
-                                        >
-                                            {tag}
-                                        </button>
-                                    ))}
-                                </div>
-                                {tagError && <p className="text-red-500">{tagError}</p>}
+                                <Description>Enter 0 if there is no salary offered.</Description>
                             </Headless.Field>
                             <Headless.Field>
                                 <Label>Deadline</Label>
@@ -202,7 +173,12 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                     required
                                 />
                             </Headless.Field>
-                            <Button type="submit">Post Job</Button>
+                            <div className="flex flex-col space-y-2">
+                                <Button type="submit">Save Changes</Button>
+                                <Button onClick={() => window.history.back()} color="red">
+                                    Cancel
+                                </Button>
+                            </div>
                         </FieldGroup>
                     </Fieldset>
                 </form>
