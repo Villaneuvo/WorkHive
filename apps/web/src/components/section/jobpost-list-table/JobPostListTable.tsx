@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { Select } from '@/components/select';
 import axios from 'axios';
 import { formatCurrency, formatDate } from '@/utils/helpers';
-import PaginationNumber from '@/components/section/jobpost-list-table/PaginationNumber';
+import PaginationNumber from '@/components/PaginationNumber';
 import { useRouter } from 'next/navigation';
 
 export default function JobPostListTable({ adminId }: { adminId: string }) {
