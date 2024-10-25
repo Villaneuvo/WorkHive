@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const userAuthSchema = z.object({
     email: z.string().email(),
@@ -10,4 +10,8 @@ export const adminRegisterSchema = z.object({
     password: z.string().min(6),
     companyName: z.string(),
     phoneNumber: z.string(),
+});
+
+export const verifyEmailSchema = z.object({
+    token: z.string(),
 });

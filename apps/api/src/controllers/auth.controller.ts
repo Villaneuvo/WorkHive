@@ -1,10 +1,49 @@
-import { PrismaClient, Role } from '@prisma/client';
-import { ZodError } from 'zod';
-import { Request, Response } from 'express';
-import { adminRegisterSchema, userAuthSchema } from '@/schemas/auth.schema';
-import bcrypt from 'bcrypt';
+import { PrismaClient, Role } from "@prisma/client";
+import { ZodError } from "zod";
+import { Request, Response } from "express";
+import { adminRegisterSchema, userAuthSchema, verifyEmailSchema } from "@/schemas/auth.schema";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import resend from "@/resend";
+import dotenv from "dotenv";
+dotenv.config();
 
-const prisma = new PrismaClient();
+import prisma from "@/prisma";
+
+export const sendVerificationEmail = async (user: any, token: string) => {
+    const verificationUrl = `${process.env.APP_URL}/verify?token=${token}`;
+
+    try {
+        const htmlContent = `<div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+            <h1 style="color: #4CAF50;">Hello!</h1>
+            <p>Please verify your email by clicking the link below:</p>
+            <a href="${verificationUrl}" 
+               style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none;">
+                Verify Email
+            </a>
+            <p style="margin-top: 20px;">
+                If the button doesn't work, use this link: <a href="${verificationUrl}">${verificationUrl}</a>
+            </p>
+        </div>`;
+
+        const { data, error } = await resend.emails.send({
+            from: "WorkHive <noreply@workhive.my.id>",
+            to: user.email,
+            subject: "Verify your email",
+            html: htmlContent,
+        });
+
+        if (error) {
+            console.error("Error sending email:", error);
+            return { status: 500, message: "Error sending email", error };
+        }
+
+        return { status: 200, message: "Email sent successfully", data };
+    } catch (error: any) {
+        console.error("Internal server error:", error.message);
+        return { status: 500, message: "Internal server error", error: error.message };
+    }
+};
 
 export const userRegister = async (req: Request, res: Response) => {
     try {
@@ -19,7 +58,7 @@ export const userRegister = async (req: Request, res: Response) => {
 
         if (existingUser) {
             return res.status(400).json({
-                message: 'User already exists',
+                message: "User already exists",
             });
         }
 
@@ -32,8 +71,15 @@ export const userRegister = async (req: Request, res: Response) => {
             },
         });
 
+        const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET || "default_secret", {
+            expiresIn: "1h",
+        });
+
+        const verifyEmail = await sendVerificationEmail(user, token);
+        console.log(verifyEmail);
+
         res.status(201).json({
-            message: 'User registered successfully',
+            message: "User registered successfully, please check your email to verify",
             user: {
                 id: user.id,
                 email: user.email,
@@ -44,7 +90,7 @@ export const userRegister = async (req: Request, res: Response) => {
             return res.status(400).json({ errors: e.errors });
         } else {
             res.status(500).json({
-                message: 'Internal server error',
+                message: "Internal server error",
                 error: e,
             });
         }
@@ -64,7 +110,7 @@ export const adminRegister = async (req: Request, res: Response) => {
 
         if (existingUser) {
             return res.status(400).json({
-                message: 'User already exists',
+                message: "User already exists",
             });
         }
 
@@ -88,8 +134,14 @@ export const adminRegister = async (req: Request, res: Response) => {
             },
         });
 
+        const token = jwt.sign({ userId: user.id, email: user.email }, process.env.JWT_SECRET || "default_secret", {
+            expiresIn: "1h",
+        });
+
+        await sendVerificationEmail(user, token);
+
         res.status(201).json({
-            message: 'Admin registered successfully',
+            message: "Admin registered successfully, please check your email to verify",
             user: {
                 id: user.id,
                 email: user.email,
@@ -105,9 +157,39 @@ export const adminRegister = async (req: Request, res: Response) => {
             return res.status(400).json({ errors: e.errors });
         } else {
             res.status(500).json({
-                message: 'Internal server error',
+                message: "Internal server error",
                 error: e,
             });
         }
     }
-}
+};
+
+export const verifyEmail = async (req: Request, res: Response) => {
+    try {
+        const parsedData = verifyEmailSchema.parse(req.body);
+        const { token } = parsedData;
+
+        if (!token) {
+            return res.status(400).json({ message: "Invalid or missing token" });
+        }
+
+        const decoded = jwt.verify(token as string, process.env.JWT_SECRET || "default_secret");
+
+        const { userId } = decoded as { userId: number };
+
+        await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                verified: true,
+            },
+        });
+
+        res.status(200).json({
+            message: "Email successfully verified",
+        });
+    } catch (error) {
+        return res.status(400).json({ message: "Invalid or expired token" });
+    }
+};
