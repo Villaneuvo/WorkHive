@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table';
-import { Input, InputGroup } from '@/components/input';
-import { Button } from '@/components/button';
-import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
-import { useEffect, useState } from 'react';
-import { Select } from '@/components/select';
-import axios from 'axios';
-import { formatCurrency, formatDate } from '@/utils/helpers';
-import PaginationNumber from '@/components/PaginationNumber';
-import { useRouter } from 'next/navigation';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
+import { Input, InputGroup } from "@/components/Input";
+import { Button } from "@/components/Button";
+import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import { useEffect, useState } from "react";
+import { Select } from "@/components/Select";
+import axios from "axios";
+import { formatCurrency, formatDate } from "@/utils/helpers";
+import PaginationNumber from "@/components/PaginationNumber";
+import { useRouter } from "next/navigation";
 
 export default function JobPostListTable({ adminId }: { adminId: string }) {
     // TODO: Tampilan sudah OK atau belum? pagination warna apa? (masih biru)
@@ -19,15 +19,15 @@ export default function JobPostListTable({ adminId }: { adminId: string }) {
     const [limit, setLimit] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
     const [totalEntries, setTotalEntries] = useState(0);
-    const [category, setCategory] = useState('All');
-    const [search, setSearch] = useState('');
-    const [sort, setSort] = useState('asc');
+    const [category, setCategory] = useState("All");
+    const [search, setSearch] = useState("");
+    const [sort, setSort] = useState("asc");
     const router = useRouter();
 
     useEffect(() => {
         async function fetchData() {
             const params: any = { page: currPage, limit };
-            if (category !== 'All') params.category = category;
+            if (category !== "All") params.category = category;
             if (search) params.search = search;
             if (sort) params.sort = sort;
             const response = await axios.get(
@@ -59,7 +59,7 @@ export default function JobPostListTable({ adminId }: { adminId: string }) {
                 <div className="flex items-center justify-end space-x-4">
                     {/* TODO: Router push kemana? */}
                     <Button onClick={() => router.push(`/create-job-post`)}>Create Job Post</Button>
-                    <Button onClick={() => (sort === 'asc' ? setSort('desc') : setSort('asc'))}>
+                    <Button onClick={() => (sort === "asc" ? setSort("desc") : setSort("asc"))}>
                         Sort By Due Date
                     </Button>
                     <div className="flex items-center justify-center space-x-2">

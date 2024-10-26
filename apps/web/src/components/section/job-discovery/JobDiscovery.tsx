@@ -14,13 +14,12 @@ import { RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import { FormatRupiah } from "@arismun/format-rupiah";
-import { Job } from "@/utils/interfaces";
 import axios from "axios";
 
 export default function JobDiscovery() {
     const dispatch = useDispatch<ThunkDispatch<any, void, any>>();
     const { location, error, city } = useSelector((state: RootState) => state.location);
-    const [job, setJob] = useState<Job[]>([]);
+    const [job, setJob] = useState<JobPost[]>([]);
     const dateNow = new Date();
 
     useEffect(() => {

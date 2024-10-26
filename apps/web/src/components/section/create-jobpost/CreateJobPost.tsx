@@ -1,47 +1,49 @@
-'use client';
+"use client";
 
-import { Description, FieldGroup, Fieldset, Label, Legend } from '@/components/fieldset';
-import { Input } from '@/components/input';
-import { Select } from '@/components/select';
-import { Textarea } from '@/components/textarea';
-import { Text } from '@/components/text';
-import * as Headless from '@headlessui/react';
-import { Button } from '@/components/button';
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { CldUploadWidget } from 'next-cloudinary';
-import Image from 'next/image';
+import { Button } from "@/components/Button";
+import { Description, FieldGroup, Fieldset, Label, Legend } from "@/components/Fieldset";
+import { Input } from "@/components/Input";
+import { Select } from "@/components/Select";
+import { Text } from "@/components/Text";
+import { Textarea } from "@/components/TextArea";
+import * as Headless from "@headlessui/react";
+import axios from "axios";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
 export default function CreateJobPost({ adminId }: { adminId: string }) {
     // TODO: Tampilan sudah OK atau belum?
     const router = useRouter();
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [banner, setBanner] = useState('');
-    const [category, setCategory] = useState('Administrative');
-    const [cityLocation, setCityLocation] = useState('');
-    const [salary, setSalary] = useState('');
-    const [inputTags, setInputTags] = useState('');
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [banner, setBanner] = useState("");
+    const [category, setCategory] = useState("Technology");
+    const [cityLocation, setCityLocation] = useState("");
+    const [provinceLocation, setProvinceLocation] = useState("");
+    const [type, setType] = useState("Full-time");
+    const [salary, setSalary] = useState("");
+    const [inputTags, setInputTags] = useState("");
     const [tags, setTags] = useState<string[]>([]);
-    const [deadline, setDeadline] = useState('');
-    const [tagError, setTagError] = useState('');
+    const [deadline, setDeadline] = useState("");
+    const [tagError, setTagError] = useState("");
 
     const handleTagKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             e.preventDefault();
             if (!inputTags) return;
             if (tags.includes(inputTags)) return;
             setTags([...tags, inputTags]);
-            setInputTags('');
-            setTagError('');
+            setInputTags("");
+            setTagError("");
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (tags.length === 0) {
-            setTagError('At least one tag is required.');
+            setTagError("At least one tag is required.");
             return;
         }
         const data = {
@@ -49,11 +51,13 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
             description,
             category,
             cityLocation,
+            provinceLocation,
+            type,
             tags,
             applicationDeadline: deadline,
             adminId: +adminId,
-            ...(banner !== '' && { bannerUrl: banner }),
-            ...(salary !== '' && salary !== '0' && { salary: +salary }),
+            ...(banner !== "" && { bannerUrl: banner }),
+            ...(salary !== "" && salary !== "0" && { salary: +salary }),
         };
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts`, data);
@@ -95,7 +99,7 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                     <CldUploadWidget
                                         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                                         onSuccess={(result, widget) => {
-                                            if (result?.event === 'success') {
+                                            if (result?.event === "success") {
                                                 result?.info;
                                                 const url = (result?.info as CloudinaryUrl)?.url;
                                                 setBanner(url);
@@ -155,6 +159,26 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                 />
                             </Headless.Field>
                             <Headless.Field>
+                                <Label>Province</Label>
+                                <Input
+                                    name="province"
+                                    value={provinceLocation}
+                                    onChange={(e) => setProvinceLocation(e.target.value)}
+                                    required
+                                />
+                            </Headless.Field>
+                            <Headless.Field>
+                                <Label>Type</Label>
+                                <Select name="type" value={type} onChange={(e) => setType(e.target.value)}>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Volunteer">Volunteer</option>
+                                    <option value="Freelance">Freelance</option>
+                                    <option value="Contract">Contract</option>
+                                </Select>
+                            </Headless.Field>
+                            <Headless.Field>
                                 <Label>Salary</Label>
                                 <Input
                                     type="number"
@@ -177,7 +201,7 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
                                     onChange={(e) => setInputTags(e.target.value)}
                                     onKeyDown={handleTagKeyDown}
                                     placeholder="Press enter to add tags"
-                                    invalid={tagError !== ''}
+                                    invalid={tagError !== ""}
                                 />
                                 <div className="my-2 flex space-x-2">
                                     {tags.map((tag) => (

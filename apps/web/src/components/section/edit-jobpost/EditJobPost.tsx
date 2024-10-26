@@ -1,27 +1,29 @@
-'use client';
+"use client";
 
-import { Description, FieldGroup, Fieldset, Label, Legend } from '@/components/fieldset';
-import { Input } from '@/components/input';
-import { Select } from '@/components/select';
-import { Textarea } from '@/components/textarea';
-import { Text } from '@/components/text';
-import * as Headless from '@headlessui/react';
-import { Button } from '@/components/button';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { CldUploadWidget } from 'next-cloudinary';
-import Image from 'next/image';
+import { Button } from "@/components/Button";
+import { Description, FieldGroup, Fieldset, Label, Legend } from "@/components/Fieldset";
+import { Input } from "@/components/Input";
+import { Select } from "@/components/Select";
+import { Text } from "@/components/Text";
+import { Textarea } from "@/components/TextArea";
+import * as Headless from "@headlessui/react";
+import axios from "axios";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 export default function EditJobPost({ id, adminId }: { id: string; adminId: string }) {
     const router = useRouter();
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [banner, setBanner] = useState('');
-    const [category, setCategory] = useState('Administrative');
-    const [cityLocation, setCityLocation] = useState('');
-    const [salary, setSalary] = useState('');
-    const [deadline, setDeadline] = useState('');
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [banner, setBanner] = useState("");
+    const [category, setCategory] = useState("Technology");
+    const [cityLocation, setCityLocation] = useState("");
+    const [provinceLocation, setProvinceLocation] = useState("");
+    const [type, setType] = useState("Full-time");
+    const [salary, setSalary] = useState("");
+    const [deadline, setDeadline] = useState("");
 
     useEffect(() => {
         async function fetchJobPost() {
@@ -40,11 +42,13 @@ export default function EditJobPost({ id, adminId }: { id: string; adminId: stri
                 setDescription(jobData.description);
                 setCategory(jobData.category);
                 setCityLocation(jobData.cityLocation);
-                setSalary(jobData.salary || '');
-                setDeadline(new Date(jobData.applicationDeadline).toISOString().split('T')[0]);
-                setBanner(jobData.bannerUrl || '');
+                setProvinceLocation(jobData.provinceLocation);
+                setType(jobData.type);
+                setSalary(jobData.salary || "");
+                setDeadline(new Date(jobData.applicationDeadline).toISOString().split("T")[0]);
+                setBanner(jobData.bannerUrl || "");
             } catch (error) {
-                console.error('Error fetching job post:', error);
+                console.error("Error fetching job post:", error);
             }
         }
         fetchJobPost();
@@ -57,14 +61,16 @@ export default function EditJobPost({ id, adminId }: { id: string; adminId: stri
             description,
             category,
             cityLocation,
+            provinceLocation,
+            type,
             applicationDeadline: deadline,
             adminId: +adminId,
-            ...(banner !== '' && { bannerUrl: banner }),
-            ...(salary !== '' && { salary: +salary }),
+            ...(banner !== "" && { bannerUrl: banner }),
+            ...(salary !== "" && { salary: +salary }),
         };
         try {
             await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/admin/${id}`, data);
-            // router.push(`/jobposts/1`); TODO: Redirect to the job post detail page
+            router.push(`/jobposts/${id}`);
         } catch (error) {
             console.error(error);
         }
@@ -98,7 +104,7 @@ export default function EditJobPost({ id, adminId }: { id: string; adminId: stri
                                     <CldUploadWidget
                                         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                                         onSuccess={(result, widget) => {
-                                            if (result?.event === 'success') {
+                                            if (result?.event === "success") {
                                                 const url = (result?.info as CloudinaryUrl)?.url;
                                                 setBanner(url);
                                             }
@@ -152,6 +158,26 @@ export default function EditJobPost({ id, adminId }: { id: string; adminId: stri
                                     onChange={(e) => setCityLocation(e.target.value)}
                                     required
                                 />
+                            </Headless.Field>
+                            <Headless.Field>
+                                <Label>Province</Label>
+                                <Input
+                                    name="province"
+                                    value={provinceLocation}
+                                    onChange={(e) => setProvinceLocation(e.target.value)}
+                                    required
+                                />
+                            </Headless.Field>
+                            <Headless.Field>
+                                <Label>Type</Label>
+                                <Select name="type" value={type} onChange={(e) => setType(e.target.value)}>
+                                    <option value="Full-time">Full-time</option>
+                                    <option value="Part-time">Part-time</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Volunteer">Volunteer</option>
+                                    <option value="Freelance">Freelance</option>
+                                    <option value="Contract">Contract</option>
+                                </Select>
                             </Headless.Field>
                             <Headless.Field>
                                 <Label>Salary</Label>

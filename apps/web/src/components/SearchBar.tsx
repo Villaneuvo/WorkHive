@@ -7,7 +7,6 @@ import axios from "axios";
 import { ACTIONS } from "../utils/action-search";
 import { reducer, initialState } from "../utils/reducer-search";
 import { fetchProviceLocation } from "../utils/fetch-province-location";
-import { SearchJobPosition } from "@/utils/interfaces";
 
 export default function SearchBar() {
     const [state, dispatch] = useReducer(reducer, initialState);

@@ -1,13 +1,13 @@
-import { Router } from "express";
 import {
-    getAllPosts,
     createJobPost,
+    deleteJobPost,
     getAllJobPostsByAdmin,
+    getAllPosts,
     getJobPostForAdminById,
     togglePublishJobPost,
     updateJobPost,
-    deleteJobPost,
 } from "@/controllers/jobPost.controller";
+import { Router } from "express";
 
 const router = Router();
 

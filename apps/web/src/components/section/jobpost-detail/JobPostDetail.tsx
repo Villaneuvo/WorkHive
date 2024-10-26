@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { DescriptionDetails, DescriptionList, DescriptionTerm } from '@/components/description-list';
-import { Subheading } from '@/components/heading';
-import { Dialog, DialogActions, DialogDescription, DialogTitle } from '@/components/dialog';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { formatCurrency, formatDate } from '@/utils/helpers';
-import { Button } from '@/components/button';
-import ApplicantListTable from './ApplicantListTable';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { Button } from "@/components/Button";
+import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/components/DescriptionList";
+import { Dialog, DialogActions, DialogDescription, DialogTitle } from "@/components/Dialog";
+import { Subheading } from "@/components/Heading";
+import { formatCurrency, formatDate } from "@/utils/helpers";
+import axios from "axios";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import ApplicantListTable from "./ApplicantListTable";
 
 export default function JobPostDetail({ id, adminId }: { id: string; adminId: string }) {
     const [jobPost, setJobPost] = useState<Partial<JobPost>>({});
@@ -29,7 +29,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 );
                 setJobPost(response.data);
             } catch (error) {
-                console.error('Error fetching job post:', error);
+                console.error("Error fetching job post:", error);
             }
         }
         fetchJobPost();
@@ -44,10 +44,10 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/togglePublish/${id}`,
                 bodyRequest,
             );
-            console.log('response', response);
+            console.log("response", response);
             window.location.reload();
         } catch (error) {
-            console.error('Error process publish', error);
+            console.error("Error process publish", error);
         }
     };
     const handleEditJobPost = () => {
@@ -58,13 +58,12 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
             const bodyRequest = {
                 adminId: +adminId,
             };
-            const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/admin/${id}`, {
+            await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/admin/${id}`, {
                 data: bodyRequest,
             });
-            console.log('response', response);
-            router.push('/jobposts');
+            router.push("/jobposts");
         } catch (error) {
-            console.error('Error delete job post', error);
+            console.error("Error delete job post", error);
         }
     };
     return (
@@ -94,7 +93,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 <DescriptionDetails>{jobPost.title}</DescriptionDetails>
 
                 <DescriptionTerm>Published</DescriptionTerm>
-                <DescriptionDetails>{jobPost.published ? 'Published' : 'Not Published'}</DescriptionDetails>
+                <DescriptionDetails>{jobPost.published ? "Published" : "Not Published"}</DescriptionDetails>
 
                 <DescriptionTerm>Description</DescriptionTerm>
                 <DescriptionDetails>{jobPost.description}</DescriptionDetails>
@@ -113,7 +112,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                             />
                         </div>
                     ) : (
-                        'No Banner'
+                        "No Banner"
                     )}
                 </DescriptionDetails>
 
@@ -130,7 +129,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 <DescriptionDetails>{formatDate(jobPost.applicationDeadline)}</DescriptionDetails>
             </DescriptionList>
 
-            {/* <ApplicantListTable jobApplications={jobPost.jobApplications || []} /> */}
+            <ApplicantListTable jobApplications={jobPost.jobApplications || []} />
 
             <Dialog open={isOpen} onClose={setIsOpen}>
                 <DialogTitle>Delete Job Post</DialogTitle>

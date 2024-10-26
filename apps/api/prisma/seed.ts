@@ -137,9 +137,13 @@ async function main() {
         data: {
             title: "Software Engineer",
             description: "We are looking for a skilled Software Engineer to join our team.",
-            category: "Engineering",
-            cityLocation: "New York",
-            salary: 80000,
+            category: "Technology",
+            bannerUrl:
+                "https://res.cloudinary.com/dkcur9nvf/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1729155298/aws_publ0g.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
+            salary: 8000000,
             applicationDeadline: new Date("2024-12-31"),
             adminId: 2,
             published: true,
@@ -168,68 +172,12 @@ async function main() {
         },
     });
 
-    await prisma.jobPost.create({
-        data: {
-            title: "Mining Construction Supervisor",
-            description: "We are seeking an experienced Construction Supervisor in the mining sector.",
-            category: "Construction",
-            cityLocation: "Balikpapan",
-            salary: 90000000,
-            applicationDeadline: new Date("2024-11-30"),
-            adminId: admin?.id || 1,
-            tags: {
-                create: [{ name: "Construction" }, { name: "Mining" }, { name: "Safety" }],
-            },
-        },
-    });
-    await prisma.jobPost.create({
-        data: {
-            title: "Backend Developer",
-            description: "We are looking for a Backend Developer with Node.js expertise.",
-            category: "Technology",
-            cityLocation: "Chicago",
-            salary: 8500000,
-            applicationDeadline: new Date("2024-10-31"),
-            adminId: admin?.id || 1,
-            tags: {
-                create: [{ name: "Node.js" }, { name: "Express" }, { name: "MongoDB" }],
-            },
-        },
-    });
-    await prisma.jobPost.create({
-        data: {
-            title: "Product Manager",
-            description: "Join us as a Product Manager to lead our development team.",
-            category: "Others",
-            cityLocation: "Boston",
-            salary: 9500000,
-            applicationDeadline: new Date("2024-12-15"),
-            adminId: admin?.id || 1,
-            tags: {
-                create: [{ name: "Leadership" }, { name: "Strategy" }],
-            },
-        },
-    });
-    await prisma.jobPost.create({
-        data: {
-            title: "Internship DevOps Engineer",
-            description: "We are seeking an Freshgraduate DevOps Engineer.",
-            category: "Technology",
-            cityLocation: "Austin",
-            applicationDeadline: new Date("2024-12-01"),
-            adminId: admin?.id || 1,
-            tags: {
-                create: [{ name: "AWS" }, { name: "Docker" }, { name: "Kubernetes" }],
-            },
-        },
-    });
-
     // Job 3
     const job3 = await prisma.jobPost.create({
         data: {
             title: "UI/UX Designer",
             description: "We are seeking a creative UI/UX Designer to improve our product interfaces.",
-            category: "Design",
+            category: "Technology",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
             cityLocation: "Kota Semarang",
             provinceLocation: "Jawa Tengah",
@@ -248,7 +196,7 @@ async function main() {
         data: {
             title: "Network Engineer",
             description: "Join us as a Network Engineer and help maintain our network infrastructure.",
-            category: "IT",
+            category: "Technology",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
             cityLocation: "Kota Semarang",
             provinceLocation: "Jawa Tengah",
@@ -267,7 +215,7 @@ async function main() {
         data: {
             title: "Marketing Manager",
             description: "We are hiring a Marketing Manager to lead our marketing team and strategies.",
-            category: "Marketing",
+            category: "Other",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
             cityLocation: "Kota Semarang",
             provinceLocation: "Jawa Tengah",
@@ -286,7 +234,7 @@ async function main() {
         data: {
             title: "Frontend Developer",
             description: "We are seeking a talented Frontend Developer to create stunning web interfaces.",
-            category: "Engineering",
+            category: "Technology",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
             cityLocation: "Kota Semarang",
             provinceLocation: "Jawa Tengah",
@@ -305,7 +253,7 @@ async function main() {
         data: {
             title: "HR Specialist",
             description: "We are looking for an experienced HR Specialist to manage our HR processes.",
-            category: "Human Resources",
+            category: "Other",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png",
             cityLocation: "Kota Semarang",
             provinceLocation: "Jawa Tengah",
@@ -324,7 +272,7 @@ async function main() {
         data: {
             title: "Product Manager",
             description: "Join us as a Product Manager to drive product strategy and delivery.",
-            category: "Management",
+            category: "Technology",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png",
             cityLocation: "Kota Semarang",
             provinceLocation: "Jawa Tengah",
@@ -343,7 +291,7 @@ async function main() {
         data: {
             title: "Backend Developer",
             description: "We are looking for a Backend Developer to work on our server-side applications.",
-            category: "Engineering",
+            category: "Technology",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155300/ultrasakti_hbhs1i.png",
             cityLocation: "Kota Surabaya",
             provinceLocation: "Jawa Timur",
@@ -362,7 +310,7 @@ async function main() {
         data: {
             title: "Content Writer",
             description: "We are hiring a Content Writer to create engaging articles for our audience.",
-            category: "Writing",
+            category: "Service",
             bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/google_xmcbav.png",
             cityLocation: "Kota Jakarta",
             provinceLocation: "Jakarta",

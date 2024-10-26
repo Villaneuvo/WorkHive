@@ -1,20 +1,20 @@
-import prisma from '@/prisma';
-import { Request, Response } from 'express';
-import { createJobPostSchema, updateJobPostSchema } from '@/schemas/jobPost.schema';
-import { ZodError } from 'zod';
+import prisma from "@/prisma";
+import { createJobPostSchema, updateJobPostSchema } from "@/schemas/jobPost.schema";
+import { Request, Response } from "express";
+import { ZodError } from "zod";
 
 export async function getAllPosts(req: Request, res: Response) {
     try {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
-        const cityLocation = req.query.cityLocation as string || "Ambatukam";
+        const cityLocation = (req.query.cityLocation as string) || "Ambatukam";
         const offset = (page - 1) * limit;
         const title = req.query.title as string;
 
         const whereClause: any = {};
 
         if (title) {
-            whereClause.title = title
+            whereClause.title = title;
         }
 
         if (cityLocation) {
@@ -54,9 +54,8 @@ export async function getAllPosts(req: Request, res: Response) {
                 pageSize: limit,
             },
         });
-
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrive posts", error })
+        res.status(500).json({ message: "Failed to retrive posts", error });
     }
 }
 
@@ -89,7 +88,7 @@ export async function getAllJobPostsByAdmin(req: Request, res: Response) {
                 skip: offset,
                 take: limit,
                 orderBy: {
-                    applicationDeadline: sort === 'asc' ? 'asc' : 'desc',
+                    applicationDeadline: sort === "asc" ? "asc" : "desc",
                 },
             }),
             prisma.jobPost.count({
@@ -107,7 +106,7 @@ export async function getAllJobPostsByAdmin(req: Request, res: Response) {
             },
         });
     } catch (e) {
-        res.status(500).json({ message: 'Internal server error', error: e });
+        res.status(500).json({ message: "Internal server error", error: e });
     }
 }
 
@@ -115,7 +114,7 @@ export async function getJobPostForAdminById(req: Request, res: Response) {
     try {
         const { id } = req.params;
         const adminId = req.query.adminId;
-        if (!adminId) throw new Error('Admin ID is required');
+        if (!adminId) throw new Error("Admin ID is required");
 
         const jobPost = await prisma.jobPost.findUnique({
             where: {
@@ -130,10 +129,10 @@ export async function getJobPostForAdminById(req: Request, res: Response) {
             },
         });
 
-        if (jobPost?.adminId !== +adminId) throw new Error('Not Authenticate');
+        if (jobPost?.adminId !== +adminId) throw new Error("Not Authenticate");
         res.status(200).json(jobPost);
     } catch (e) {
-        res.status(500).json({ message: 'Internal server error', error: e });
+        res.status(500).json({ message: "Internal server error", error: e });
     }
 }
 
@@ -148,7 +147,9 @@ export async function createJobPost(req: Request, res: Response) {
                     description: parsedData.description,
                     category: parsedData.category,
                     cityLocation: parsedData.cityLocation,
+                    provinceLocation: parsedData.provinceLocation,
                     applicationDeadline: parsedData.applicationDeadline,
+                    type: parsedData.type,
                     adminId: parsedData.adminId,
                     ...(parsedData.bannerUrl && { bannerUrl: parsedData.bannerUrl }),
                     ...(parsedData.salary && { salary: parsedData.salary }),
@@ -172,7 +173,7 @@ export async function createJobPost(req: Request, res: Response) {
         if (e instanceof ZodError) {
             res.status(400).json({ errors: e.errors });
         } else {
-            res.status(500).json({ message: 'Internal server error', error: e });
+            res.status(500).json({ message: "Internal server error", error: e });
         }
     }
 }
@@ -188,9 +189,9 @@ export async function togglePublishJobPost(req: Request, res: Response) {
             },
         });
 
-        if (!jobPost) throw new Error('Job post not found');
+        if (!jobPost) throw new Error("Job post not found");
 
-        if (jobPost.adminId !== adminId) throw new Error('Not Authorized');
+        if (jobPost.adminId !== adminId) throw new Error("Not Authorized");
 
         const updatedJobPost = await prisma.jobPost.update({
             where: {
@@ -203,7 +204,7 @@ export async function togglePublishJobPost(req: Request, res: Response) {
 
         res.status(200).json(updatedJobPost);
     } catch (e) {
-        res.status(500).json({ message: 'Internal server error', error: e });
+        res.status(500).json({ message: "Internal server error", error: e });
     }
 }
 
@@ -218,9 +219,9 @@ export async function updateJobPost(req: Request, res: Response) {
             },
         });
 
-        if (!jobPost) throw new Error('Job post not found');
+        if (!jobPost) throw new Error("Job post not found");
 
-        if (jobPost.adminId !== parsedData.adminId) throw new Error('Not Authorized');
+        if (jobPost.adminId !== parsedData.adminId) throw new Error("Not Authorized");
 
         const updatedJobPost = await prisma.jobPost.update({
             where: {
@@ -231,6 +232,8 @@ export async function updateJobPost(req: Request, res: Response) {
                 description: parsedData.description,
                 category: parsedData.category,
                 cityLocation: parsedData.cityLocation,
+                provinceLocation: parsedData.provinceLocation,
+                type: parsedData.type,
                 applicationDeadline: parsedData.applicationDeadline,
                 salary: parsedData.salary,
                 ...(parsedData.bannerUrl && { bannerUrl: parsedData.bannerUrl }),
@@ -242,7 +245,7 @@ export async function updateJobPost(req: Request, res: Response) {
         if (e instanceof ZodError) {
             res.status(400).json({ errors: e.errors });
         } else {
-            res.status(500).json({ message: 'Internal server error', error: e });
+            res.status(500).json({ message: "Internal server error", error: e });
         }
     }
 }
@@ -258,9 +261,9 @@ export async function deleteJobPost(req: Request, res: Response) {
             },
         });
 
-        if (!jobPost) throw new Error('Job post not found');
+        if (!jobPost) throw new Error("Job post not found");
 
-        if (jobPost.adminId !== adminId) throw new Error('Not Authorized');
+        if (jobPost.adminId !== adminId) throw new Error("Not Authorized");
 
         await prisma.jobPost.delete({
             where: {
@@ -268,8 +271,8 @@ export async function deleteJobPost(req: Request, res: Response) {
             },
         });
 
-        res.status(200).json({ message: 'Job post deleted' });
+        res.status(200).json({ message: "Job post deleted" });
     } catch (e) {
-        res.status(500).json({ message: 'Internal server error', error: e });
+        res.status(500).json({ message: "Internal server error", error: e });
     }
 }
