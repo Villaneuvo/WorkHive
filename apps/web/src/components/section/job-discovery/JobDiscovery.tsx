@@ -16,10 +16,12 @@ import { ThunkDispatch } from "@reduxjs/toolkit";
 import { FormatRupiah } from "@arismun/format-rupiah";
 import { Job } from "@/utils/interfaces";
 import axios from "axios";
+import Card from "@/components/Card";
 
 export default function JobDiscovery() {
     const dispatch = useDispatch<ThunkDispatch<any, void, any>>();
     const { location, error, city } = useSelector((state: RootState) => state.location);
+    const [jobs, setJobs] = useState<Job[]>([]);
     const [job, setJob] = useState<Job[]>([]);
     const dateNow = new Date();
 
@@ -52,6 +54,7 @@ export default function JobDiscovery() {
             const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts`, { params });
             const rawData = res.data.data;
 
+            setJobs(rawData);
             setJob(rawData);
         }
         fetchData();
@@ -77,6 +80,8 @@ export default function JobDiscovery() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                    {jobs.map((job) => (
+                        <Card key={job.title} job={job} />
                     {job.map((job) => (
                         <Link
                             key={job?.title}

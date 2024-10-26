@@ -8,6 +8,7 @@ import { ACTIONS } from "../utils/action-search";
 import { reducer, initialState } from "../utils/reducer-search";
 import { fetchProviceLocation } from "../utils/fetch-province-location";
 import { SearchJobPosition } from "@/utils/interfaces";
+import { SearchBarLocationResult, SearchBarResultPosition } from "./SearchBarResult";
 
 export default function SearchBar() {
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -101,6 +102,7 @@ export default function SearchBar() {
         dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: false });
     };
 
+    const handleSelectLocation: React.Dispatch<React.SetStateAction<string>> = (location) => {
     const handleSelectLocation = (location: string) => {
         dispatch({ type: ACTIONS.SET_LOCATION_INPUT, payload: location });
         dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: false });
@@ -159,6 +161,11 @@ export default function SearchBar() {
                             <li className="text-text-main px-4 py-2 text-sm leading-5">Tidak ada hasil</li>
                         ) : (
                             locationList.map((location: string) => (
+                                <SearchBarLocationResult
+                                    key={location}
+                                    location={location}
+                                    handleSelectLocation={handleSelectLocation}
+                                />
                                 <li
                                     key={location}
                                     className="text-text-main cursor-pointer px-4 py-2 text-sm leading-5 hover:bg-gray-50"
@@ -187,6 +194,11 @@ export default function SearchBar() {
                             <li className="text-text-main px-4 py-2 text-sm leading-5">Tidak ada hasil</li>
                         ) : (
                             positionList.map((position: SearchJobPosition) => (
+                                <SearchBarResultPosition
+                                    key={position.id}
+                                    position={position}
+                                    handleSelectPosition={handleSelectPosition}
+                                />
                                 <li
                                     key={position.id}
                                     className="text-text-main cursor-pointer px-4 py-2 text-sm leading-5 hover:bg-gray-50"
