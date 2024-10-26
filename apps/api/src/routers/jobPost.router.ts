@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getAllCompanies, getAllJobPostsByAdmin, getAllPosts, getCompanyById, getPostById } from '@/controllers/jobPost.controller';
+import { getAllPosts } from '@/controllers/jobPost.controller';
 
 const router = Router();
 

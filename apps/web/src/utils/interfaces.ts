@@ -8,6 +8,11 @@ export interface Job {
     };
     adminId: string;
     category: string;
+    title: string;
+    bannerUrl: string;
+    admin: {
+        companyName: string;
+    };
     cityLocation: string;
     provinceLocation: string;
     salary: number;
@@ -25,6 +30,7 @@ export interface Company {
     companyCityLocation: string;
     companyProvince: string;
     phoneNumber: string;
+    applicationDeadline: string;
 }
 
 export interface SearchJobPosition {
