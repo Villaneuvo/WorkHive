@@ -1,33 +1,36 @@
 export interface Job {
     id: string;
     title: string;
-    bannerUrl: string;
     description: string;
-    admin: {
-        companyName: string;
-    };
-    adminId: string;
+    bannerUrl: string;
     category: string;
     cityLocation: string;
     provinceLocation: string;
-    salary: number;
     type: string;
+    salary: number;
+    applicationDeadline: Date;
+    adminId: string;
+    admin: {
+        companyName: string;
+    };
+    published: boolean;
+    jobApplications: JobApplication[];
     createdAt: string;
     updatedAt: string;
-    applicationDeadline: string;
 }
 
 export interface Company {
-    id: string;
-    companyName: string;
-    companyDescription: string;
-    companyBannerImg: string;
-    companyCityLocation: string;
-    companyProvince: string;
-    phoneNumber: string;
-}
+      id: string;
+      companyName: string;
+      companyDescription: string;
+      companyBannerImg: string;
+      companyCityLocation: string;
+      companyProvince: string;
+      phoneNumber: string;
+  }
 
-export interface SearchJobPosition {
+
+interface SearchJobPosition {
     id: string;
     title: string;
     bannerUrl: string;
@@ -54,7 +57,19 @@ export interface Choice {
     text: string;
     questionId: number;
 }
-export interface Params {
+
+interface CloudinaryUrl {
+    url: string;
+}
+
+interface JobApplication {
+    id: number;
+    jobId: number;
+    userId: number;
+    cvUrl: string;
+    expectedSalary: number;
+}
+interface Params {
     page: number;
     limit: number;
     cityLocation?: string;

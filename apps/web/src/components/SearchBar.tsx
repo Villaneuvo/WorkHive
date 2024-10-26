@@ -51,7 +51,6 @@ export default function SearchBar() {
         fetchData();
     }, [positionInput]);
 
-    // Debounce for PositionInput Handling
     useEffect(() => {
         const timer = setTimeout(() => {
             dispatch({ type: ACTIONS.SET_DEBOUNCE_INPUT, payload: positionInput });
@@ -117,7 +116,7 @@ export default function SearchBar() {
         dispatch({ type: ACTIONS.SET_SHOW_SUGGESTIONS, payload: true });
     };
 
-    return (
+return (
         <>
             <div className="mt-6 flex flex-col gap-y-5 sm:flex-row">
                 <div className="flex flex-col gap-x-0.5 gap-y-5 sm:flex-row sm:rounded-l-md sm:border sm:border-black/25 sm:bg-gray-100">
@@ -202,4 +201,3 @@ export default function SearchBar() {
             </button>
         </>
     );
-}

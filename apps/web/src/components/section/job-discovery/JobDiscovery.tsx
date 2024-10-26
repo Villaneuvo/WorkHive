@@ -1,19 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { FaLocationDot } from "react-icons/fa6";
-import { CiCreditCard1 } from "react-icons/ci";
-import { IoIosBriefcase } from "react-icons/io";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { FaRegClock } from "react-icons/fa";
-import { IoBookmarkOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocation, setError, fetchReverseGeocode } from "@/features/locationSlice";
 import { RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { ThunkDispatch } from "@reduxjs/toolkit";
-import { FormatRupiah } from "@arismun/format-rupiah";
 import { Job } from "@/utils/interfaces";
 import axios from "axios";
 import Card from "@/components/Card";
