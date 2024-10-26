@@ -59,6 +59,8 @@ model JobPost {
   bannerUrl           String?
   category            String
   cityLocation        String
+  provinceLocation    String
+  type                String
   salary              Float?
   applicationDeadline DateTime
   createdAt           DateTime         @default(now())
