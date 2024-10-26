@@ -70,6 +70,7 @@ model JobPost {
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
   adminId             Int
+  published           Boolean          @default(false)
   admin               Admin            @relation(fields: [adminId], references: [id])
   jobApplications     JobApplication[]
   tags                JobTag[]
@@ -81,15 +82,15 @@ model JobTag {
   id        Int     @id @default(autoincrement())
   name      String
   jobPostId Int
-  jobPost   JobPost @relation(fields: [jobPostId], references: [id])
+  jobPost   JobPost @relation(fields: [jobPostId], references: [id], onDelete: Cascade)
 }
 
 model JobApplication {
   id             Int               @id @default(autoincrement())
   jobId          Int
   userId         Int
-  job            JobPost           @relation(fields: [jobId], references: [id])
-  user           User              @relation(fields: [userId], references: [id])
+  job            JobPost           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   status         ApplicationStatus @default(PENDING)
   cvUrl          String
   expectedSalary Float
@@ -148,8 +149,8 @@ model ApplyList {
   userId    Int
   jobPostId Int
   status    ApplyStatus
-  jobPost   JobPost     @relation(fields: [jobPostId], references: [id])
-  user      User        @relation(fields: [userId], references: [id])
+  jobPost   JobPost     @relation(fields: [jobPostId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
@@ -166,8 +167,8 @@ model JobSaved {
   id      Int      @id @default(autoincrement())
   userId  Int
   jobId   Int
-  user    User     @relation(fields: [userId], references: [id])
-  jobPost JobPost  @relation(fields: [jobId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobPost JobPost  @relation(fields: [jobId], references: [id], onDelete: Cascade)
   savedAt DateTime @default(now())
 }
 

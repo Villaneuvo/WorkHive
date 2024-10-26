@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcrypt';
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -7,17 +7,17 @@ async function main() {
     // Create a user with a profile
     const user1 = await prisma.user.create({
         data: {
-            email: 'user1@example.com',
-            password: await bcrypt.hash('password123', 10),
-            name: 'John Doe',
-            role: 'USER',
+            email: "user1@example.com",
+            password: await bcrypt.hash("password123", 10),
+            name: "John Doe",
+            role: "USER",
             verified: true,
             profile: {
                 create: {
-                    dob: new Date('1990-01-01'),
-                    gender: 'Male',
-                    education: 'Bachelor’s Degree in Computer Science',
-                    address: '1234 Main St, City, Country',
+                    dob: new Date("1990-01-01"),
+                    gender: "Male",
+                    education: "Bachelor’s Degree in Computer Science",
+                    address: "1234 Main St, City, Country",
                 },
             },
         },
@@ -26,10 +26,10 @@ async function main() {
     // Create an admin user
     const adminUser = await prisma.user.create({
         data: {
-            email: 'admin1@example.com',
-            password: await bcrypt.hash('adminpass123', 10),
-            name: 'Jessica Theodore',
-            role: 'ADMIN',
+            email: "admin1@example.com",
+            password: await bcrypt.hash("adminpass123", 10),
+            name: "Jessica Theodore",
+            role: "ADMIN",
             verified: true,
             Admin: {
                 create: {
@@ -46,10 +46,10 @@ async function main() {
 
     const adminUser2 = await prisma.user.create({
         data: {
-            email: 'admin2@example.com',
-            password: await bcrypt.hash('adminpass123', 10),
-            name: 'Imam Al Zulfiki',
-            role: 'ADMIN',
+            email: "admin2@example.com",
+            password: await bcrypt.hash("adminpass123", 10),
+            name: "Imam Al Zulfiki",
+            role: "ADMIN",
             verified: true,
             Admin: {
                 create: {
@@ -66,10 +66,10 @@ async function main() {
 
     const adminUser3 = await prisma.user.create({
         data: {
-            email: 'admin3@example.com',
-            password: await bcrypt.hash('adminpass123', 10),
-            name: 'Gidhan Radhiyansyah Mahendra',
-            role: 'ADMIN',
+            email: "admin3@example.com",
+            password: await bcrypt.hash("adminpass123", 10),
+            name: "Gidhan Radhiyansyah Mahendra",
+            role: "ADMIN",
             verified: true,
             Admin: {
                 create: {
@@ -86,10 +86,10 @@ async function main() {
 
     const adminUser4 = await prisma.user.create({
         data: {
-            email: 'admin4@example.com',
-            password: await bcrypt.hash('adminpass123', 10),
-            name: 'Daffa Radhitya Putra Pratama',
-            role: 'ADMIN',
+            email: "admin4@example.com",
+            password: await bcrypt.hash("adminpass123", 10),
+            name: "Daffa Radhitya Putra Pratama",
+            role: "ADMIN",
             verified: true,
             Admin: {
                 create: {
@@ -106,10 +106,10 @@ async function main() {
 
     const adminUser5 = await prisma.user.create({
         data: {
-            email: 'admin5@example.com',
-            password: await bcrypt.hash('adminpass123', 10),
-            name: 'Rafid Fadhillah Al Khadafi',
-            role: 'ADMIN',
+            email: "admin5@example.com",
+            password: await bcrypt.hash("adminpass123", 10),
+            name: "Rafid Fadhillah Al Khadafi",
+            role: "ADMIN",
             verified: true,
             Admin: {
                 create: {
@@ -134,10 +134,10 @@ async function main() {
     // Create a developer user
     const developerUser = await prisma.user.create({
         data: {
-            email: 'developer@example.com',
-            password: await bcrypt.hash('devpass123', 10),
-            name: 'Dev User',
-            role: 'DEVELOPER',
+            email: "developer@example.com",
+            password: await bcrypt.hash("devpass123", 10),
+            name: "Dev User",
+            role: "DEVELOPER",
             verified: true,
             Developer: {
                 create: {},
@@ -155,46 +155,39 @@ async function main() {
     // Create job posts with tags
     const job1 = await prisma.jobPost.create({
         data: {
-            title: 'Software Engineer',
-            description:
-                'We are looking for a skilled Software Engineer to join our team.',
-            category: 'Engineering',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1729155298/aws_publ0g.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "Software Engineer",
+            description: "We are looking for a skilled Software Engineer to join our team.",
+            category: "Technology",
+            bannerUrl:
+                "https://res.cloudinary.com/dkcur9nvf/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1729155298/aws_publ0g.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 8000000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 2,
+            published: true,
             tags: {
-                create: [
-                    { name: 'JavaScript' },
-                    { name: 'React' },
-                    { name: 'Node.js' },
-                ],
+                create: [{ name: "JavaScript" }, { name: "React" }, { name: "Node.js" }],
             },
         },
     });
 
     const job2 = await prisma.jobPost.create({
         data: {
-            title: 'Data Scientist',
-            description:
-                'Analyze and interpret complex data to help our business grow.',
-            category: 'Data Science',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1729155298/aws_publ0g.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "Data Scientist",
+            description: "Analyze and interpret complex data to help our business grow.",
+            category: "Technology",
+            bannerUrl:
+                "https://res.cloudinary.com/dkcur9nvf/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1729155298/aws_publ0g.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 9000000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 2,
             tags: {
-                create: [
-                    { name: 'Python' },
-                    { name: 'Machine Learning' },
-                    { name: 'Data Analysis' },
-                ],
+                create: [{ name: "Python" }, { name: "Machine Learning" }, { name: "Data Analysis" }],
             },
         },
     });
@@ -202,23 +195,18 @@ async function main() {
     // Job 3
     const job3 = await prisma.jobPost.create({
         data: {
-            title: 'UI/UX Designer',
-            description:
-                'We are seeking a creative UI/UX Designer to improve our product interfaces.',
-            category: 'Design',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "UI/UX Designer",
+            description: "We are seeking a creative UI/UX Designer to improve our product interfaces.",
+            category: "Technology",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 7500000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 1,
             tags: {
-                create: [
-                    { name: 'Figma' },
-                    { name: 'Adobe XD' },
-                    { name: 'Prototyping' },
-                ],
+                create: [{ name: "Figma" }, { name: "Adobe XD" }, { name: "Prototyping" }],
             },
         },
     });
@@ -226,23 +214,18 @@ async function main() {
     // Job 4
     const job4 = await prisma.jobPost.create({
         data: {
-            title: 'Network Engineer',
-            description:
-                'Join us as a Network Engineer and help maintain our network infrastructure.',
-            category: 'IT',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "Network Engineer",
+            description: "Join us as a Network Engineer and help maintain our network infrastructure.",
+            category: "Technology",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 8500000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 1,
             tags: {
-                create: [
-                    { name: 'Networking' },
-                    { name: 'Cisco' },
-                    { name: 'Firewall' },
-                ],
+                create: [{ name: "Networking" }, { name: "Cisco" }, { name: "Firewall" }],
             },
         },
     });
@@ -250,23 +233,18 @@ async function main() {
     // Job 5
     const job5 = await prisma.jobPost.create({
         data: {
-            title: 'Marketing Manager',
-            description:
-                'We are hiring a Marketing Manager to lead our marketing team and strategies.',
-            category: 'Marketing',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "Marketing Manager",
+            description: "We are hiring a Marketing Manager to lead our marketing team and strategies.",
+            category: "Other",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 9500000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 1,
             tags: {
-                create: [
-                    { name: 'Digital Marketing' },
-                    { name: 'SEO' },
-                    { name: 'Campaigns' },
-                ],
+                create: [{ name: "Digital Marketing" }, { name: "SEO" }, { name: "Campaigns" }],
             },
         },
     });
@@ -274,23 +252,18 @@ async function main() {
     // Job 6
     const job6 = await prisma.jobPost.create({
         data: {
-            title: 'Frontend Developer',
-            description:
-                'We are seeking a talented Frontend Developer to create stunning web interfaces.',
-            category: 'Engineering',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "Frontend Developer",
+            description: "We are seeking a talented Frontend Developer to create stunning web interfaces.",
+            category: "Technology",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 7800000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 1,
             tags: {
-                create: [
-                    { name: 'HTML' },
-                    { name: 'CSS' },
-                    { name: 'JavaScript' },
-                ],
+                create: [{ name: "HTML" }, { name: "CSS" }, { name: "JavaScript" }],
             },
         },
     });
@@ -298,23 +271,18 @@ async function main() {
     // Job 7
     const job7 = await prisma.jobPost.create({
         data: {
-            title: 'HR Specialist',
-            description:
-                'We are looking for an experienced HR Specialist to manage our HR processes.',
-            category: 'Human Resources',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "HR Specialist",
+            description: "We are looking for an experienced HR Specialist to manage our HR processes.",
+            category: "Other",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 7000000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 3,
             tags: {
-                create: [
-                    { name: 'Recruitment' },
-                    { name: 'Employee Relations' },
-                    { name: 'HR Policies' },
-                ],
+                create: [{ name: "Recruitment" }, { name: "Employee Relations" }, { name: "HR Policies" }],
             },
         },
     });
@@ -322,23 +290,18 @@ async function main() {
     // Job 8
     const job8 = await prisma.jobPost.create({
         data: {
-            title: 'Product Manager',
-            description:
-                'Join us as a Product Manager to drive product strategy and delivery.',
-            category: 'Management',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png',
-            cityLocation: 'Kota Semarang',
-            provinceLocation: 'Jawa Tengah',
-            type: 'Full-time',
+            title: "Product Manager",
+            description: "Join us as a Product Manager to drive product strategy and delivery.",
+            category: "Technology",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png",
+            cityLocation: "Kota Semarang",
+            provinceLocation: "Jawa Tengah",
+            type: "Full-time",
             salary: 9500000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 3,
             tags: {
-                create: [
-                    { name: 'Agile' },
-                    { name: 'Product Roadmap' },
-                    { name: 'Stakeholder Management' },
-                ],
+                create: [{ name: "Agile" }, { name: "Product Roadmap" }, { name: "Stakeholder Management" }],
             },
         },
     });
@@ -346,23 +309,18 @@ async function main() {
     // Job 9 - Kota Surabaya
     const job9 = await prisma.jobPost.create({
         data: {
-            title: 'Backend Developer',
-            description:
-                'We are looking for a Backend Developer to work on our server-side applications.',
-            category: 'Engineering',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155300/ultrasakti_hbhs1i.png',
-            cityLocation: 'Kota Surabaya',
-            provinceLocation: 'Jawa Timur',
-            type: 'Full-time',
+            title: "Backend Developer",
+            description: "We are looking for a Backend Developer to work on our server-side applications.",
+            category: "Technology",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155300/ultrasakti_hbhs1i.png",
+            cityLocation: "Kota Surabaya",
+            provinceLocation: "Jawa Timur",
+            type: "Full-time",
             salary: 8500000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 5,
             tags: {
-                create: [
-                    { name: 'Node.js' },
-                    { name: 'API Development' },
-                    { name: 'Database' },
-                ],
+                create: [{ name: "Node.js" }, { name: "API Development" }, { name: "Database" }],
             },
         },
     });
@@ -370,38 +328,31 @@ async function main() {
     // Job 10 - Kota Jakarta
     const job10 = await prisma.jobPost.create({
         data: {
-            title: 'Content Writer',
-            description:
-                'We are hiring a Content Writer to create engaging articles for our audience.',
-            category: 'Writing',
-            bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/google_xmcbav.png',
-            cityLocation: 'Kota Jakarta',
-            provinceLocation: 'Jakarta',
-            type: 'Full-time',
+            title: "Content Writer",
+            description: "We are hiring a Content Writer to create engaging articles for our audience.",
+            category: "Service",
+            bannerUrl: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/google_xmcbav.png",
+            cityLocation: "Kota Jakarta",
+            provinceLocation: "Jakarta",
+            type: "Full-time",
             salary: 6800000,
-            applicationDeadline: new Date('2024-12-31'),
+            applicationDeadline: new Date("2024-12-31"),
             adminId: 4,
             tags: {
-                create: [
-                    { name: 'Content Creation' },
-                    { name: 'SEO Writing' },
-                    { name: 'Copywriting' },
-                ],
+                create: [{ name: "Content Creation" }, { name: "SEO Writing" }, { name: "Copywriting" }],
             },
         },
     });
 
-
     // Create skill assessments and questions
     const skillAssessment = await prisma.skillAssessment.create({
         data: {
-            skillName: 'JavaScript Proficiency',
+            skillName: "JavaScript Proficiency",
             questions: {
                 create: [
-                    { content: 'What is a closure in JavaScript?' },
+                    { content: "What is a closure in JavaScript?" },
                     {
-                        content:
-                            'Explain the difference between var, let, and const.',
+                        content: "Explain the difference between var, let, and const.",
                     },
                 ],
             },
@@ -413,7 +364,7 @@ async function main() {
     await prisma.subscription.create({
         data: {
             userId: user1.id,
-            subscriptionType: 'STANDARD',
+            subscriptionType: "STANDARD",
             startDate: new Date(),
             endDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
             isActive: true,
@@ -434,7 +385,7 @@ async function main() {
     await prisma.skillBadge.create({
         data: {
             userId: user1.id,
-            badgeName: 'JavaScript Mastery',
+            badgeName: "JavaScript Mastery",
         },
     });
 
@@ -443,8 +394,8 @@ async function main() {
         data: {
             jobId: job1.id,
             userId: user1.id,
-            status: 'PENDING',
-            cvUrl: 'https://example.com/cv/user1.pdf',
+            status: "PENDING",
+            cvUrl: "https://example.com/cv/user1.pdf",
             expectedSalary: 8500000,
         },
     });
@@ -462,11 +413,11 @@ async function main() {
         data: {
             userId: user1.id,
             jobPostId: job1.id,
-            status: 'SUBMITTED',
+            status: "SUBMITTED",
         },
     });
 
-    console.log('Seeding completed successfully!');
+    console.log("Seeding completed successfully!");
 }
 
 main()

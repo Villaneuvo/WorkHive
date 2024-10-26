@@ -11,7 +11,7 @@ export default function RelatedJob({ params }: { params: { adminId: string } }) 
     useEffect(() => {
         async function fetchData() {
             const res = await axios.get(
-                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/job/${params.adminId}`,
+                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/adminId/${params.adminId}`,
             );
             const data = res.data.data;
             setJobPosts(data);
