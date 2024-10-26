@@ -44,12 +44,16 @@ model Profile {
 }
 
 model Admin {
-  id          Int       @id @default(autoincrement())
-  userId      Int       @unique
-  user        User      @relation(fields: [userId], references: [id])
-  companyName String
-  phoneNumber String
-  jobs        JobPost[]
+  id                  Int       @id @default(autoincrement())
+  userId              Int       @unique
+  user                User      @relation(fields: [userId], references: [id])
+  companyName         String
+  companyDescription  String    @db.Text
+  companyBannerImg    String
+  companyCityLocation String
+  companyProvince     String
+  phoneNumber         String
+  jobs                JobPost[]
 }
 
 model JobPost {

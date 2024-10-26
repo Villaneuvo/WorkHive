@@ -1,3 +1,4 @@
+export const fetchProviceLocation = async (val?: string) => {
 export const fetchProviceLocation = async (val: string) => {
     try {
         const res = await fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
