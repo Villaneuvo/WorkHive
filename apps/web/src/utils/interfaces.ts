@@ -1,4 +1,4 @@
-interface JobPost {
+export interface Job {
     id: string;
     title: string;
     description: string;
@@ -19,7 +19,7 @@ interface JobPost {
     updatedAt: string;
 }
 
-interface Company {
+export interface Company {
     id: string;
     companyName: string;
     companyDescription: string;
@@ -27,10 +27,9 @@ interface Company {
     companyCityLocation: string;
     companyProvince: string;
     phoneNumber: string;
-    applicationDeadline: string;
 }
 
-interface SearchJobPosition {
+export interface SearchJobPosition {
     id: string;
     title: string;
     bannerUrl: string;
@@ -39,18 +38,37 @@ interface SearchJobPosition {
     provinceLocation: string;
 }
 
-interface CloudinaryUrl {
+export interface SkillAssessment {
+    id: number;
+    skillName: string;
+    description?: string;
+    questions: Question[];
+}
+
+export interface Question {
+    id: number;
+    questionText: string;
+    choices: Choice[];
+}
+
+export interface Choice {
+    id: number;
+    text: string;
+    questionId: number;
+}
+
+export interface CloudinaryUrl {
     url: string;
 }
 
-interface JobApplication {
+export interface JobApplication {
     id: number;
     jobId: number;
     userId: number;
     cvUrl: string;
     expectedSalary: number;
 }
-interface Params {
+export interface Params {
     page: number;
     limit: number;
     cityLocation?: string;

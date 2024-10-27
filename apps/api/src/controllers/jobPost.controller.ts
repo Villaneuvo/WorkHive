@@ -27,6 +27,14 @@ export async function getAllPosts(req: Request, res: Response) {
             whereClause.provinceLocation = provinceLocation;
         }
 
+        if (category) {
+            whereClause.category = category;
+        }
+
+        if (provinceLocation) {
+            whereClause.provinceLocation = provinceLocation;
+        }
+
         if (cityLocation) {
             whereClause.cityLocation = cityLocation;
         }
@@ -301,9 +309,9 @@ export async function getAllCompanies(req: Request, res: Response) {
         const offset = (page - 1) * limit;
 
         // New query parameters for search and sorting
-        const searchName = (req.query.companyName as string) || "";
-        const searchLocation = (req.query.companyLocation as string) || "";
-        const sortOrder = req.query.sort === "desc" ? "desc" : "asc"; // Defaults to ascending
+        const searchName = req.query.companyName as string || '';
+        const searchLocation = req.query.companyLocation as string || '';
+        const sortOrder = req.query.sort === 'desc' ? 'desc' : 'asc';
 
         const [companies, totalCompanies] = await Promise.all([
             prisma.admin.findMany({

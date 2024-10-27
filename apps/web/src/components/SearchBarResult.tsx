@@ -16,7 +16,7 @@ export function SearchBarResultPosition({
                 className="text-text-main cursor-pointer px-4 py-2 text-sm leading-5 hover:bg-gray-50"
                 onClick={() => handleSelectPosition(position.title)}
             >
-                <Link className="ml-3 flex flex-row items-center gap-x-5 text-base" href="#">
+                <Link className="ml-3 flex flex-row items-center gap-x-5 text-base" href={`/jobs/${position.id}`}>
                     <div className="h-fit w-fit overflow-hidden rounded-md border border-gray-900/25 bg-white p-5">
                         <Image
                             width={60}
