@@ -1,15 +1,16 @@
 "use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
-import { Input, InputGroup } from "@/components/Input";
 import { Button } from "@/components/Button";
-import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
-import { useEffect, useState } from "react";
-import { Select } from "@/components/Select";
-import axios from "axios";
-import { formatCurrency, formatDate } from "@/utils/helpers";
+import { Input, InputGroup } from "@/components/Input";
 import PaginationNumber from "@/components/PaginationNumber";
+import { Select } from "@/components/Select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
+import { formatCurrency, formatDate } from "@/utils/helpers";
+import { Job } from "@/utils/interfaces";
+import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
+import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function JobPostListTable({ adminId }: { adminId: string }) {
     // TODO: Tampilan sudah OK atau belum? pagination warna apa? (masih biru)
@@ -88,7 +89,7 @@ export default function JobPostListTable({ adminId }: { adminId: string }) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {jobPosts.map((jobPost: JobPost) => (
+                    {jobPosts.map((jobPost: Job) => (
                         <TableRow key={jobPost.title} href={`/${jobPost.id}`}>
                             <TableCell className="font-medium">{jobPost.title}</TableCell>
                             <TableCell>{jobPost.category}</TableCell>

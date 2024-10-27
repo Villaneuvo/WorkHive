@@ -20,17 +20,16 @@ export interface Job {
 }
 
 export interface Company {
-      id: string;
-      companyName: string;
-      companyDescription: string;
-      companyBannerImg: string;
-      companyCityLocation: string;
-      companyProvince: string;
-      phoneNumber: string;
-  }
+    id: string;
+    companyName: string;
+    companyDescription: string;
+    companyBannerImg: string;
+    companyCityLocation: string;
+    companyProvince: string;
+    phoneNumber: string;
+}
 
-
-interface SearchJobPosition {
+export interface SearchJobPosition {
     id: string;
     title: string;
     bannerUrl: string;
@@ -49,7 +48,7 @@ export interface SkillAssessment {
 export interface Question {
     id: number;
     questionText: string;
-    choices: Choice[]
+    choices: Choice[];
 }
 
 export interface Choice {
@@ -58,18 +57,18 @@ export interface Choice {
     questionId: number;
 }
 
-interface CloudinaryUrl {
+export interface CloudinaryUrl {
     url: string;
 }
 
-interface JobApplication {
+export interface JobApplication {
     id: number;
     jobId: number;
     userId: number;
     cvUrl: string;
     expectedSalary: number;
 }
-interface Params {
+export interface Params {
     page: number;
     limit: number;
     cityLocation?: string;

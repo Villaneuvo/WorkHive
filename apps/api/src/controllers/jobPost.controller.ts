@@ -1,5 +1,3 @@
-import prisma from '@/prisma';
-import { Request, Response } from 'express';
 import prisma from "@/prisma";
 import { createJobPostSchema, updateJobPostSchema } from "@/schemas/jobPost.schema";
 import { Request, Response } from "express";
@@ -9,7 +7,7 @@ export async function getAllPosts(req: Request, res: Response) {
     try {
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
-        const cityLocation = req.query.cityLocation as string || "Ambatukam";
+        const cityLocation = (req.query.cityLocation as string) || "Ambatukam";
         const offset = (page - 1) * limit;
         const title = req.query.title as string;
         const category = req.query.category as string;
@@ -18,15 +16,15 @@ export async function getAllPosts(req: Request, res: Response) {
         const whereClause: any = {};
 
         if (title) {
-            whereClause.title = title
+            whereClause.title = title;
         }
 
         if (category) {
-            whereClause.category = category
+            whereClause.category = category;
         }
 
         if (provinceLocation) {
-            whereClause.provinceLocation = provinceLocation
+            whereClause.provinceLocation = provinceLocation;
         }
 
         if (category) {
@@ -362,7 +360,7 @@ export async function getAllCompanies(req: Request, res: Response) {
             },
         });
     } catch (error) {
-        res.status(500).json({ message: 'Internal server error', error });
+        res.status(500).json({ message: "Internal server error", error });
     }
 }
 
@@ -372,7 +370,7 @@ export async function getPostById(req: Request, res: Response) {
         const postId = req.params.id;
         const jobPost = await prisma.jobPost.findUnique({
             where: {
-                id: parseInt(postId)
+                id: parseInt(postId),
             },
             include: {
                 admin: {
@@ -382,7 +380,7 @@ export async function getPostById(req: Request, res: Response) {
                     },
                 },
                 tags: true,
-            }
+            },
         });
 
         if (!jobPost) {
@@ -391,7 +389,7 @@ export async function getPostById(req: Request, res: Response) {
 
         res.status(200).json(jobPost);
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrive post", error })
+        res.status(500).json({ message: "Failed to retrive post", error });
     }
 }
 
@@ -401,7 +399,7 @@ export async function getCompanyById(req: Request, res: Response) {
         const companyId = req.params.id;
         const company = await prisma.admin.findUnique({
             where: {
-                id: parseInt(companyId)
+                id: parseInt(companyId),
             },
             select: {
                 id: true,
@@ -411,7 +409,7 @@ export async function getCompanyById(req: Request, res: Response) {
                 companyProvince: true,
                 companyBannerImg: true,
                 phoneNumber: true,
-            }
+            },
         });
 
         if (!company) {
@@ -420,56 +418,6 @@ export async function getCompanyById(req: Request, res: Response) {
 
         res.status(200).json(company);
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrive company", error })
-    }
-}
-
-export async function getAllJobPostsByAdmin(req: Request, res: Response) {
-    try {
-        const { adminId } = req.params;
-        const page = parseInt(req.query.page as string) || 1;
-        const limit = parseInt(req.query.limit as string) || 10;
-        const offset = (page - 1) * limit;
-        const { search, category } = req.query;
-        const whereClause: any = {};
-
-        whereClause.adminId = +adminId;
-
-        if (search) {
-            whereClause.OR = [{ title: { contains: search as string } }];
-        }
-        if (category) {
-            whereClause.category = category as string;
-        }
-        const [jobPosts, totalJobPosts] = await Promise.all([
-            prisma.jobPost.findMany({
-                where: whereClause,
-                include: {
-                    admin: {
-                        select: {
-                            companyName: true,
-                            phoneNumber: true,
-                        },
-                    },
-                    tags: true,
-                },
-                skip: offset,
-                take: limit,
-            }),
-            prisma.jobPost.count({
-                where: whereClause,
-            }),
-        ]);
-        res.status(200).json({
-            data: jobPosts,
-            pagination: {
-                totalItems: totalJobPosts,
-                totalPages: Math.ceil(totalJobPosts / limit),
-                currentPage: page,
-                pageSize: limit,
-            },
-        });
-    } catch (e) {
-        res.status(500).json({ message: 'Internal server error', error: e });
+        res.status(500).json({ message: "Failed to retrive company", error });
     }
 }

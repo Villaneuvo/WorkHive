@@ -6,6 +6,7 @@ import { Input } from "@/components/Input";
 import { Select } from "@/components/Select";
 import { Text } from "@/components/Text";
 import { Textarea } from "@/components/TextArea";
+import { CloudinaryUrl } from "@/utils/interfaces";
 import * as Headless from "@headlessui/react";
 import axios from "axios";
 import { CldUploadWidget } from "next-cloudinary";
