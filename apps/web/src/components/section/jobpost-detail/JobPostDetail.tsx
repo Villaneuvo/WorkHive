@@ -5,6 +5,7 @@ import { DescriptionDetails, DescriptionList, DescriptionTerm } from "@/componen
 import { Dialog, DialogActions, DialogDescription, DialogTitle } from "@/components/Dialog";
 import { Subheading } from "@/components/Heading";
 import { formatCurrency, formatDate } from "@/utils/helpers";
+import { Job } from "@/utils/interfaces";
 import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -12,7 +13,7 @@ import { useEffect, useState } from "react";
 import ApplicantListTable from "./ApplicantListTable";
 
 export default function JobPostDetail({ id, adminId }: { id: string; adminId: string }) {
-    const [jobPost, setJobPost] = useState<Partial<JobPost>>({});
+    const [jobPost, setJobPost] = useState<Partial<Job>>({});
     const [isOpen, setIsOpen] = useState(false);
     const router = useRouter();
     useEffect(() => {
