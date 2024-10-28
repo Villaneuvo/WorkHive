@@ -1,15 +1,15 @@
 "use client";
+import Alert from "@/components/Alert";
 import { Button } from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import TextField from "@/components/TextField";
-import Link from "next/link";
-import { useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { FormikValues, useFormik } from "formik";
 import { registerUser } from "@/utils/service/auth";
+import { FormikValues, useFormik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 const RegisterFormSchema = z
@@ -21,9 +21,8 @@ const RegisterFormSchema = z
     })
     .refine((data) => data.password === data.confirm_password, {
         message: "Passwords don't match",
-        path: ["confirm_password"],
+        path: ["confirm_password"], // Path of the error
     });
-
 type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
 
 export default function RegisterForm() {
@@ -53,14 +52,18 @@ export default function RegisterForm() {
             const res = await registerUser({
                 email: values.email as string,
                 password: values.password as string,
-            });
-            if (res?.code === 200) {
+            }).catch((err) => err.data);
+            if (!res?.user?.id) {
                 setMessage({
-                    type: "success",
-                    content: "Account created successfully. Please check your email to verify your account.",
+                    type: "error",
+                    content: res?.message || res.errors[0].message,
                 });
             } else {
-                throw new Error(res?.message);
+                setMessage({
+                    type: "success",
+                    content: res.message,
+                });
+                formik.resetForm();
             }
         } catch (error: unknown) {
             setMessage({
@@ -82,68 +85,71 @@ export default function RegisterForm() {
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} className="space-y-4 md:space-y-6">
-            <TextField
-                name="email"
-                label="Email address"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                errorMessage={formik.errors.email && formik.touched.email ? (formik.errors.email as string) : ""}
-            />
-            <TextField
-                name="password"
-                label="Password"
-                type="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                errorMessage={
-                    formik.errors.password && formik.touched.password ? (formik.errors.password as string) : ""
-                }
-            />
-            <TextField
-                name="confirm_password"
-                label="Confirm Password"
-                type="password"
-                value={formik.values.confirm_password}
-                onChange={formik.handleChange}
-                errorMessage={
-                    formik.errors.confirm_password && formik.touched.confirm_password
-                        ? (formik.errors.confirm_password as string)
-                        : ""
-                }
-            />
-            <div className="flex items-center justify-between">
-                <Checkbox
-                    name="agree"
-                    label={
-                        <>
-                            I accept the{" "}
-                            <a
-                                href=""
-                                target="_blank"
-                                className="text-primary-dark cursor-pointer font-bold hover:underline"
-                            >
-                                Terms and Conditions
-                            </a>
-                        </>
-                    }
-                    checked={formik.values.aggree}
-                    onChange={(e) => formik.setFieldValue("aggree", e.target.checked)}
+        <>
+            {message.content ? <Alert type={message.type} message={message.content} /> : null}
+            <form onSubmit={formik.handleSubmit} className="space-y-4 md:space-y-6">
+                <TextField
+                    name="email"
+                    label="Email address"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    errorMessage={formik.errors.email && formik.touched.email ? (formik.errors.email as string) : ""}
                 />
-            </div>
-            <Button disabled={!formik.values.aggree} type="submit" className="w-full">
-                Create an account
-            </Button>
-            <hr />
-            <Button variant="outline" className="w-full">
-                Sign up with Google
-            </Button>
-            <p className="text-center text-sm font-light text-gray-500 dark:text-gray-400">
-                Already have an account?{" "}
-                <Link href="/login" className="text-primary font-bold hover:underline">
-                    Login here
-                </Link>
-            </p>
-        </form>
+                <TextField
+                    name="password"
+                    label="Password"
+                    type="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    errorMessage={
+                        formik.errors.password && formik.touched.password ? (formik.errors.password as string) : ""
+                    }
+                />
+                <TextField
+                    name="confirm_password"
+                    label="Confirm Password"
+                    type="password"
+                    value={formik.values.confirm_password}
+                    onChange={formik.handleChange}
+                    errorMessage={
+                        formik.errors.confirm_password && formik.touched.confirm_password
+                            ? (formik.errors.confirm_password as string)
+                            : ""
+                    }
+                />
+                <div className="flex items-center justify-between">
+                    <Checkbox
+                        name="agree"
+                        label={
+                            <>
+                                I accept the{" "}
+                                <a
+                                    href=""
+                                    target="_blank"
+                                    className="text-primary-dark cursor-pointer font-bold hover:underline"
+                                >
+                                    Terms and Conditions
+                                </a>
+                            </>
+                        }
+                        checked={formik.values.aggree}
+                        onChange={(e) => formik.setFieldValue("aggree", e.target.checked)}
+                    />
+                </div>
+                <Button disabled={!formik.values.aggree} type="submit" className="w-full">
+                    Create an account
+                </Button>
+                <hr />
+                <Button variant="outline" className="w-full">
+                    Sign up with Google
+                </Button>
+                <p className="text-center text-sm font-light text-gray-500 dark:text-gray-400">
+                    Already have an account?{" "}
+                    <Link href="/login" className="text-primary font-bold hover:underline">
+                        Login here
+                    </Link>
+                </p>
+            </form>
+        </>
     );
 }
