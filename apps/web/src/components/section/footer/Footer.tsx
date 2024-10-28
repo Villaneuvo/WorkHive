@@ -49,9 +49,9 @@ export const Footer = () => {
                                 Layanan Pengaduan Konsumen <br />
                                 PT KOKARP TECH INDONESIA <br />
                                 Email :{" "}
-                                <Link href="mailto:support@jobtalk.com" className="hover:underline">
+                                <Link href="mailto:support@workhive.com" className="hover:underline">
                                     {" "}
-                                    support@jobtalk.com{" "}
+                                    support@workhive.com{" "}
                                 </Link>{" "}
                                 <br />
                                 Tel : 087701802324
@@ -62,13 +62,13 @@ export const Footer = () => {
                                 Republik Indonesia <br /> Tel : 0853-1111-1010 (WhatsApp)
                             </p>
                             <br />
-                            <span>&copy; 2024 JobTalk.com</span>
+                            <span>&copy; 2024 WorkHive.com</span>
                         </div>
                     </div>
                     <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
                         <div className="md:grid md:grid-cols-2 md:gap-8">
                             <div>
-                                <h3 className="text-base font-bold leading-6 text-gray-900">JobTalk</h3>
+                                <h3 className="text-base font-bold leading-6 text-gray-900">WorkHive</h3>
                                 <ul role="list" className="mt-6 space-y-4">
                                     {workHive.map((item) => (
                                         <li key={item.name}>

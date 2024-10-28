@@ -1,17 +1,17 @@
-import React, { useId } from "react";
+import React from "react";
 
 import { Container } from "@/components/Container";
+import { BsBuildings } from "react-icons/bs";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
+import { PiReadCvLogo } from "react-icons/pi";
 import { TbFilterEdit } from "react-icons/tb";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
-import { BsBuildings } from "react-icons/bs";
-import { PiReadCvLogo } from "react-icons/pi";
 
 const features = [
     {
         name: "Beragam Lowongan Pekerjaan",
         description:
-            "JobTalk.com menyediakan ribuan lowongan dari berbagai industri, sehingga kamu bisa menemukan pekerjaan sesuai minat dan keahlian.",
+            "WorkHive.com menyediakan ribuan lowongan dari berbagai industri, sehingga kamu bisa menemukan pekerjaan sesuai minat dan keahlian.",
         icon: CarreerIcon,
     },
     {
@@ -29,7 +29,7 @@ const features = [
     {
         name: "Tips dan Panduan Karier",
         description:
-            "JobTalk.com menawarkan berbagai tips karier, pembuatan CV, serta panduan wawancara yang akan membantumu menonjol di mata perekrut.",
+            "WorkHive.com menawarkan berbagai tips karier, pembuatan CV, serta panduan wawancara yang akan membantumu menonjol di mata perekrut.",
         icon: TipsCareerIcon,
     },
     {
@@ -41,7 +41,7 @@ const features = [
     {
         name: "CV Generator",
         description:
-            "JobTalk.com menyediakan fitur pembuatan CV yang menarik dan profesional, sehingga CV-mu akan menonjol di mata perekrut.",
+            "WorkHive.com menyediakan fitur pembuatan CV yang menarik dan profesional, sehingga CV-mu akan menonjol di mata perekrut.",
         icon: CVCreationIcon,
     },
 ];
@@ -99,7 +99,7 @@ export default function WhyUs() {
             <Container>
                 <div className="mx-auto max-w-2xl sm:text-center">
                     <h2 className="text-3xl font-medium tracking-tight text-gray-900">
-                        Kenapa mencari peluang karier di JobTalk.com adalah keputusan yang tepat?
+                        Kenapa mencari peluang karier di WorkHive.com adalah keputusan yang tepat?
                     </h2>
                     <p className="mt-2 text-lg text-gray-600">
                         Dengan fitur pencarian yang mudah digunakan, kamu bisa menemukan pekerjaan yang sesuai dengan

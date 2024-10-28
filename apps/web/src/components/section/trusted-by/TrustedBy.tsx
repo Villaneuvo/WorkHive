@@ -58,7 +58,6 @@ export default function TrustedBy() {
     return (
         <section className="py-10 sm:py-20">
             <Container>
-                {/* Header */}
                 <div className="mx-auto mb-10 max-w-2xl sm:text-center">
                     <h2 className="text-3xl font-medium tracking-tight text-gray-900">
                         Dipercaya oleh 100 lebih perusahaan yang menanti talenta terbaik seperti anda

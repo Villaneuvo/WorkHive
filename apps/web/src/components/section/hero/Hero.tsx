@@ -1,5 +1,3 @@
-// import SearchBar from "@/components/SearchBar";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 
 export default function Hero() {
@@ -11,14 +9,14 @@ export default function Hero() {
                         <div className="mx-auto max-w-2xl">
                             <div className="max-w-lg">
                                 <h1 className="mt-10 text-4xl font-semibold tracking-tight sm:text-6xl">
-                                    Temukan pekerjaan impianmu bersama{" "}
-                                    <span className="text-reseda-green font-bold">JobTalk.com.</span>
+                                    Temukan dan wujudkan karier impianmu di{" "}
+                                    <span className="text-reseda-green font-bold">WorkHive.com.</span>
                                 </h1>
                                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                                    Temukan lowongan kerja dari perusahaan impianmu. Cari pekerjaan yang sesuai dengan
-                                    keahlianmu dan wujudkan karier impianmu bersama JobTalk.com.
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Temporibus atque provident
+                                    nesciunt sunt? Quod neque excepturi nobis fugiat quo alias veritatis blanditiis sit
+                                    dolores! Tempora saepe rem tenetur fuga magnam.
                                 </p>
-                                {/* <SearchBar /> */}
                             </div>
                         </div>
                     </div>

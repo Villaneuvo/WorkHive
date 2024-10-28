@@ -1,6 +1,5 @@
 import { Dialog, DialogPanel, Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { BuildingOfficeIcon, ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
