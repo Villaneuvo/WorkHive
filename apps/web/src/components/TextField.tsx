@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+
 type TextFieldProps = {
     label?: string;
     placeholder?: string;
@@ -7,7 +8,9 @@ type TextFieldProps = {
     value: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     name?: string;
+    errorMessage?: string;
 };
+
 export default function TextField({
     label = "",
     placeholder = "",
@@ -15,6 +18,7 @@ export default function TextField({
     value = "",
     onChange = () => {},
     name = "",
+    errorMessage = "",
 }: TextFieldProps) {
     return (
         <div>
@@ -30,9 +34,10 @@ export default function TextField({
                     type={type}
                     placeholder={placeholder}
                     value={value}
-                    onChange={(e) => onChange(e)}
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={onChange}
+                    className="block w-full rounded-md border-0 p-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
+                {errorMessage ? <small className="mt-1 text-sm text-red-600">{errorMessage}</small> : null}
             </div>
         </div>
     );

@@ -1,20 +1,14 @@
-import React from "react";
 import {
     CheckCircleIcon,
-    XMarkIcon,
     ExclamationTriangleIcon,
     InformationCircleIcon,
     XCircleIcon,
 } from "@heroicons/react/20/solid";
-import clsx from "clsx";
-
 type AlertProps = {
     type: "success" | "info" | "warning" | "error";
     message: string;
-    className?: string;
 };
-
-export default function Alert({ type, message, className = "" }: AlertProps) {
+export default function Alert({ type, message }: AlertProps) {
     const typealert = {
         success: {
             background: "bg-green-50",
@@ -38,7 +32,7 @@ export default function Alert({ type, message, className = "" }: AlertProps) {
         },
     };
     return (
-        <div className={clsx("my-2 rounded-md p-4", typealert[type].background, className)}>
+        <div className={`my-2 rounded-md p-4 ${typealert[type].background}`}>
             <div className="flex">
                 <div className="flex-shrink-0">{typealert[type].icon}</div>
                 <div className="ml-3">
