@@ -41,11 +41,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 adminId: +adminId,
                 published: changePublish,
             };
-            const response = await axios.put(
-                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/togglePublish/${id}`,
-                bodyRequest,
-            );
-            console.log("response", response);
+            await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/togglePublish/${id}`, bodyRequest);
             window.location.reload();
         } catch (error) {
             console.error("Error process publish", error);
@@ -130,7 +126,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 <DescriptionDetails>{formatDate(jobPost.applicationDeadline)}</DescriptionDetails>
             </DescriptionList>
 
-            <ApplicantListTable jobApplications={jobPost.jobApplications || []} />
+            {jobPost.id && <ApplicantListTable jobId={jobPost.id} />}
 
             <Dialog open={isOpen} onClose={setIsOpen}>
                 <DialogTitle>Delete Job Post</DialogTitle>
