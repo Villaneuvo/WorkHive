@@ -37,8 +37,8 @@ const leftNavigation = {
 };
 
 const rightNavigation = [
-    { name: "Sign in", href: "#" },
-    { name: "Sign up", href: "#" },
+    { name: "Sign in", href: "/login" },
+    { name: "Sign up", href: "/register" },
 ];
 
 export default function Header() {

@@ -9,13 +9,12 @@ export default function Hero() {
                         <div className="mx-auto max-w-2xl">
                             <div className="max-w-lg">
                                 <h1 className="mt-10 text-4xl font-semibold tracking-tight sm:text-6xl">
-                                    Temukan dan wujudkan karier impianmu di{" "}
+                                    Temukan pekerjaan impianmu bersama{" "}
                                     <span className="text-reseda-green font-bold">WorkHive.com.</span>
                                 </h1>
                                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Temporibus atque provident
-                                    nesciunt sunt? Quod neque excepturi nobis fugiat quo alias veritatis blanditiis sit
-                                    dolores! Tempora saepe rem tenetur fuga magnam.
+                                    Temukan lowongan kerja dari perusahaan impianmu. Cari pekerjaan yang sesuai dengan
+                                    keahlianmu dan wujudkan karier impianmu bersama WorkHive.com
                                 </p>
                             </div>
                         </div>
