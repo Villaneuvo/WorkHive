@@ -15,7 +15,7 @@ const ChangePasswordFormSchema = z
     })
     .refine((data) => data.password === data.confirm_password, {
         message: "Passwords don't match",
-        path: ["confirm_password"], // Path of the error
+        path: ["confirm_password"],
     });
 
 type ChangePasswordFormSchemaType = z.infer<typeof ChangePasswordFormSchema>;
@@ -28,7 +28,6 @@ export default function ChangePasswordForm({ token }: { token: string | "" }) {
         type: "success",
         message: "",
     });
-
     const handleSubmit = async (values: FormikValues) => {
         try {
             const res = await changePasswordUser({
@@ -39,7 +38,6 @@ export default function ChangePasswordForm({ token }: { token: string | "" }) {
             console.error(e);
         }
     };
-
     const formik = useFormik<ChangePasswordFormSchemaType>({
         initialValues: {
             password: "",
@@ -48,7 +46,6 @@ export default function ChangePasswordForm({ token }: { token: string | "" }) {
         validate: withZodSchema(ChangePasswordFormSchema),
         onSubmit: handleSubmit,
     });
-
     return (
         <>
             {message.message ? <Alert type={message.type} message={message.message} /> : null}

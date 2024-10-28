@@ -21,8 +21,9 @@ const RegisterFormSchema = z
     })
     .refine((data) => data.password === data.confirm_password, {
         message: "Passwords don't match",
-        path: ["confirm_password"], // Path of the error
+        path: ["confirm_password"],
     });
+
 type RegisterFormSchemaType = z.infer<typeof RegisterFormSchema>;
 
 export default function RegisterForm() {

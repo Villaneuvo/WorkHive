@@ -14,3 +14,12 @@ export const registerUser = async (payload: RegisterPayload) => {
         return await Promise.reject(err);
     }
 };
+
+export const changePasswordUser = async (payload: { password: string; token: string }) => {
+    try {
+        const res = await instance.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/change-password`, payload);
+        return await Promise.resolve(res.data);
+    } catch (err) {
+        return await Promise.reject(err);
+    }
+};
