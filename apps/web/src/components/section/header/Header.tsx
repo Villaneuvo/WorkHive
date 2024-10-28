@@ -47,7 +47,7 @@ export default function Header() {
         <header className={`${!isOpen ? "shadow-[rgba(0,0,15,0.15)_0px_2px_4px_0px]" : "none"} py-2`}>
             <nav className="max-w-8xl mx-auto flex justify-between px-6 py-0 text-sm text-gray-700 lg:px-8">
                 <div className="flex items-center">
-                    <Link href={"#"}>
+                    <Link href={"/"}>
                         <Image src="/logo.svg" alt="logo" width={120} height={120} />
                     </Link>
 

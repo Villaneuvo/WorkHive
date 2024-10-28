@@ -30,12 +30,12 @@ export default function RegisterForm() {
                 <Checkbox
                     name="remember_me"
                     label={
-                        <p>
+                        <>
                             I accept the{" "}
                             <a className="text-primary-dark cursor-pointer font-bold hover:underline">
                                 Terms and Conditions
                             </a>
-                        </p>
+                        </>
                     }
                     value=""
                     onChange={(event) => console.log(event?.target.value)}
@@ -46,7 +46,7 @@ export default function RegisterForm() {
             </Button>
             <p className="text-center text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
-                <Link href="/auth/login" className="text-primary font-bold hover:underline">
+                <Link href="/login" className="text-primary font-bold hover:underline">
                     Login here
                 </Link>
             </p>
