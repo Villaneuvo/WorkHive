@@ -31,7 +31,6 @@ export default function LoginForm() {
         type: "success",
         content: "",
     });
-    const [error, setError] = useState("");
 
     useEffect(() => {
         if (status === "authenticated") {
@@ -82,10 +81,11 @@ export default function LoginForm() {
         validate: withZodSchema(LoginFormSchema),
         onSubmit: handleSubmit,
     });
+
     return (
         <>
             {message.content ? <Alert type={message.type} message={message.content} /> : null}
-            <form onSubmit={formik.handleSubmit} className="space-y-4 md:space-y-6" action="#">
+            <form onSubmit={formik.handleSubmit} className="space-y-4 md:space-y-6">
                 <TextField
                     name="email"
                     label="Email address"
