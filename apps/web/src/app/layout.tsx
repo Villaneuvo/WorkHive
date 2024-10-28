@@ -1,10 +1,8 @@
-import { Footer } from "@/components/section/footer/Footer";
-import Header from "@/components/section/header/Header";
-import AuthProvider from "@/utils/authProvider";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/authOptions";
 import "./globals.css";
+import { getServerSession } from "next-auth";
+import AuthProvider from "@/utils/authProvider";
+import { authOptions } from "./api/auth/authOptions";
 
 export const metadata: Metadata = {
     title: "WorkHive",
@@ -18,14 +16,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <html lang="en">
             <head>
                 <title>WorkHive</title>
+                <meta name="description" content={metadata.description || ""} />
             </head>
-
             <body className="">
-                <AuthProvider session={session}>
-                    <Header />
-                    <main>{children}</main>
-                    <Footer />
-                </AuthProvider>
+                <AuthProvider session={session}>{children}</AuthProvider>
             </body>
         </html>
     );

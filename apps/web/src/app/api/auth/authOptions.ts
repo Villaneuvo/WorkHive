@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
                 if (!credentials?.email || !credentials.password) return null;
 
                 try {
-                    const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/auth/login`, {
+                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
                         email: credentials.email,
                         password: credentials.password,
                     });
