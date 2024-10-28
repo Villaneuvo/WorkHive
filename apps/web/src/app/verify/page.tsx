@@ -17,7 +17,7 @@ const VerifyEmailPage = () => {
             if (token) {
                 try {
                     const baseAPIURL = process.env.NEXT_PUBLIC_API_URL;
-                    const response = await axios.post(`${baseAPIURL}/api/v1/auth/verify`, { token });
+                    const response = await axios.post(`${baseAPIURL}/auth/verify`, { token });
 
                     if (response.data.message === "Email verified successfully!") {
                         setMessage("Email verified successfully! Redirecting to login...");

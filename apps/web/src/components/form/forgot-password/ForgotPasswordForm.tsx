@@ -3,18 +3,13 @@ import { Button } from "@/components/Button";
 import TextField from "@/components/TextField";
 import { FormikValues, useFormik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
-import React from "react";
 import { z } from "zod";
-
 const ForgotPasswordFormSchema = z.object({
     email: z.string().email().min(1, "Email is required"),
 });
-
 type ForgotPasswordFormSchemaType = z.infer<typeof ForgotPasswordFormSchema>;
-
 export default function ForgotPasswordForm() {
     const handleSubmit = async (values: FormikValues) => {};
-
     const formik = useFormik<ForgotPasswordFormSchemaType>({
         initialValues: {
             email: "",
