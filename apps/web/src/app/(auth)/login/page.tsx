@@ -2,7 +2,6 @@
 
 import Card from "@/components/Card";
 import LoginForm from "@/components/form/login/LoginForm";
-// /app/auth/page.js
 export default function LoginPage() {
     return (
         <Card>

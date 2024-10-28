@@ -1,5 +1,5 @@
-import Link from "next/link";
 import clsx from "clsx";
+import Link from "next/link";
 
 const baseStyles = {
     solid: "group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2",
@@ -33,9 +33,9 @@ type ButtonProps = (
         | (Omit<React.ComponentPropsWithoutRef<"button">, "color"> & {
               href?: undefined;
           })
-    ) & { disabled?: boolean };
+    );
 
-export function Button({ className, disabled = false, ...props }: ButtonProps) {
+export function Button({ className, ...props }: ButtonProps) {
     props.variant ??= "solid";
     props.color ??= "slate";
 
@@ -46,7 +46,6 @@ export function Button({ className, disabled = false, ...props }: ButtonProps) {
             : props.variant === "solid"
               ? variantStyles.solid[props.color]
               : undefined,
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className,
     );
 
