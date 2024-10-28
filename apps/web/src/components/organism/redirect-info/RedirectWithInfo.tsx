@@ -9,11 +9,9 @@ export default function RedirectWithInfo({ time, url }: { time: number; url: str
         const interval = setInterval(() => {
             setCount((prev) => prev - 1);
         }, 1000);
-
         setTimeout(() => {
             router.replace(url);
         }, time);
-
         return () => clearInterval(interval);
     }, [time]);
     return (
