@@ -164,6 +164,47 @@ export const adminRegister = async (req: Request, res: Response) => {
     }
 };
 
+export const login = async (req: Request, res: Response) => {
+    try {
+        const parsedData = userAuthSchema.parse(req.body);
+        const { email, password } = parsedData;
+
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
+        const token = generateToken(user);
+
+        res.json({ message: "Login successful", token });
+    } catch (e) {
+        if (e instanceof ZodError) {
+            return res.status(400).json({ errors: e.errors });
+        } else {
+            res.status(500).json({ message: "Internal server error", error: e });
+        }
+    }
+};
+
+const generateToken = (user: any) => {
+    return jwt.sign(
+        {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+        },
+        process.env.JWT_SECRET as string,
+        { expiresIn: "7d" },
+    );
+};
+
 export const verifyEmail = async (req: Request, res: Response) => {
     try {
         const parsedData = verifyEmailSchema.parse(req.body);
