@@ -58,9 +58,11 @@ export default function Select({
                             <span className="block truncate font-normal group-data-[selected]:font-semibold">
                                 {item?.label}
                             </span>
-                            <span className="text-primary-dark absolute inset-y-0 left-0 flex items-center pl-1.5 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
-                                <CheckIcon aria-hidden="true" className="h-5 w-5" />
-                            </span>
+                            {item.value == selected?.value ? (
+                                <span className="text-primary-dark absolute inset-y-0 left-0 flex items-center pl-1.5 group-data-[focus]:text-white">
+                                    <CheckIcon aria-hidden="true" className="h-5 w-5" />
+                                </span>
+                            ) : null}
                         </ListboxOption>
                     ))}
                 </ListboxOptions>

@@ -1,12 +1,14 @@
+"use client";
+import React from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 
 const people = [
-    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
-    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", role: "Member" },
+    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", date: "2021-09-01" },
+    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", date: "2021-09-01" },
+    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", date: "2021-09-01" },
+    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", date: "2021-09-01" },
+    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", date: "2021-09-01" },
+    { name: "Lindsay Walton", title: "Front-end Developer", email: "lindsay.walton@example.com", date: "2021-09-01" },
 ];
 
 export default function InterviewScheduleTable() {
@@ -34,7 +36,7 @@ export default function InterviewScheduleTable() {
                             Email
                         </th>
                         <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                            Role
+                            Date
                         </th>
                         <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                             <span className="sr-only">Action</span>
@@ -55,22 +57,16 @@ export default function InterviewScheduleTable() {
                             </td>
                             <td className="hidden px-3 py-4 text-sm text-gray-500 lg:table-cell">{person.title}</td>
                             <td className="hidden px-3 py-4 text-sm text-gray-500 sm:table-cell">{person.email}</td>
-                            <td className="px-3 py-4 text-sm text-gray-500">{person.role}</td>
+                            <td className="px-3 py-4 text-sm text-gray-500">{person.date}</td>
                             <td className="flex gap-2 py-4 pl-3 pr-4 text-sm font-medium sm:pr-0">
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center rounded-md bg-orange-500 p-1 text-white"
-                                >
+                                <button className="flex items-center justify-center rounded-md bg-orange-500 p-1 text-white">
                                     <PencilIcon className="h-4 w-4" />
                                     <span className="sr-only">edit {person.name}</span>
-                                </a>
-                                <a
-                                    href="#"
-                                    className="flex items-center justify-center rounded-md bg-red-600 p-1 text-white"
-                                >
+                                </button>
+                                <button className="flex items-center justify-center rounded-md bg-red-600 p-1 text-white">
                                     <TrashIcon className="h-4 w-4" />
                                     <span className="sr-only">delete {person.name}</span>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                     ))}
