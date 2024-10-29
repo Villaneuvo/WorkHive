@@ -1,3 +1,16 @@
+export interface User {
+    id: string;
+    email: string;
+    name: string;
+    age: number;
+    educationalBackground: string;
+    photoUrl: string;
+    phoneNumber: string;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
 export interface Job {
     id: string;
     title: string;
@@ -65,8 +78,11 @@ export interface JobApplication {
     id: number;
     jobId: number;
     userId: number;
+    user: User;
+    status: string;
     cvUrl: string;
     expectedSalary: number;
+    createdAt: string;
 }
 export interface Params {
     page: number;

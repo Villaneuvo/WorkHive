@@ -15,6 +15,9 @@ model User {
   email                 String                  @unique
   password              String
   name                  String                  @default("User")
+  age                   Int?
+  educationalBackground EducationalBackground?
+  photoUrl              String?
   role                  Role                    @default(USER)
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
@@ -203,4 +206,14 @@ enum ApplyStatus {
   REVIEWING
   ACCEPTED
   REJECTED
+}
+
+enum EducationalBackground {
+  SD
+  SMP
+  SMA
+  D3
+  S1
+  S2
+  S3
 }

@@ -1,13 +1,12 @@
 "use client";
 
 import { Button } from "@/components/Button";
-import { Input, InputGroup } from "@/components/Input";
 import PaginationNumber from "@/components/PaginationNumber";
+import SearchComponent from "@/components/SearchComponent";
 import { Select } from "@/components/Select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
 import { formatCurrency, formatDate } from "@/utils/helpers";
 import { Job } from "@/utils/interfaces";
-import { MagnifyingGlassIcon } from "@heroicons/react/16/solid";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -47,16 +46,7 @@ export default function JobPostListTable({ adminId }: { adminId: string }) {
     return (
         <div className="p-5">
             <div className="flex-row items-center justify-between space-x-2 space-y-2 md:flex">
-                <InputGroup>
-                    <MagnifyingGlassIcon />
-                    <Input
-                        name="search"
-                        placeholder="Search&hellip;"
-                        aria-label="Search"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </InputGroup>
+                <SearchComponent setCallback={setSearch} />
                 <div className="flex items-center justify-end space-x-4">
                     {/* TODO: Router push kemana? */}
                     <Button onClick={() => router.push(`/create-job-post`)}>Create Job Post</Button>
@@ -89,46 +79,61 @@ export default function JobPostListTable({ adminId }: { adminId: string }) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {jobPosts.map((jobPost: Job) => (
-                        <TableRow key={jobPost.title} href={`/${jobPost.id}`}>
-                            <TableCell className="font-medium">{jobPost.title}</TableCell>
-                            <TableCell>{jobPost.category}</TableCell>
-                            <TableCell className="text-zinc-500">{jobPost.cityLocation}</TableCell>
-                            <TableCell>{formatCurrency(jobPost.salary)}</TableCell>
-                            <TableCell>{formatDate(jobPost.applicationDeadline)}</TableCell>
-                            <TableCell>{jobPost.jobApplications.length}</TableCell>
-                            <TableCell>
-                                {jobPost.published ? (
-                                    <p className="h-fit w-fit rounded bg-green-600 px-2 py-1 text-white">Published</p>
-                                ) : (
-                                    <p className="h-fit w-fit rounded bg-red-600 px-2 py-1 text-white">Not Published</p>
-                                )}
+                    {jobPosts.length == 0 ? (
+                        <TableRow>
+                            <TableCell colSpan={7} className="text-center text-zinc-500">
+                                No Job Post Found
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        jobPosts.map((jobPost: Job) => (
+                            <TableRow key={jobPost.title} href={`/${jobPost.id}`}>
+                                <TableCell className="font-medium">{jobPost.title}</TableCell>
+                                <TableCell>{jobPost.category}</TableCell>
+                                <TableCell className="text-zinc-500">{jobPost.cityLocation}</TableCell>
+                                <TableCell>{formatCurrency(jobPost.salary)}</TableCell>
+                                <TableCell>{formatDate(jobPost.applicationDeadline)}</TableCell>
+                                <TableCell>{jobPost.jobApplications.length}</TableCell>
+                                <TableCell>
+                                    {jobPost.published ? (
+                                        <p className="h-fit w-fit rounded bg-green-600 px-2 py-1 text-white">
+                                            Published
+                                        </p>
+                                    ) : (
+                                        <p className="h-fit w-fit rounded bg-red-600 px-2 py-1 text-white">
+                                            Not Published
+                                        </p>
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
-            <div className="my-5 flex-row items-center justify-between space-x-2 space-y-2 text-center md:flex">
-                <div>
-                    Showing {limit * (currPage - 1) + 1} - {limit * (currPage - 1) + jobPosts.length} of {totalEntries}
-                </div>
+            {jobPosts.length > 0 && (
+                <div className="my-5 flex-row items-center justify-between space-x-2 space-y-2 text-center md:flex">
+                    <div>
+                        Showing {limit * (currPage - 1) + 1} - {limit * (currPage - 1) + jobPosts.length} of{" "}
+                        {totalEntries}
+                    </div>
 
-                <PaginationNumber totalPages={totalPages} currPage={currPage} setCurrPage={setCurrPage} />
+                    <PaginationNumber totalPages={totalPages} currPage={currPage} setCurrPage={setCurrPage} />
 
-                <div className="flex items-center justify-center space-x-2">
-                    <p>Entries</p>
-                    <Select
-                        name="entries"
-                        value={limit}
-                        onChange={(e) => setLimit(+e.target.value)}
-                        className="max-w-20"
-                    >
-                        <option value={10}>10</option>
-                        <option value={15}>15</option>
-                        <option value={20}>20</option>
-                    </Select>
+                    <div className="flex items-center justify-center space-x-2">
+                        <p>Entries</p>
+                        <Select
+                            name="entries"
+                            value={limit}
+                            onChange={(e) => setLimit(+e.target.value)}
+                            className="max-w-20"
+                        >
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                            <option value={20}>20</option>
+                        </Select>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

@@ -150,6 +150,9 @@ export async function getJobPostForAdminById(req: Request, res: Response) {
                     include: {
                         user: true,
                     },
+                    orderBy: {
+                        createdAt: "asc",
+                    },
                 },
             },
         });
@@ -309,9 +312,9 @@ export async function getAllCompanies(req: Request, res: Response) {
         const offset = (page - 1) * limit;
 
         // New query parameters for search and sorting
-        const searchName = req.query.companyName as string || '';
-        const searchLocation = req.query.companyLocation as string || '';
-        const sortOrder = req.query.sort === 'desc' ? 'desc' : 'asc';
+        const searchName = (req.query.companyName as string) || "";
+        const searchLocation = (req.query.companyLocation as string) || "";
+        const sortOrder = req.query.sort === "desc" ? "desc" : "asc";
 
         const [companies, totalCompanies] = await Promise.all([
             prisma.admin.findMany({
