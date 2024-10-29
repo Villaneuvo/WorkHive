@@ -1,9 +1,9 @@
-import axios from "axios";
+import { loginUser } from "@/utils/service/auth";
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import dotenv from "dotenv";
 dotenv.config();
 
 export const authOptions: NextAuthOptions = {
@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
                 if (!credentials?.email || !credentials.password) return null;
 
                 try {
-                    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+                    const response = await loginUser({
                         email: credentials.email,
                         password: credentials.password,
                     });
