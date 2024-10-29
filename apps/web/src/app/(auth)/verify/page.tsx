@@ -6,16 +6,15 @@ import Alert from "@/components/Alert";
 const handleVerifyUser = async (token: string) => {
     try {
         const response = await verifyUserRegis({ token });
-        console.log(response);
-        if (response.data.message === "Email verified successfully!") {
+        if (response.message === "Email successfully verified") {
             return {
                 status: "success",
-                message: response?.data?.message,
+                message: response?.message,
             };
         } else {
             return {
                 status: "error",
-                message: response?.data?.message,
+                message: response?.message,
             };
         }
     } catch (error: unknown) {

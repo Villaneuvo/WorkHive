@@ -45,6 +45,41 @@ export const sendVerificationEmail = async (user: any, token: string) => {
     }
 };
 
+export const sendResetPasswordEmail = async (user: any, token: string) => {
+    const resetUrl = `${process.env.APP_URL}/forgot-password?token=${token}`;
+
+    try {
+        const htmlContent = `<div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+            <h1 style="color: #4CAF50;">Hello!</h1>
+            <p>Please reset your password by clicking the link below:</p>
+            <a href="${resetUrl}" 
+               style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none;">
+                Reset Password
+            </a>
+            <p style="margin-top: 20px;">
+                If the button doesn't work, use this link: <a href="${resetUrl}">${resetUrl}</a>
+            </p>
+        </div>`;
+
+        const { data, error } = await resend.emails.send({
+            from: "WorkHive <noreply@workhive.my.id>",
+            to: user.email,
+            subject: "Reset your password",
+            html: htmlContent,
+        });
+
+        if (error) {
+            console.error("Error sending email:", error);
+            return { status: 500, message: "Error sending email", error };
+        }
+
+        return { status: 200, message: "Email sent successfully", data };
+    } catch (error: any) {
+        console.error("Internal server error:", error.message);
+        return { status: 500, message: "Internal server error", error: error.message };
+    }
+};
+
 export const userRegister = async (req: Request, res: Response) => {
     try {
         const parsedData = userAuthSchema.parse(req.body);

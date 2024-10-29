@@ -18,7 +18,7 @@ export default function Checkbox({ label = "", onChange = () => {}, name = "", c
                     checked={checked}
                     onChange={(e) => onChange(e)}
                     type="checkbox"
-                    className="focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 h-4 w-4 rounded border dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800"
+                    className="focus:ring-primary-dark h-4 w-4 rounded focus:outline-none focus:ring-2"
                 />
             </div>
             {label ? (
