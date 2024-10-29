@@ -1,4 +1,5 @@
 import { Button } from "@/components/Button";
+import ScheduleForm from "@/components/form/schedule/ScheduleForm";
 import InterviewScheduleTable from "@/components/table/interview/InterviewScheduleTable";
 
 export default function InterviewSchedulePage() {
@@ -10,7 +11,7 @@ export default function InterviewSchedulePage() {
                     <p className="mt-2 text-sm text-gray-700">Manage interview schedules for your organization</p>
                 </div>
                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                    <Button>Add Schedule</Button>
+                    <ScheduleForm />
                 </div>
             </div>
             <InterviewScheduleTable />

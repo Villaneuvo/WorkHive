@@ -2,20 +2,23 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Button } from "./Button";
+import clsx from "clsx";
 
 type ModalProps = {
     open: boolean;
+    onSubmit?: () => void;
     onClose: () => void;
     title?: string;
     children: React.ReactNode;
+    className?: string;
 };
 
-export default function Modal({ open, onClose, title = "", children }: ModalProps) {
+export default function Modal({ open, onClose, title = "", children, className, onSubmit = () => {} }: ModalProps) {
     return (
         <Dialog open={open} onClose={onClose} className="relative z-10">
             <DialogBackdrop
                 transition
-                className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+                className="relative transform rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
             />
             <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
                 <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
@@ -33,7 +36,7 @@ export default function Modal({ open, onClose, title = "", children }: ModalProp
                                 <XMarkIcon aria-hidden="true" className="h-6 w-6" />
                             </button>
                         </div>
-                        <div className="sm:flex sm:items-start">
+                        <div className={clsx(className)}>
                             <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                 {title ? (
                                     <DialogTitle as="h3" className="text-base font-semibold leading-6 text-gray-900">
@@ -43,9 +46,13 @@ export default function Modal({ open, onClose, title = "", children }: ModalProp
                                 <div className="mt-2">{children}</div>
                             </div>
                         </div>
-                        <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                            <Button variant="outline">Cancel</Button>
-                            <Button variant="solid">Submit</Button>
+                        <div className="mt-5 flex justify-end space-x-2 sm:mt-4">
+                            <Button onClick={onClose} variant="outline">
+                                Cancel
+                            </Button>
+                            <Button onClick={onSubmit} variant="solid">
+                                Submit
+                            </Button>
                         </div>
                     </DialogPanel>
                 </div>
