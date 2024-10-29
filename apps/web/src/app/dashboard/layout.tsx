@@ -13,9 +13,7 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import {
     Bars3Icon,
     CalendarIcon,
-    ChartPieIcon,
-    DocumentDuplicateIcon,
-    FolderIcon,
+    ChatBubbleBottomCenterTextIcon,
     HomeIcon,
     XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -28,10 +26,7 @@ import { useState } from "react";
 const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
     { name: "Interview Schedule", href: "/dashboard/interview", icon: CalendarIcon, current: false },
-    { name: "Projects", href: "#", icon: FolderIcon, current: false },
-    { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-    { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-    { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
+    { name: "Chat", href: "/dashboard/chat", icon: ChatBubbleBottomCenterTextIcon, current: false },
 ];
 
 const userNavigation = [{ name: "Sign out", href: "/" }];
@@ -71,6 +66,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                                     </button>
                                 </div>
                             </TransitionChild>
+                            {/* Sidebar component, swap this element with another sidebar if you like */}
                             <div className="bg-primary-dark flex grow flex-col gap-y-5 overflow-y-auto px-6 pb-4">
                                 <div className="flex h-16 shrink-0 items-center justify-center">
                                     <Image alt="JobTalk" src="/logo.svg" width={200} height={200} />
@@ -112,7 +108,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     </div>
                 </Dialog>
 
+                {/* Static sidebar for desktop */}
                 <div className="hidden lg:fixed lg:inset-y-0 lg:z-10 lg:flex lg:w-72 lg:flex-col">
+                    {/* Sidebar component, swap this element with another sidebar if you like */}
                     <div className="bg-primary-dark flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 px-6 pb-4">
                         <div className="flex h-16 shrink-0 items-center justify-center">
                             <Image alt="JobTalk" src="/logo.svg" width={200} height={200} />
@@ -163,11 +161,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                             <Bars3Icon aria-hidden="true" className="h-6 w-6" />
                         </button>
 
+                        {/* Separator */}
                         <div aria-hidden="true" className="h-6 w-px bg-gray-200 lg:hidden" />
 
                         <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                             <div className="relative flex flex-1"></div>
                             <div className="flex items-center gap-x-4 lg:gap-x-6">
+                                {/* Profile dropdown */}
                                 <Menu as="div" className="relative">
                                     <MenuButton className="-m-1.5 flex items-center p-1.5">
                                         <span className="sr-only">Open user menu</span>
@@ -209,9 +209,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                         </div>
                     </div>
 
-                    <main className="py-10">
-                        <div className="px-4 sm:px-6 lg:px-8">{children}</div>
-                    </main>
+                    <main className="">{children}</main>
                 </div>
             </div>
         </>
