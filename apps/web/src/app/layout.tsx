@@ -13,12 +13,12 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const session = await getServerSession(authOptions);
     return (
-        <html lang="en">
+        <html lang="en" className="h-full bg-white">
             <head>
                 <title>WorkHive</title>
                 <meta name="description" content={metadata.description || ""} />
             </head>
-            <body className="">
+            <body className="h-full">
                 <AuthProvider session={session}>{children}</AuthProvider>
             </body>
         </html>

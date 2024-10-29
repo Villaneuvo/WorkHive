@@ -1,5 +1,3 @@
-import React from "react";
-//icon edit and delete
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 
 const people = [
