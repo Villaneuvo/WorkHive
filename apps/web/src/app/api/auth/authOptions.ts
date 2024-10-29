@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
                         password: credentials.password,
                     });
 
-                    const { token } = response.data;
+                    const { token } = response;
 
                     if (token) {
                         const decodedToken = jwt.decode(token) as {

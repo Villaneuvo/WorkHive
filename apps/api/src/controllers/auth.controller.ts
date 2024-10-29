@@ -1,7 +1,7 @@
 import { PrismaClient, Role } from "@prisma/client";
 import { ZodError } from "zod";
 import { Request, Response } from "express";
-import { adminRegisterSchema, userAuthSchema, verifyEmailSchema } from "@/schemas/auth.schema";
+import { adminRegisterSchema, emailSchema, userAuthSchema, verifyEmailSchema } from "@/schemas/auth.schema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import resend from "@/resend";
@@ -199,7 +199,7 @@ export const adminRegister = async (req: Request, res: Response) => {
     }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const userLogin = async (req: Request, res: Response) => {
     try {
         const parsedData = userAuthSchema.parse(req.body);
         const { email, password } = parsedData;
@@ -267,5 +267,37 @@ export const verifyEmail = async (req: Request, res: Response) => {
         });
     } catch (error) {
         return res.status(400).json({ message: "Invalid or expired token" });
+    }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+    try {
+        const parsedData = emailSchema.parse(req.body);
+        const { email } = parsedData;
+
+        const user = await prisma.user.findUnique({
+            where: {
+                email,
+            },
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || "default_secret", {
+            expiresIn: "1h",
+        });
+
+        await sendResetPasswordEmail(user, token);
+
+        res.status(200).json({
+            message: "Reset password email sent successfully",
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error,
+        });
     }
 };

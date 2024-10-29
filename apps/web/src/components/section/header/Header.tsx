@@ -1,6 +1,15 @@
 "use client";
 
-import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from "@headlessui/react";
+import {
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+} from "@headlessui/react";
 import {
     Bars3Icon,
     BuildingOfficeIcon,
@@ -12,6 +21,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import MobileHeader from "./MobileHeader";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const leftNavigation = {
     jobseeker: [
@@ -41,8 +52,19 @@ const rightNavigation = [
     { name: "Sign up", href: "/register" },
 ];
 
+const userNavigation = [
+    { name: "Chat", href: "/chat" },
+    { name: "Sign out", href: "/" },
+];
+
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
+    // show user session
+    const { data: session, status } = useSession();
+
+    const handleSignOut = () => {
+        signOut({ callbackUrl: "/" }); // Redirect to the login page after sign-out
+    };
     return (
         <header className={`${!isOpen ? "shadow-[rgba(0,0,15,0.15)_0px_2px_4px_0px]" : "none"} py-2`}>
             <nav className="max-w-8xl mx-auto flex justify-between px-6 py-0 text-sm text-gray-700 lg:px-8">
@@ -101,15 +123,63 @@ export default function Header() {
                         For Employers
                         <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-full"></span>
                     </Link>
-                    {rightNavigation.map((item) => (
-                        <Link
-                            className={`${item.name === "Sign in" ? "text-reseda-green rounded-md px-4 py-2 transition delay-100 duration-300 hover:bg-gray-200" : item.name === "Sign up" ? "transititon bg-reseda-green hover:bg-reseda-green/75 rounded-md px-4 py-2 text-white delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" : "hover:text-reseda-green group transition duration-300 hover:underline hover:underline-offset-4"}`}
-                            key={item.name}
-                            href={item.href}
-                        >
-                            {item.name}
-                        </Link>
-                    ))}
+                    {status === "authenticated" ? (
+                        <Menu as="div" className="relative">
+                            <MenuButton className="-m-1.5 flex items-center p-1.5">
+                                <span className="sr-only">Open user menu</span>
+                                <img
+                                    alt=""
+                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                    className="h-8 w-8 rounded-full bg-gray-50"
+                                />
+                                <span className="hidden lg:flex lg:items-center">
+                                    <span
+                                        aria-hidden="true"
+                                        className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                                    >
+                                        {session?.user?.name}
+                                    </span>
+                                    <ChevronDownIcon aria-hidden="true" className="ml-2 h-5 w-5 text-gray-400" />
+                                </span>
+                            </MenuButton>
+                            <MenuItems
+                                transition
+                                className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                            >
+                                {userNavigation.map((item) => (
+                                    <MenuItem key={item.name}>
+                                        {item.name === "Sign out" ? (
+                                            <button
+                                                onClick={handleSignOut}
+                                                className="block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-gray-50"
+                                            >
+                                                {item.name}
+                                            </button>
+                                        ) : (
+                                            <Link
+                                                href={item.href}
+                                                className="block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-gray-50"
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        )}
+                                    </MenuItem>
+                                ))}
+                            </MenuItems>
+                        </Menu>
+                    ) : (
+                        <>
+                            {rightNavigation.map((item) => (
+                                <Link
+                                    className={`${item.name === "Sign in" ? "text-reseda-green rounded-md px-4 py-2 transition delay-100 duration-300 hover:bg-gray-200" : item.name === "Sign up" ? "transititon bg-reseda-green hover:bg-reseda-green/75 rounded-md px-4 py-2 text-white delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" : "hover:text-reseda-green group transition duration-300 hover:underline hover:underline-offset-4"}`}
+                                    key={item.name}
+                                    href={item.href}
+                                >
+                                    {item.name}
+                                </Link>
+                            ))}
+                        </>
+                    )}
                     <div className="flex lg:hidden">
                         <button type="button" onClick={() => setIsOpen(true)}>
                             {!isOpen ? (
