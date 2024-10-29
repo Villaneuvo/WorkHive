@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import clsx from "clsx";
 
 type TextFieldProps = {
     label?: string;
@@ -9,6 +10,7 @@ type TextFieldProps = {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     name?: string;
     errorMessage?: string;
+    addOn?: string;
 };
 
 export default function TextField({
@@ -19,6 +21,7 @@ export default function TextField({
     onChange = () => {},
     name = "",
     errorMessage = "",
+    addOn = "",
 }: TextFieldProps) {
     return (
         <div>
@@ -27,7 +30,12 @@ export default function TextField({
                     {label}
                 </label>
             ) : null}
-            <div className={`${label ? "mt-2" : ""}`}>
+            <div className={`${label ? "mt-2" : ""} relative rounded-md shadow-sm`}>
+                {addOn ? (
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <span className="text-gray-500 sm:text-sm">{addOn}</span>
+                    </div>
+                ) : null}
                 <input
                     id={name}
                     name={name}
@@ -35,7 +43,10 @@ export default function TextField({
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
-                    className="block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className={clsx(
+                        "focus:ring-primary-dark ring-primary-light block w-full rounded-md border-0 px-4 py-2 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6",
+                        addOn ? "pl-10" : "",
+                    )}
                 />
                 {errorMessage ? <small className="mt-1 text-sm text-red-600">{errorMessage}</small> : null}
             </div>

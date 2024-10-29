@@ -1,7 +1,6 @@
 "use client";
 import Alert from "@/components/Alert";
 import { Button } from "@/components/Button";
-import Modal from "@/components/Modal";
 import TextField from "@/components/TextField";
 import UploadFile from "@/components/UploadFile";
 import { MAX_FILE_SIZE } from "@/utils/const";
@@ -31,7 +30,6 @@ export default function ApplyJobForm() {
         type: "success",
     });
     const handleSubmit = async (values: FormikValues) => {};
-
     const formik = useFormik<ApplyJobFormSchemaType>({
         initialValues: {
             cv: null,
@@ -40,7 +38,6 @@ export default function ApplyJobForm() {
         validate: withZodSchema(ApplyJobFormSchema),
         onSubmit: handleSubmit,
     });
-
     return (
         <div>
             {message.content ? <Alert message={message.content} type={message.type} /> : null}
@@ -63,7 +60,6 @@ export default function ApplyJobForm() {
                     label="Expected Salary (Rupiah)"
                     value={formik.values.expected_salary.toString()}
                     onChange={(e) => {
-                        //accept only number
                         const value = e.target.value.replace(/\D/g, "");
                         formik.setFieldValue("expected_salary", Number(value));
                     }}
