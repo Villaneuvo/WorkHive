@@ -59,12 +59,12 @@ const userNavigation = [
 
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
-    // show user session
     const { data: session, status } = useSession();
 
     const handleSignOut = () => {
-        signOut({ callbackUrl: "/" }); // Redirect to the login page after sign-out
+        signOut({ callbackUrl: "/" });
     };
+
     return (
         <header className={`${!isOpen ? "shadow-[rgba(0,0,15,0.15)_0px_2px_4px_0px]" : "none"} py-2`}>
             <nav className="max-w-8xl mx-auto flex justify-between px-6 py-0 text-sm text-gray-700 lg:px-8">
