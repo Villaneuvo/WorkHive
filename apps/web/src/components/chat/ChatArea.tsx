@@ -1,8 +1,10 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ChatItem from "./ChatItem";
 import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
+import socket from "@/utils/socket";
+
 const OnlineComponent = () => (
     <div className="mt-1 flex items-center gap-x-1.5">
         <div className="flex-none rounded-full bg-emerald-500/20 p-1">
@@ -11,41 +13,20 @@ const OnlineComponent = () => (
         <p className="text-xs leading-5 text-gray-500">Online</p>
     </div>
 );
+
 type ChatListProps = {
     maxHeigh?: string;
 };
+
 const chatList = [
     {
-        message: "Hey, how are you?",
+        message: "test",
         time: "10:00",
         isme: true,
         status: "read",
     },
-    {
-        message: "I'm fine, thank you",
-        time: "10:01",
-        isme: false,
-        status: "read",
-    },
-    {
-        message: "I'm fine, thank you",
-        time: "10:01",
-        isme: false,
-        status: "read",
-    },
-    {
-        message: "I'm fine, thank you",
-        time: "10:01",
-        isme: false,
-        status: "read",
-    },
-    {
-        message: "What are you doing?",
-        time: "10:02",
-        isme: true,
-        status: "delivered",
-    },
 ];
+
 function scrollToBottom() {
     const chatContainer = document.querySelector(".chat-container");
     if (chatContainer) {
@@ -55,27 +36,70 @@ function scrollToBottom() {
         });
     }
 }
+
+const randomuserid = Math.random().toString(36).substring(7);
+
 export default function ChatArea({ maxHeigh = "" }: ChatListProps) {
-    const [message, setMessage] = React.useState("");
+    const [message, setMessage] = useState("");
+    const [pesanDiterima, setPesanDiterima] = useState<any>([]);
+    const [userId, setUserId] = useState(""); // Set pengirim
+    const [recipientId, setRecipientId] = useState(""); // Set penerima
+
     useEffect(() => {
         scrollToBottom();
+        setUserId(randomuserid);
     }, []);
+
+    useEffect(() => {
+        socket.emit("register", userId);
+        socket.on("receive_message", (data) => {
+            console.log("data pesan", data);
+            const pesanbaru = {
+                message: data.message,
+                time: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true }),
+                isme: data.senderId === userId,
+                status: "read",
+            };
+            setPesanDiterima((prev: any) => [...prev, pesanbaru]);
+            setTimeout(() => {
+                scrollToBottom();
+            }, 1000);
+        });
+
+        return () => {
+            socket.off("receive_message");
+        };
+    }, [userId]);
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const newmessage = message.trim();
+        if (!recipientId) {
+            return alert("user id penerima belum diset");
+        }
         if (newmessage) {
-            chatList.push({
+            const data = {
+                recipientId,
                 message: newmessage,
-                time: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true }),
-                isme: true,
-                status: "delivered",
-            });
+                senderId: userId,
+            };
+            socket.emit("send_message", data);
+            setPesanDiterima((prev: any) => [
+                ...prev,
+                {
+                    message: newmessage,
+                    time: new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "numeric", hour12: true }),
+                    isme: true,
+                    status: "read",
+                },
+            ]);
             setTimeout(() => {
                 scrollToBottom();
             }, 100);
             setMessage("");
         }
     };
+
     return (
         <div
             className={clsx("col-span-9 flex flex-col")}
@@ -83,7 +107,6 @@ export default function ChatArea({ maxHeigh = "" }: ChatListProps) {
                 maxHeight: maxHeigh ? maxHeigh : "calc(100vh-64px)",
             }}
         >
-            {/* Chat Header */}
             <div className="sticky top-0 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4">
                 <div className="flex items-center gap-x-4">
                     <img
@@ -92,16 +115,16 @@ export default function ChatArea({ maxHeigh = "" }: ChatListProps) {
                         className="h-8 w-8 rounded-full bg-gray-50"
                     />
                     <div className="space-y-0">
-                        <p className="text-sm font-semibold leading-6 text-gray-900">Leslie Alexander</p>
+                        <p className="text-sm font-semibold leading-6 text-gray-900">Leslie Alexander [{userId}]</p>
                         <OnlineComponent />
                     </div>
                 </div>
             </div>
-            {/* Chat Content */}
+
             <div className="flex flex-1 flex-col overflow-y-scroll">
                 <div className="chat-container flex-1 overflow-y-auto scroll-smooth p-4">
                     <div className="flex flex-col justify-end gap-2">
-                        {chatList.map((item, index) => (
+                        {pesanDiterima.map((item: any, index: number) => (
                             <ChatItem
                                 message={item.message}
                                 time={item.time}
@@ -114,9 +137,19 @@ export default function ChatArea({ maxHeigh = "" }: ChatListProps) {
                     </div>
                 </div>
                 <div className="bg-primary-dark px-4 py-2 text-white">
+                    {/* <input
+                        type="text"
+                        placeholder="User id penerima"
+                        className="w-full rounded-md pb-2 text-black"
+                        value={recipientId}
+                        onChange={(e) => {
+                            setRecipientId(e.target.value);
+                        }}
+                    /> */}
                     <form className="flex w-full" onSubmit={handleSubmit}>
                         <input
                             value={message}
+                            placeholder="Type a message"
                             onChange={(e) => {
                                 setMessage(e.target.value);
                             }}

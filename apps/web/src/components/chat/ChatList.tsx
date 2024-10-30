@@ -1,5 +1,7 @@
+"use client";
 import React from "react";
 import clsx from "clsx";
+
 type ChatListProps = {
     list: Array<{
         imageUrl: string;
@@ -9,6 +11,7 @@ type ChatListProps = {
     }>;
     maxHeigh?: string;
 };
+
 const OnlineComponent = () => (
     <div className="mt-1 flex items-center gap-x-1.5">
         <div className="flex-none rounded-full bg-emerald-500/20 p-1">
@@ -17,14 +20,11 @@ const OnlineComponent = () => (
         <p className="text-xs leading-5 text-gray-500">Online</p>
     </div>
 );
+
 export default function ChatList({ list, maxHeigh }: ChatListProps) {
-    // console.log(maxHeigh);
     return (
         <div
-            className={clsx(
-                "col-span-3 overflow-y-scroll border-r border-gray-300",
-                // maxHeigh ? `max-h-[${maxHeigh}]` : "max-h-[calc(100vh-64px)]",
-            )}
+            className={clsx("col-span-3 overflow-y-scroll border-r border-gray-300")}
             style={{
                 maxHeight: maxHeigh ? maxHeigh : "calc(100vh-64px)",
             }}

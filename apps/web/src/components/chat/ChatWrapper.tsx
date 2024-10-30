@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import ChatList from "@/components/chat/ChatList";
 import ChatArea from "@/components/chat/ChatArea";
