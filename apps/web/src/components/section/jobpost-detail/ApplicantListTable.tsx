@@ -10,7 +10,7 @@ import { Select } from "@/components/Select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
 import { formatCurrency } from "@/utils/helpers";
 import { JobApplication } from "@/utils/interfaces";
-import { EllipsisHorizontalIcon } from "@heroicons/react/16/solid";
+import { EllipsisHorizontalIcon, StarIcon } from "@heroicons/react/16/solid";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -20,6 +20,7 @@ export default function ApplicantListTable({ jobId }: { jobId: string }) {
     const [filterAge, setFilterAge] = useState("all");
     const [filterSalary, setFilterSalary] = useState("all");
     const [filterEducation, setFilterEducation] = useState("all");
+    const [sort, setSort] = useState("");
     const [currPage, setCurrPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const limit = 10;
@@ -31,6 +32,7 @@ export default function ApplicantListTable({ jobId }: { jobId: string }) {
                 if (filterAge !== "all") params.filterAge = filterAge;
                 if (filterSalary !== "all") params.filterSalary = filterSalary;
                 if (filterEducation !== "all") params.filterEducation = filterEducation;
+                if (sort) params.sort = sort;
                 const response = await axios.get(
                     `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobapplications/jobPostId/${jobId}`,
                     { params },
@@ -42,7 +44,7 @@ export default function ApplicantListTable({ jobId }: { jobId: string }) {
             }
         }
         fetchJobApplications();
-    }, [searchName, filterAge, filterSalary, filterEducation, currPage]);
+    }, [searchName, filterAge, filterSalary, filterEducation, sort, currPage]);
 
     function getBadgeStyle(status: string) {
         switch (status) {
@@ -67,7 +69,11 @@ export default function ApplicantListTable({ jobId }: { jobId: string }) {
                 `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobapplications/changeStatus/${id}`,
                 bodyRequest,
             );
-            window.location.reload();
+            setJobApplications((prevApplications) =>
+                prevApplications.map((application) =>
+                    application.id === id ? { ...application, status } : application,
+                ),
+            );
         } catch (error) {
             console.error("Error change status", error);
         }
@@ -75,8 +81,11 @@ export default function ApplicantListTable({ jobId }: { jobId: string }) {
 
     return (
         <div>
-            <div className="flex-row items-center justify-between space-x-2 space-y-2 md:flex">
+            <div className="flex flex-col items-start space-y-2 md:flex-row md:items-center md:justify-between md:space-x-2">
                 <SearchComponent setCallback={setSearchName} />
+                <Button onClick={() => (sort === "asc" ? setSort("desc") : setSort("asc"))}>
+                    Sort Expected Salary
+                </Button>
                 <div className="flex items-center justify-center space-x-2">
                     <p>Age</p>
                     <Select
@@ -157,7 +166,12 @@ export default function ApplicantListTable({ jobId }: { jobId: string }) {
                                 <TableCell className="font-medium">
                                     <div className="flex items-center gap-4">
                                         <Avatar src={jobApplication.user.photoUrl} className="size-12" />
-                                        <div className="font-medium">{jobApplication.user.name}</div>
+                                        <div className="flex items-center gap-2 font-medium">
+                                            {jobApplication.user.name}
+                                            {jobApplication.user.subscription?.isActive &&
+                                                jobApplication.user.subscription.subscriptionType ===
+                                                    "PROFESSIONAL" && <StarIcon className="h-4 w-4 text-yellow-400" />}
+                                        </div>
                                     </div>
                                 </TableCell>
                                 <TableCell>{jobApplication.user.age}</TableCell>

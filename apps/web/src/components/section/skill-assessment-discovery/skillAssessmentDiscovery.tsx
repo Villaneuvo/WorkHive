@@ -1,23 +1,28 @@
 "use client";
 
 import { Container } from "@/components/Container";
+import { SkillAssessment, User } from "@/utils/interfaces";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { SkillAssessment } from "@/utils/interfaces";
+import { useEffect, useState } from "react";
 
 export default function SkillAssessmentDiscovery() {
+    const userId = "1"; // TODO: ganti menjadi props
     const [skillAssessment, setSkillAssessment] = useState<SkillAssessment[]>([]);
+    const [user, setUser] = useState<Partial<User>>({});
 
     useEffect(() => {
         // Fetch data from API
         async function fetchData() {
             try {
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/skill-assessment/quiz/`);
+                const resUser = await axios.get(
+                    `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/subscriptions/userId/${userId}`,
+                );
                 const data = res.data.data;
-                console.log(data);
                 setSkillAssessment(data);
+                setUser(resUser.data);
             } catch (error) {
                 console.error(error);
             }
@@ -31,6 +36,16 @@ export default function SkillAssessmentDiscovery() {
                 {/* Title Section */}
                 <div className="w-full">
                     <h3 className="text-2xl font-semibold text-gray-900">Skill Assessment</h3>
+                    {user.subscription?.isActive ? (
+                        <p className="text-sm text-gray-500">
+                            Kuota Skill Assessment:{" "}
+                            {user.subscription?.subscriptionType === "STANDARD"
+                                ? user.subscription?.quotaAssessment || 0
+                                : "Tak Terbatas"}
+                        </p>
+                    ) : (
+                        "Berlangganan untuk mengikuti tes"
+                    )}
                     <p className="my-4 text-sm leading-relaxed lg:w-3/5">
                         Test your skill and get a job that suits you best with our skill assessment test. We provide a
                         variety of tests that you can take to find out your skills and abilities. Earn a badge for each
@@ -59,12 +74,17 @@ export default function SkillAssessmentDiscovery() {
                                     <p>{item.description}</p>
                                 </div>
                                 <div className="flex items-center">
-                                    <Link
-                                        href={`skill-assessment/quiz/${item.id}`}
-                                        className="bg-reseda-green hover:bg-reseda-green/70 rounded-md p-2 font-medium text-white transition delay-100 duration-300"
-                                    >
-                                        Take Test
-                                    </Link>
+                                    {user.subscription?.isActive &&
+                                        (user.subscription?.subscriptionType === "STANDARD"
+                                            ? user.subscription?.quotaAssessment > 0
+                                            : true) && (
+                                            <Link
+                                                href={`skill-assessment/quiz/${item.id}`}
+                                                className="bg-reseda-green hover:bg-reseda-green/70 rounded-md p-2 font-medium text-white transition delay-100 duration-300"
+                                            >
+                                                Take Test
+                                            </Link>
+                                        )}
                                 </div>
                             </div>
                         </div>
