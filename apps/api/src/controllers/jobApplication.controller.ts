@@ -7,7 +7,7 @@ export async function getAllJobApplicationByJobPostId(req: Request, res: Respons
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
     const offset = (page - 1) * limit;
-    const { searchName, filterAge, filterSalary, filterEducation } = req.query;
+    const { searchName, filterAge, filterSalary, filterEducation, sort } = req.query;
 
     const whereClause: any = {
         jobId: +jobPostId,
@@ -56,13 +56,15 @@ export async function getAllJobApplicationByJobPostId(req: Request, res: Respons
             prisma.jobApplication.findMany({
                 where: whereClause,
                 include: {
-                    user: true,
+                    user: {
+                        include: {
+                            subscription: true,
+                        },
+                    },
                 },
                 skip: offset,
                 take: limit,
-                orderBy: {
-                    createdAt: "asc",
-                },
+                orderBy: sort ? { expectedSalary: sort === "asc" ? "asc" : "desc" } : { createdAt: "asc" },
             }),
             prisma.jobApplication.count({
                 where: whereClause,
