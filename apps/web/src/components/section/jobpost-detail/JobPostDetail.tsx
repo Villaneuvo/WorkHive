@@ -42,13 +42,13 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 published: changePublish,
             };
             await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/togglePublish/${id}`, bodyRequest);
-            window.location.reload();
+            setJobPost((prev) => ({ ...prev, published: changePublish }));
         } catch (error) {
             console.error("Error process publish", error);
         }
     };
     const handleEditJobPost = () => {
-        router.push(`/jobposts/${id}/edit`);
+        router.push(`/jobposts/${id}/edit`); // TODO: disesuaikan
     };
     const handleDeleteJobPost = async () => {
         try {
@@ -58,7 +58,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
             await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/admin/${id}`, {
                 data: bodyRequest,
             });
-            router.push("/jobposts");
+            router.push("/jobposts"); // TODO: disesuaikan
         } catch (error) {
             console.error("Error delete job post", error);
         }
@@ -126,7 +126,12 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
                 <DescriptionDetails>{formatDate(jobPost.applicationDeadline)}</DescriptionDetails>
             </DescriptionList>
 
-            {jobPost.id && <ApplicantListTable jobId={jobPost.id} />}
+            {jobPost.id && (
+                <div className="mt-10">
+                    <Subheading className="my-2">Applicant List</Subheading>
+                    <ApplicantListTable jobId={jobPost.id} />
+                </div>
+            )}
 
             <Dialog open={isOpen} onClose={setIsOpen}>
                 <DialogTitle>Delete Job Post</DialogTitle>
