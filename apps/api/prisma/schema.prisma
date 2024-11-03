@@ -15,12 +15,15 @@ model User {
   email                 String                  @unique
   password              String
   name                  String                  @default("User")
+  age                   Int?
+  educationalBackground EducationalBackground?
+  photoUrl              String?                 @default("http://res.cloudinary.com/dkcur9nvf/image/upload/v1730362532/g6pjkjaipvie2rsz2lsk.jpg")
   role                  Role                    @default(USER)
   createdAt             DateTime                @default(now())
   updatedAt             DateTime                @updatedAt
   verified              Boolean                 @default(false)
   profile               Profile?
-  subscriptions         Subscription[]
+  subscription          Subscription?
   jobApplications       JobApplication[]
   SkillAssessmentResult SkillAssessmentResult[]
   cvUrl                 String?
@@ -29,6 +32,7 @@ model User {
   skillBadges           SkillBadge[]
   Admin                 Admin?
   Developer             Developer?
+  cv                    CV?
 }
 
 model Profile {
@@ -98,15 +102,51 @@ model JobApplication {
 }
 
 model Subscription {
-  id               Int              @id @default(autoincrement())
-  userId           Int
-  user             User             @relation(fields: [userId], references: [id])
+  id               Int                      @id @default(autoincrement())
+  userId           Int                      @unique
+  user             User?                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   subscriptionType SubscriptionType
-  startDate        DateTime         @default(now())
+  quotaAssessment  Int?
+  transferProof    String?
+  paymentId        String?                  @unique
+  startDate        DateTime                 @default(now())
   endDate          DateTime
-  isActive         Boolean          @default(true)
-  Developer        Developer?       @relation(fields: [developerId], references: [id])
+  isActive         Boolean                  @default(false)
+  isApproved       ApproveSubscriptionType?
+  Developer        Developer?               @relation(fields: [developerId], references: [id])
   developerId      Int?
+}
+
+model CV {
+  id          Int            @id @default(autoincrement())
+  userId      Int            @unique
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cvUrl       String?
+  phoneNumber String
+  education   EducationCV?
+  experiences ExperienceCV[]
+  skills      String
+}
+
+model EducationCV {
+  id             Int                   @id @default(autoincrement())
+  cvId           Int                   @unique
+  cv             CV                    @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  education      EducationalBackground
+  institution    String
+  major          String?
+  finalGrade     String
+  graduationDate String
+}
+
+model ExperienceCV {
+  id            Int     @id @default(autoincrement())
+  cvId          Int
+  cv            CV      @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  position      String
+  company       String
+  workingPeriod String
+  description   String? @db.Text
 }
 
 model SkillAssessment {
@@ -203,4 +243,20 @@ enum ApplyStatus {
   REVIEWING
   ACCEPTED
   REJECTED
+}
+
+enum EducationalBackground {
+  SD
+  SMP
+  SMA
+  D3
+  S1
+  S2
+  S3
+}
+
+enum ApproveSubscriptionType {
+  APPROVED
+  REJECTED
+  PENDING
 }

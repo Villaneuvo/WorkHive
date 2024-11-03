@@ -1,8 +1,8 @@
 export function formatCurrency(value: number) {
     if (value <= 0) {
-        return 'No Salary';
+        return "No Salary";
     }
-    return new Intl.NumberFormat('id-ID', currencyFormatOptions).format(value);
+    return new Intl.NumberFormat("id-ID", currencyFormatOptions).format(value);
 }
 
 export function formatDate(date1: Date | undefined) {
@@ -15,17 +15,17 @@ export function formatDate(date1: Date | undefined) {
 
     // Opsi format tanggal
     const options: Intl.DateTimeFormatOptions = {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
     };
 
-    return new Intl.DateTimeFormat('en-US', options).format(date);
+    return new Intl.DateTimeFormat("id", options).format(date);
 }
 
 export const currencyFormatOptions: Intl.NumberFormatOptions = {
-    style: 'currency',
-    currency: 'IDR',
+    style: "currency",
+    currency: "IDR",
     minimumFractionDigits: 0,
 };

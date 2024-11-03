@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 
 export async function getAllSkillAssessments(req: Request, res: Response) {
     try {
-
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 10;
         const offset = (page - 1) * limit;
@@ -11,22 +10,21 @@ export async function getAllSkillAssessments(req: Request, res: Response) {
         const [skillAssessments, totalSkillAssessments] = await Promise.all([
             prisma.skillAssessment.findMany({
                 skip: offset,
-                take: limit
+                take: limit,
             }),
-            prisma.skillAssessment.count()
-        ])
+            prisma.skillAssessment.count(),
+        ]);
 
         res.status(200).json({
             data: skillAssessments,
             pagination: {
                 totalItems: totalSkillAssessments,
                 currentPage: page,
-                totalPages: Math.ceil(totalSkillAssessments / limit)
-            }
-        })
-
+                totalPages: Math.ceil(totalSkillAssessments / limit),
+            },
+        });
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrive skill assessments", error })
+        res.status(500).json({ message: "Failed to retrive skill assessments", error });
     }
 }
 
@@ -40,7 +38,7 @@ export async function getSkillAssessmentsQuizById(req: Request, res: Response) {
         const [skillAssessments, totalSkillAssessments] = await Promise.all([
             prisma.skillAssessment.findMany({
                 where: {
-                    id: parseInt(id)
+                    id: parseInt(id),
                 },
                 skip: offset,
                 take: limit,
@@ -49,23 +47,23 @@ export async function getSkillAssessmentsQuizById(req: Request, res: Response) {
                         select: {
                             questionText: true,
                             choices: true,
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             }),
-            prisma.skillAssessment.count()
-        ])
+            prisma.skillAssessment.count(),
+        ]);
 
         res.status(200).json({
             data: skillAssessments,
             pagination: {
                 totalItems: totalSkillAssessments,
                 currentPage: page,
-                totalPages: Math.ceil(totalSkillAssessments / limit)
-            }
-        })
+                totalPages: Math.ceil(totalSkillAssessments / limit),
+            },
+        });
     } catch (error) {
-        res.status(500).json({ message: "Failed to retrive skill assessments", error })
+        res.status(500).json({ message: "Failed to retrive skill assessments", error });
     }
 }
 
@@ -91,8 +89,7 @@ export async function submitSkillAssessmentAnswers(req: Request, res: Response) 
             return res.status(404).json({ message: "Skill Assessment not found" });
         }
 
-
-        userAnswers.forEach((userAnswer: { question: string, answerIdx: number }) => {
+        userAnswers.forEach((userAnswer: { question: string; answerIdx: number }) => {
             const question = skillAssessment.questions.find((q) => q.questionText === userAnswer?.question);
             if (question?.correctAnswerId === userAnswer.answerIdx) {
                 correctAnswers++;
@@ -116,13 +113,27 @@ export async function submitSkillAssessmentAnswers(req: Request, res: Response) 
                 skillAssessmentId: parseInt(assessmentId),
             },
         });
+        // decrement quota assessment if user has standard subscription
+        const subscription = await prisma.subscription.findUnique({
+            where: { userId: +userId },
+        });
+        if (subscription?.subscriptionType === "STANDARD") {
+            await prisma.subscription.update({
+                where: { userId: +userId },
+                data: {
+                    quotaAssessment: {
+                        decrement: 1,
+                    },
+                },
+            });
+        }
 
         let badge = null;
         if (passed) {
             badge = await prisma.skillBadge.create({
                 data: {
                     userId: 1,
-                    badge: skillAssessment.skillName + " Master"
+                    badge: skillAssessment.skillName + " Master",
                 },
             });
         }
@@ -134,7 +145,6 @@ export async function submitSkillAssessmentAnswers(req: Request, res: Response) 
             score,
             badge: badge?.badge,
         });
-
     } catch (error) {
         res.status(500).json({ message: "Error submitting assessment answers", error });
     }

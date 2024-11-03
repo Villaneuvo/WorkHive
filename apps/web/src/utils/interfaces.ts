@@ -1,3 +1,17 @@
+export interface User {
+    id: string;
+    email: string;
+    name: string;
+    age: number;
+    educationalBackground: string;
+    photoUrl: string;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+    subscription: Subscription;
+    cv: CV;
+}
+
 export interface Job {
     id: string;
     title: string;
@@ -65,8 +79,11 @@ export interface JobApplication {
     id: number;
     jobId: number;
     userId: number;
+    user: User;
+    status: string;
     cvUrl: string;
     expectedSalary: number;
+    createdAt: string;
 }
 export interface Params {
     page: number;
@@ -78,4 +95,47 @@ export interface Params {
     title?: string;
     provinceLocation?: string;
     sort?: string;
+}
+export interface SnapWindow extends Window {
+    snap?: { embed: (token: string, options: { embedId: string }) => void };
+}
+export interface Subscription {
+    id: number;
+    userId: number;
+    subscriptionType: string;
+    quotaAssessment: number;
+    isActive: boolean;
+    isApproved: string;
+    transferProof: string;
+    endDate: string;
+    user: User;
+}
+export interface CV {
+    id: number;
+    userId: number;
+    user: User;
+    cvUrl: string;
+    phoneNumber: string;
+    education: EducationCV;
+    experiences: ExperienceCV[];
+    skills: string;
+}
+export interface EducationCV {
+    id: number;
+    cvId: number;
+    cv: CV;
+    education: string;
+    institution: string;
+    major: string;
+    finalGrade: Float32Array;
+    graduationDate: string;
+}
+export interface ExperienceCV {
+    id: number;
+    cvId: number;
+    cv: CV;
+    position: string;
+    company: string;
+    workingPeriod: string;
+    description: string[];
 }
