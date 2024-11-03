@@ -1,5 +1,6 @@
 "use client";
 
+import { Job } from "@/utils/interfaces";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +12,7 @@ export default function RelatedJob({ params }: { params: { adminId: string } }) 
     useEffect(() => {
         async function fetchData() {
             const res = await axios.get(
-                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/job/${params.adminId}`,
+                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/adminId/${params.adminId}`,
             );
             const data = res.data.data;
             setJobPosts(data);
@@ -21,7 +22,7 @@ export default function RelatedJob({ params }: { params: { adminId: string } }) 
 
     return (
         <>
-            {jobPosts.map((jobPost: any) => (
+            {jobPosts.map((jobPost: Job) => (
                 <div
                     key={jobPost.id}
                     className="mb-5 flex overflow-hidden rounded-lg border border-gray-900/15 bg-white shadow-lg"

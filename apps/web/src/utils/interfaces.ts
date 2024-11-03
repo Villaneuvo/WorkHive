@@ -1,20 +1,22 @@
 export interface Job {
     id: string;
     title: string;
-    bannerUrl: string;
     description: string;
-    admin: {
-        companyName: string;
-    };
-    adminId: string;
+    bannerUrl: string;
     category: string;
     cityLocation: string;
     provinceLocation: string;
-    salary: number;
     type: string;
+    salary: number;
+    applicationDeadline: Date;
+    adminId: string;
+    admin: {
+        companyName: string;
+    };
+    published: boolean;
+    jobApplications: JobApplication[];
     createdAt: string;
     updatedAt: string;
-    applicationDeadline: string;
 }
 
 export interface Company {
@@ -46,13 +48,25 @@ export interface SkillAssessment {
 export interface Question {
     id: number;
     questionText: string;
-    choices: Choice[]
+    choices: Choice[];
 }
 
 export interface Choice {
     id: number;
     text: string;
     questionId: number;
+}
+
+export interface CloudinaryUrl {
+    url: string;
+}
+
+export interface JobApplication {
+    id: number;
+    jobId: number;
+    userId: number;
+    cvUrl: string;
+    expectedSalary: number;
 }
 export interface Params {
     page: number;
