@@ -21,6 +21,7 @@ type LoginFormSchemaType = z.infer<typeof LoginFormSchema>;
 export default function LoginForm() {
     const { status } = useSession();
 
+    const [isLoading, setIsLoading] = useState(false);
     const searchParams = useSearchParams();
     const router = useRouter();
     const register = searchParams.get("register");
@@ -48,6 +49,7 @@ export default function LoginForm() {
 
     async function handleSubmit(values: FormikValues) {
         try {
+            setIsLoading(true);
             setMessage({
                 type: "success",
                 content: "",
@@ -58,9 +60,10 @@ export default function LoginForm() {
                 password: values.password,
             });
             if (result?.error) {
+                setIsLoading(false);
                 setMessage({
                     type: "error",
-                    content: result.error,
+                    content: "Invalid email or password",
                 });
             } else {
                 const callbackUrl = searchParams.get("callbackUrl") || "/";
@@ -70,6 +73,7 @@ export default function LoginForm() {
                 }, 0);
             }
         } catch (error) {
+            setIsLoading(false);
             console.error(error);
         }
     }
@@ -120,7 +124,7 @@ export default function LoginForm() {
                             Forgot password?
                         </Link>
                     </div>
-                    <Button type="submit" className="w-full">
+                    <Button disabled={isLoading} type="submit" className="w-full">
                         Sign In
                     </Button>
                 </form>
