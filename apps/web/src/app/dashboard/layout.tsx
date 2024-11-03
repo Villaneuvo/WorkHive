@@ -15,6 +15,7 @@ import {
     CalendarIcon,
     ChatBubbleBottomCenterTextIcon,
     HomeIcon,
+    UserIcon,
     XMarkIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -26,6 +27,7 @@ import { useState } from "react";
 const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
     { name: "Interview Schedule", href: "/dashboard/interview", icon: CalendarIcon, current: false },
+    { name: "Profile", href: "/dashboard/profile", icon: UserIcon, current: false },
     { name: "Chat", href: "/dashboard/chat", icon: ChatBubbleBottomCenterTextIcon, current: false },
 ];
 
