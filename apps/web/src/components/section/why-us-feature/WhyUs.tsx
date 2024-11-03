@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useId } from "react";
 
 import { Container } from "@/components/Container";
-import { BsBuildings } from "react-icons/bs";
 import { MdOutlineTipsAndUpdates } from "react-icons/md";
-import { PiReadCvLogo } from "react-icons/pi";
 import { TbFilterEdit } from "react-icons/tb";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
+import { BsBuildings } from "react-icons/bs";
+import { PiReadCvLogo } from "react-icons/pi";
 
 const features = [
     {

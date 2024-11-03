@@ -31,14 +31,14 @@ const leftNavigation = {
             alt: "a magnifier icon",
             name: "Cari Lowongan",
             desc: "Temukan lowongan impian dari berbagai industri",
-            href: "#",
+            href: "/jobs",
         },
         {
             image: BuildingOfficeIcon,
             alt: "an office building icon",
             name: "Cari Perusahaan",
             desc: "Temukan lowongan dari perusahaan impianmu",
-            href: "#",
+            href: "/company",
         },
     ],
     webFeature: [
@@ -76,10 +76,17 @@ export default function Header() {
                     <PopoverGroup className="hidden lg:flex lg:gap-x-8">
                         <Popover className="relative">
                             <PopoverButton className="hover:text-reseda-green group flex items-center rounded-md p-2 leading-6 transition delay-100 duration-300 hover:bg-gray-200">
+                        <Popover className="relative">
+                            <PopoverButton className="hover:text-reseda-green group flex items-center rounded-md p-2 leading-6 transition delay-100 duration-300 hover:bg-gray-200">
                                 For Jobseeker
+                                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-500 group-data-[open]:rotate-180" />
                                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-500 group-data-[open]:rotate-180" />
                             </PopoverButton>
 
+                            <PopoverPanel
+                                className="absolute -left-8 top-full z-10 mt-5 w-screen max-w-sm overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                                transition
+                            >
                             <PopoverPanel
                                 className="absolute -left-8 top-full z-10 mt-5 w-screen max-w-sm overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
                                 transition
@@ -106,6 +113,11 @@ export default function Header() {
                         </Popover>
 
                         {leftNavigation.webFeature.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className="hover:text-reseda-green group p-2 transition duration-300"
+                            >
                             <Link
                                 key={item.name}
                                 href={item.href}

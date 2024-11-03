@@ -1,5 +1,6 @@
 import { Dialog, DialogPanel, Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { BuildingOfficeIcon, ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -41,7 +42,7 @@ export default function MobileHeader({
                     className="flex translate-y-24 flex-col bg-white px-6 py-4 text-sm text-gray-700 shadow-[rgba(0,0,15,0.15)_0px_8px_4px_0px]"
                 >
                     <Disclosure as="div" className="">
-                        <DisclosureButton className="hover:text-reseda-green group flex w-full items-center justify-between p-5 delay-100 duration-300 hover:bg-gray-50 focus:outline-none">
+                        <DisclosureButton className="hover:text-reseda-green group flex w-full items-center justify-between p-5 delay-100 duration-300 hover:bg-gray-50">
                             For Jobseeker
                             <ChevronDownIcon
                                 aria-hidden="true"

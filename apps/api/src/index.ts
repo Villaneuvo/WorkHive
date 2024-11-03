@@ -1,3 +1,4 @@
+import "./scheduler/cronJobs";
 import app from "./app";
 import dotenv from "dotenv";
 import { createServer } from "http";

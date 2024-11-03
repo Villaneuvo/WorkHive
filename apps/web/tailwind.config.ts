@@ -22,6 +22,21 @@ module.exports = {
                     light: "#8FA98F",
                 },
             },
+            animation: {
+                "spin-once": "spin-once 1s ease-in-out forwards",
+                "pulse-once": "pulse-once 1s ease-in-out forwards",
+            },
+            keyframes: {
+                "spin-once": {
+                    "0%": { transform: "rotate(0deg)" },
+                    "100%": { transform: "rotate(360deg)" },
+                },
+                "pulse-once": {
+                    "0%": { opacity: "1" },
+                    "50%": { opacity: "0.5" },
+                    "100%": { opacity: "1" },
+                },
+            },
         },
     },
     plugins: [require("@tailwindcss/forms")],
