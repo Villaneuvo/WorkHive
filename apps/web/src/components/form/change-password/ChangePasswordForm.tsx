@@ -1,6 +1,7 @@
 "use client";
 import Alert from "@/components/Alert";
 import { Button } from "@/components/Button";
+import RedirectWithInfo from "@/components/organism/redirect-info/RedirectWithInfo";
 import TextField from "@/components/TextField";
 import { changePasswordUser } from "@/utils/service/auth";
 import { FormikValues, useFormik } from "formik";
@@ -23,21 +24,36 @@ type ChangePasswordFormSchemaType = z.infer<typeof ChangePasswordFormSchema>;
 export default function ChangePasswordForm({ token }: { token: string | "" }) {
     const [message, setMessage] = React.useState<{
         type: "success" | "error";
-        message: string;
+        content: string;
     }>({
         type: "success",
-        message: "",
+        content: "",
     });
+
     const handleSubmit = async (values: FormikValues) => {
         try {
             const res = await changePasswordUser({
                 password: values.password,
                 token: token,
             });
+            if (res?.message) {
+                setMessage({
+                    type: "success",
+                    content: res.message,
+                });
+                formik.resetForm();
+            } else {
+                throw res;
+            }
         } catch (e) {
             console.error(e);
+            setMessage({
+                type: "error",
+                content: "Something went wrong",
+            });
         }
     };
+
     const formik = useFormik<ChangePasswordFormSchemaType>({
         initialValues: {
             password: "",
@@ -46,10 +62,11 @@ export default function ChangePasswordForm({ token }: { token: string | "" }) {
         validate: withZodSchema(ChangePasswordFormSchema),
         onSubmit: handleSubmit,
     });
+
     return (
         <>
-            {message.message ? <Alert type={message.type} message={message.message} /> : null}
-            <form onSubmit={formik.handleSubmit} className="space-y-4 md:space-y-6">
+            {message.content ? <Alert type={message.type} message={message.content} /> : null}
+            <form onSubmit={formik.handleSubmit} className="mb-4 space-y-4 md:space-y-6">
                 <TextField
                     label="Password"
                     name="password"
@@ -78,6 +95,9 @@ export default function ChangePasswordForm({ token }: { token: string | "" }) {
                     </Button>
                 </div>
             </form>
+            {message.type === "success" && message.content !== "" ? (
+                <RedirectWithInfo time={5000} url="/login" />
+            ) : null}
         </>
     );
 }

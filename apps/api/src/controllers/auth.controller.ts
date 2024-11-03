@@ -1,7 +1,13 @@
 import { PrismaClient, Role } from "@prisma/client";
 import { ZodError } from "zod";
 import { Request, Response } from "express";
-import { adminRegisterSchema, emailSchema, userAuthSchema, verifyEmailSchema } from "@/schemas/auth.schema";
+import {
+    adminRegisterSchema,
+    emailSchema,
+    resetPasswordSchema,
+    userAuthSchema,
+    verifyEmailSchema,
+} from "@/schemas/auth.schema";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import resend from "@/resend";
@@ -46,7 +52,7 @@ export const sendVerificationEmail = async (user: any, token: string) => {
 };
 
 export const sendResetPasswordEmail = async (user: any, token: string) => {
-    const resetUrl = `${process.env.APP_URL}/forgot-password?token=${token}`;
+    const resetUrl = `${process.env.APP_URL}/change-password?token=${token}`;
 
     try {
         const htmlContent = `<div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
@@ -299,5 +305,31 @@ export const forgotPassword = async (req: Request, res: Response) => {
             message: "Internal server error",
             error,
         });
+    }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+    try {
+        const parsedData = resetPasswordSchema.parse(req.body);
+        const { password, token } = parsedData;
+        if (!token) {
+            return res.status(400).json({ message: "Invalid or missing token" });
+        }
+        const decoded = jwt.verify(token as string, process.env.JWT_SECRET || "default_secret");
+        const { userId } = decoded as { userId: number };
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await prisma.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                password: hashedPassword,
+            },
+        });
+        res.status(200).json({
+            message: "Password reset successfully",
+        });
+    } catch (error) {
+        return res.status(400).json({ message: "Invalid or expired token" });
     }
 };

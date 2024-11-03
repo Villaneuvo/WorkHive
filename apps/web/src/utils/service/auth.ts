@@ -28,7 +28,7 @@ export const registerUser = async (payload: RegisterPayload) => {
 
 export const changePasswordUser = async (payload: { password: string; token: string }) => {
     try {
-        const res = await instance.post(`${baseURL}/auth/change-password`, payload);
+        const res = await instance.post(`${baseURL}/auth/reset-password`, payload);
         return await Promise.resolve(res.data);
     } catch (err) {
         return await Promise.reject(err);

@@ -19,3 +19,8 @@ export const adminRegisterSchema = z.object({
 export const verifyEmailSchema = z.object({
     token: z.string(),
 });
+
+export const resetPasswordSchema = z.object({
+    password: z.string().min(6),
+    token: z.string(),
+});
