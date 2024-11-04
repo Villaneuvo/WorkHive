@@ -7,6 +7,8 @@ import jobApplicationRoutes from "./routers/jobApplication.router";
 import jobPostRoutes from "./routers/jobPost.router";
 import skillAssessmentRouter from "./routers/skillAssessment.router";
 import subscriptionRouter from "./routers/subscription.router";
+import companyRouter from './routers/company.router';
+import endorsmentRouter from './routers/endorsment.router'
 
 const app = express();
 
@@ -25,7 +27,8 @@ app.use("/api/v1/jobapplications", jobApplicationRoutes);
 app.use("/api/v1/skill-assessment", skillAssessmentRouter);
 app.use("/api/v1/subscriptions", subscriptionRouter);
 app.use("/api/v1/generator", generatorRouter);
-
+app.use('/api/v1/company', companyRouter);
+app.use('/api/v1/endorsement', endorsmentRouter);
 app.use(errorMiddleware);
 
 export default app;

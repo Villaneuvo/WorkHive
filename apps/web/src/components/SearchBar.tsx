@@ -51,6 +51,7 @@ export default function SearchBar() {
         fetchData();
     }, [positionInput]);
 
+    // Debounce for PositionInput Handling
     useEffect(() => {
         const timer = setTimeout(() => {
             dispatch({ type: ACTIONS.SET_DEBOUNCE_INPUT, payload: positionInput });

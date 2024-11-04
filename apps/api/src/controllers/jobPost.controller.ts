@@ -412,6 +412,12 @@ export async function getCompanyById(req: Request, res: Response) {
                 companyProvince: true,
                 companyBannerImg: true,
                 phoneNumber: true,
+                companyRating: true,
+                totalReviews: true,
+                ratings: {
+                    orderBy: { createdAt: 'desc' },
+                    select: { rating: true, createdAt: true, userId: true },
+                },
             },
         });
 
@@ -424,3 +430,29 @@ export async function getCompanyById(req: Request, res: Response) {
         res.status(500).json({ message: "Failed to retrive company", error });
     }
 }
+
+export const saveJobPost = async (req: Request, res: Response) => {
+    const { userId, jobId } = req.body;
+
+    try {
+        const existingSave = await prisma.jobSaved.findFirst({
+            where: { userId, jobId },
+        });
+
+        if (existingSave) {
+            return res.status(409).json({ message: "Job already saved." });
+        }
+
+        const savedJob = await prisma.jobSaved.create({
+            data: {
+                userId,
+                jobId,
+            },
+        });
+
+        res.status(201).json(savedJob);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Unable to save job post." });
+    }
+};

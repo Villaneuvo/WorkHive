@@ -1,5 +1,6 @@
 import { Job } from "@/utils/interfaces";
 import { FormatRupiah } from "@arismun/format-rupiah";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { CiCreditCard1 } from "react-icons/ci";
@@ -9,6 +10,30 @@ import { IoBookmarkOutline } from "react-icons/io5";
 
 export default function Card({ job }: { job: Job }) {
     const dateNow = new Date();
+
+    const saveJobPost = async (jobId: number) => {
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/jobs/save`, {
+                jobId,
+                userId: 1,
+            });
+
+            console.log(response);
+
+            if (response.status === 201) {
+                alert("Job saved successfully!");
+            } else {
+                alert(response.data.message || "Failed to save job.");
+            }
+        } catch (error) {
+            console.error("Error saving job:", error);
+            if (axios.isAxiosError(error) && error.response) {
+                alert(error.response.data?.message || "Failed to save job.");
+            } else {
+                alert("Failed to save job.");
+            }
+        }
+    };
 
     return (
         <Link
@@ -54,7 +79,13 @@ export default function Card({ job }: { job: Job }) {
                 </span>
             </div>
             <div className="flex justify-center gap-x-4">
-                <button className="mt-10 flex w-32 items-center justify-center gap-x-2 rounded-md bg-gray-400 p-2 font-normal text-white transition delay-100 duration-300 hover:bg-gray-500">
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        saveJobPost(Number(job?.id));
+                    }}
+                    className="mt-10 flex w-32 items-center justify-center gap-x-2 rounded-md bg-gray-400 p-2 font-normal text-white transition delay-100 duration-300 hover:bg-gray-500"
+                >
                     <IoBookmarkOutline className="h-5 w-5" />
                     Simpan
                 </button>
