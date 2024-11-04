@@ -58,7 +58,7 @@ export default function SkillAssessmentQuizPage({ params }: { params: { id: stri
                         assessmentId: skillAssessment!.id,
                         userAnswers: updatedAnswers.map((ans) => ({
                             question: ans.question,
-                            answerIdx: ans.answerIdx,
+                            answerIdx: ans.answerIdx + 1,
                         })),
                     },
                 );

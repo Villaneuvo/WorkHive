@@ -24,6 +24,7 @@ async function main() {
             },
         },
     });
+
     const user2 = await prisma.user.create({
         data: {
             email: "user2@example.com",
@@ -54,13 +55,23 @@ async function main() {
             verified: true,
             Admin: {
                 create: {
-                    companyName: "Astra Group Indonesia",
-                    companyDescription:
-                        "Astra International is an Indonesian conglomerate. It is engaged in the automotive, agribusiness, heavy equipment, mining, energy, financial services, information technology, and infrastructure and logistics sectors.",
-                    companyBannerImg: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png",
-                    companyCityLocation: "Kota Semarang",
-                    companyProvince: "Jawa Tengah",
-                    phoneNumber: "+123456789",
+                    companyName: 'Astra Group Indonesia',
+                    companyDescription: 'Astra International is an Indonesian conglomerate. It is engaged in the automotive, agribusiness, heavy equipment, mining, energy, financial services, information technology, and infrastructure and logistics sectors.',
+                    companyBannerImg: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png',
+                    companyCityLocation: 'Kota Semarang',
+                    companyProvince: 'Jawa Tengah',
+                    companyRating: 4.2,
+                    totalReviews: 5,
+                    phoneNumber: '+123456789',
+                    ratings: {
+                        create: [
+                            { userId: 1, rating: 5, createdAt: new Date("2024-10-01") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-10") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-15") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-20") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-25") },
+                        ],
+                    },
                 },
             },
         },
@@ -75,13 +86,23 @@ async function main() {
             verified: true,
             Admin: {
                 create: {
-                    companyName: "Amazon Web Service Indonesia",
-                    companyDescription:
-                        "Amazon Web Services (AWS) is a subsidiary of Amazon providing on-demand cloud computing platforms and APIs to individuals, companies, and governments, on a metered pay-as-you-go basis. These cloud computing web services provide a variety of basic abstract technical infrastructure and distributed computing building blocks and tools.",
-                    companyBannerImg: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/aws_publ0g.png",
-                    companyCityLocation: "Kota Semarang",
-                    companyProvince: "Jawa Tengah",
-                    phoneNumber: "+123456789",
+                    companyName: 'Amazon Web Service Indonesia',
+                    companyDescription: "Amazon Web Services (AWS) is a subsidiary of Amazon providing on-demand cloud computing platforms and APIs to individuals, companies, and governments, on a metered pay-as-you-go basis. These cloud computing web services provide a variety of basic abstract technical infrastructure and distributed computing building blocks and tools.",
+                    companyBannerImg: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/aws_publ0g.png',
+                    companyCityLocation: 'Kota Semarang',
+                    companyProvince: 'Jawa Tengah',
+                    companyRating: 4.2,
+                    totalReviews: 5,
+                    phoneNumber: '+123456789',
+                    ratings: {
+                        create: [
+                            { userId: 1, rating: 5, createdAt: new Date("2024-10-01") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-10") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-15") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-20") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-25") },
+                        ],
+                    },
                 },
             },
         },
@@ -96,13 +117,23 @@ async function main() {
             verified: true,
             Admin: {
                 create: {
-                    companyName: "Dell Technologies Indonesia",
-                    companyDescription:
-                        "Dell Technologies is an American multinational technology company. It was formed as a result of the acquisition of EMC Corporation by Dell Inc.",
-                    companyBannerImg: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png",
-                    companyCityLocation: "Kota Semarang",
-                    companyProvince: "Jawa Tengah",
-                    phoneNumber: "+123456789",
+                    companyName: 'Dell Technologies Indonesia',
+                    companyDescription: 'Dell Technologies is an American multinational technology company. It was formed as a result of the acquisition of EMC Corporation by Dell Inc.',
+                    companyBannerImg: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/dell_kv8wre.png',
+                    companyCityLocation: 'Kota Semarang',
+                    companyProvince: 'Jawa Tengah',
+                    companyRating: 4.2,
+                    totalReviews: 5,
+                    phoneNumber: '+123456789',
+                    ratings: {
+                        create: [
+                            { userId: 1, rating: 5, createdAt: new Date("2024-10-01") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-10") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-15") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-20") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-25") },
+                        ],
+                    },
                 },
             },
         },
@@ -117,13 +148,23 @@ async function main() {
             verified: true,
             Admin: {
                 create: {
-                    companyName: "Google Indonesia",
-                    companyDescription:
-                        "Google LLC is an American multinational technology company that specializes in Internet-related services and products, which include online advertising technologies, a search engine, cloud computing, software, and hardware.",
-                    companyBannerImg: "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/google_xmcbav.png",
-                    companyCityLocation: "Kota Jakarta",
-                    companyProvince: "Jakarta",
-                    phoneNumber: "+123456789",
+                    companyName: 'Google Indonesia',
+                    companyDescription: 'Google LLC is an American multinational technology company that specializes in Internet-related services and products, which include online advertising technologies, a search engine, cloud computing, software, and hardware.',
+                    companyBannerImg: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155299/google_xmcbav.png',
+                    companyCityLocation: 'Kota Jakarta',
+                    companyProvince: 'Jakarta',
+                    companyRating: 4.2,
+                    totalReviews: 5,
+                    phoneNumber: '+123456789',
+                    ratings: {
+                        create: [
+                            { userId: 1, rating: 5, createdAt: new Date("2024-10-01") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-10") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-15") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-20") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-25") },
+                        ],
+                    },
                 },
             },
         },
@@ -138,14 +179,23 @@ async function main() {
             verified: true,
             Admin: {
                 create: {
-                    companyName: "Ultra Sakti Indonesia",
-                    companyDescription:
-                        "Ultra Sakti is a technology company that provides a variety of services, including software development, IT consulting, and digital marketing.",
-                    companyBannerImg:
-                        "https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155300/ultrasakti_hbhs1i.png",
-                    companyCityLocation: "Kota Surabaya",
-                    companyProvince: "Jawa Timur",
-                    phoneNumber: "+123456789",
+                    companyName: 'Ultra Sakti Indonesia',
+                    companyDescription: 'Ultra Sakti is a technology company that provides a variety of services, including software development, IT consulting, and digital marketing.',
+                    companyBannerImg: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155300/ultrasakti_hbhs1i.png',
+                    companyCityLocation: 'Kota Surabaya',
+                    companyProvince: 'Jawa Timur',
+                    companyRating: 4.2,
+                    totalReviews: 5,
+                    phoneNumber: '+123456789',
+                    ratings: {
+                        create: [
+                            { userId: 1, rating: 5, createdAt: new Date("2024-10-01") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-10") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-15") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-20") },
+                            { userId: 1, rating: 4, createdAt: new Date("2024-10-25") },
+                        ],
+                    },
                 },
             },
         },
