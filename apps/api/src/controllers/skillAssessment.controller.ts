@@ -1,5 +1,6 @@
 import prisma from "@/prisma";
 import { Request, Response } from "express";
+import { createOrUpdateCertificate } from "./generator.controller";
 
 export async function getAllSkillAssessments(req: Request, res: Response) {
     try {
@@ -136,6 +137,7 @@ export async function submitSkillAssessmentAnswers(req: Request, res: Response) 
                     badge: skillAssessment.skillName + " Master",
                 },
             });
+            await createOrUpdateCertificate(userId, skillAssessment.id);
         }
 
         res.status(200).json({

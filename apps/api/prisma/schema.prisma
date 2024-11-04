@@ -33,6 +33,7 @@ model User {
   Admin                 Admin?
   Developer             Developer?
   cv                    CV?
+  certificate           Certificate[]
 }
 
 model Profile {
@@ -149,6 +150,20 @@ model ExperienceCV {
   description   String? @db.Text
 }
 
+model Certificate {
+  id                Int               @id @default(autoincrement())
+  title             String
+  status            CertificateStatus
+  completionDate    DateTime
+  expiredDate       DateTime
+  pdfUrl            String?
+  verificationCode  String            @unique
+  userId            Int
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillAssessmentId Int
+  skillAssessment   SkillAssessment   @relation(fields: [skillAssessmentId], references: [id])
+}
+
 model SkillAssessment {
   id                    Int                     @id @default(autoincrement())
   skillName             String
@@ -157,6 +172,7 @@ model SkillAssessment {
   SkillAssessmentResult SkillAssessmentResult[]
   Developer             Developer?              @relation(fields: [developerId], references: [id])
   developerId           Int?
+  certificate           Certificate[]
 }
 
 model Question {
@@ -259,4 +275,9 @@ enum ApproveSubscriptionType {
   APPROVED
   REJECTED
   PENDING
+}
+
+enum CertificateStatus {
+  ACTIVE
+  EXPIRED
 }
