@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import AuthProvider from "@/utils/authProvider";
+import { authOptions } from "./api/auth/authOptions";
 import "./globals.css";
+import { getServerSession } from "next-auth";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -12,10 +15,13 @@ export const metadata: Metadata = {
     description: "Work Hive is a platform that connects job seekers with employers.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+    const session = await getServerSession(authOptions);
     return (
         <html lang="en">
-            <body className={poppins.className}>{children}</body>
+            <AuthProvider session={session}>
+                <body className={poppins.className}>{children}</body>
+            </AuthProvider>
         </html>
     );
 }

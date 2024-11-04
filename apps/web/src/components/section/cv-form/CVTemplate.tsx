@@ -10,7 +10,7 @@ export default function CVTemplateATS({ userId }: { userId: string }) {
     useEffect(() => {
         async function fetchData() {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/generator/userInfo/${userId}`,
+                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/generator/userCVInfo/${userId}`,
             );
             setUser(response.data);
             setUser((prev) => {
@@ -31,7 +31,7 @@ export default function CVTemplateATS({ userId }: { userId: string }) {
         }
         fetchData();
     }, [userId]);
-    if (loading) return <p>Loading...</p>;
+    if (loading || user.cv == undefined) return <p>Loading...</p>;
     return (
         <div className="mx-auto max-w-2xl bg-white p-4 text-gray-900" style={{ fontFamily: "Arial, sans-serif" }}>
             {/* Personal Information */}

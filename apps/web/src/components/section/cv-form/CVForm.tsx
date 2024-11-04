@@ -22,7 +22,7 @@ export default function CVForm({ userId }: { userId: string }) {
     useEffect(() => {
         async function fetchData() {
             const response = await axios.get(
-                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/generator/userInfo/${userId}`,
+                `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/generator/userCVInfo/${userId}`,
             );
             setName(response.data.name);
             setEmail(response.data.email);
