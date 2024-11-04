@@ -56,10 +56,10 @@ model Admin {
   userId              Int             @unique
   user                User            @relation(fields: [userId], references: [id])
   companyName         String
-  companyDescription  String          @db.Text
-  companyBannerImg    String
-  companyCityLocation String
-  companyProvince     String
+  companyDescription  String?         @db.Text
+  companyBannerImg    String?
+  companyCityLocation String?
+  companyProvince     String?
   phoneNumber         String
   jobs                JobPost[]
   companyRating       Float?          @default(0.0)

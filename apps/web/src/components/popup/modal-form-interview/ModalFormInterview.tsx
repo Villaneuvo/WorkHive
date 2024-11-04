@@ -1,5 +1,5 @@
 import Modal from "@/components/Modal";
-import Select from "@/components/Select";
+import Select from "@/components/Select1";
 import TextField from "@/components/TextField";
 import React, { forwardRef } from "react";
 

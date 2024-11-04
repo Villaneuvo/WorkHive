@@ -58,14 +58,8 @@ export default function ModalConfirm({
                             </div>
                         </div>
                         <div className="mt-5 flex justify-end space-x-2 sm:mt-4">
-                            <Button onClick={onClose} variant="outline">
-                                Cancel
-                            </Button>
-                            <Button
-                                className="bg-red-600 text-white hover:bg-red-700"
-                                onClick={onConfirm}
-                                variant="solid"
-                            >
+                            <Button onClick={onClose}>Cancel</Button>
+                            <Button className="bg-red-600 text-white hover:bg-red-700" onClick={onConfirm}>
                                 Confirm
                             </Button>
                         </div>
