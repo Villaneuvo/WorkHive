@@ -1,5 +1,6 @@
 import prisma from "@/prisma";
 import resend from "@/resend";
+import { CertificateStatus } from "@prisma/client";
 import cron from "node-cron";
 
 // Cron job untuk mengirim email saat h-1 yang dijalankan setiap hari pada jam 00:00
@@ -51,6 +52,14 @@ cron.schedule("0 0 * * *", async () => {
             transferProof: null,
             quotaAssessment: null,
             paymentId: null,
+        },
+    });
+    await prisma.certificate.updateMany({
+        where: {
+            expiredDate: { lt: today },
+        },
+        data: {
+            status: "EXPIRED" as CertificateStatus,
         },
     });
 

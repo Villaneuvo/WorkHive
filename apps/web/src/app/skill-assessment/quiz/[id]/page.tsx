@@ -54,7 +54,7 @@ export default function SkillAssessmentQuizPage({ params }: { params: { id: stri
                 const response = await axios.post(
                     `${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/skill-assessment/submit-assessment`,
                     {
-                        userId: 123, // Dummy for now
+                        userId: 1, // TODO: Dummy for now
                         assessmentId: skillAssessment!.id,
                         userAnswers: updatedAnswers.map((ans) => ({
                             question: ans.question,

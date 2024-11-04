@@ -139,3 +139,16 @@ export interface ExperienceCV {
     workingPeriod: string;
     description: string[];
 }
+export interface Certificate {
+    id: number;
+    title: string;
+    status: string;
+    completionDate: Date;
+    expiredDate: Date;
+    pdfUrl: string;
+    verificationCode: string;
+    userId: number;
+    user: User;
+    skillAssessmentId: number;
+    skillAssessment: SkillAssessment;
+}
