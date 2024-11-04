@@ -1,7 +1,7 @@
 "use client";
 
 import FAQ from "@/components/section/FAQ/FAQ";
-import { Footer } from "@/components/section/footer/Footer";
+import Footer from "@/components/section/footer/Footer";
 import Header from "@/components/section/header/Header";
 import Hero from "@/components/section/hero/Hero";
 import JobDiscovery from "@/components/section/job-discovery/JobDiscovery";

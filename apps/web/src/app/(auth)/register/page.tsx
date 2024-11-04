@@ -1,4 +1,4 @@
-import Card from "@/components/Card";
+import Card from "@/components/Card1";
 import RegisterForm from "@/components/form/register/RegisterForm";
 export default function LoginPage() {
     return (

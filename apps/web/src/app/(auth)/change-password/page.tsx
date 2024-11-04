@@ -1,4 +1,4 @@
-import Card from "@/components/Card";
+import Card from "@/components/Card1";
 import ChangePasswordForm from "@/components/form/change-password/ChangePasswordForm";
 
 export default function ChangePasswordPage({

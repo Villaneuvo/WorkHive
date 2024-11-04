@@ -47,12 +47,10 @@ export default function Modal({ open, onClose, title = "", children, className, 
                             </div>
                         </div>
                         <div className="mt-5 flex justify-end space-x-2 sm:mt-4">
-                            <Button onClick={onClose} variant="outline">
+                            <Button onClick={onClose} outline>
                                 Cancel
                             </Button>
-                            <Button onClick={onSubmit} variant="solid">
-                                Submit
-                            </Button>
+                            <Button onClick={onSubmit}>Submit</Button>
                         </div>
                     </DialogPanel>
                 </div>

@@ -1,4 +1,4 @@
-import Card from "@/components/Card";
+import Card from "@/components/Card1";
 import ForgotPasswordForm from "@/components/form/forgot-password/ForgotPasswordForm";
 import React from "react";
 
