@@ -9,6 +9,7 @@ import {
     getPostById,
     togglePublishJobPost,
     updateJobPost,
+    saveJobPost
 } from "@/controllers/jobPost.controller";
 import { Router } from "express";
 
@@ -24,5 +25,6 @@ router.get("/admin/:id", getJobPostForAdminById);
 router.put("/admin/:id", updateJobPost);
 router.delete("/admin/:id", deleteJobPost);
 router.put("/togglePublish/:id", togglePublishJobPost);
+router.post('/jobs/save', saveJobPost);
 
 export default router;

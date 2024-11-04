@@ -30,10 +30,13 @@ model User {
   applications          ApplyList[]
   jobSaved              JobSaved[]
   skillBadges           SkillBadge[]
+  endorsements          Endorsement[]           @relation("UserEndorsements")
+  endorsementsGiven     Endorsement[]           @relation("EndorserUser")
   Admin                 Admin?
   Developer             Developer?
   cv                    CV?
   certificate           Certificate[]
+  ratings               CompanyRating[]
 }
 
 model Profile {
@@ -49,16 +52,44 @@ model Profile {
 }
 
 model Admin {
-  id                  Int       @id @default(autoincrement())
-  userId              Int       @unique
-  user                User      @relation(fields: [userId], references: [id])
+  id                  Int             @id @default(autoincrement())
+  userId              Int             @unique
+  user                User            @relation(fields: [userId], references: [id])
   companyName         String
-  companyDescription  String    @db.Text
+  companyDescription  String          @db.Text
   companyBannerImg    String
   companyCityLocation String
   companyProvince     String
   phoneNumber         String
   jobs                JobPost[]
+  companyRating       Float?          @default(0.0)
+  totalReviews        Int             @default(0)
+  ratings             CompanyRating[]
+}
+
+model CompanyRating {
+  id        Int      @id @default(autoincrement())
+  adminId   Int
+  userId    Int?
+  rating    Int
+  createdAt DateTime @default(now())
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+model Endorsement {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  endorserId Int?
+  text       String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  isExpired  Boolean  @default(false)
+  user       User     @relation("UserEndorsements", fields: [userId], references: [id])
+  endorser   User?    @relation("EndorserUser", fields: [endorserId], references: [id])
+
+  @@index([userId])
+  @@index([endorserId])
 }
 
 model JobPost {
