@@ -7,6 +7,7 @@ import socket from "@/utils/socket";
 import { useSession } from "next-auth/react";
 import { getPublicProfile } from "@/utils/service/user";
 import { getChatHistory, storeUserChat } from "@/utils/service/chat";
+import Image from "next/image";
 
 const OnlineComponent = () => (
     <div className="mt-1 flex items-center gap-x-1.5">
@@ -65,15 +66,40 @@ export default function ChatArea({ maxHeigh = "", recipientId, revalidate = () =
     };
 
     useEffect(() => {
+        const handleGetChatHistory = async (senderId: number, recipientId: number) => {
+            try {
+                const response = await getChatHistory({ senderId, recipientId });
+                if (response?.data) {
+                    setPesanDiterima(
+                        response.data.map((item: any) => ({
+                            message: item.message,
+                            time: new Date(item.timestamp).toLocaleTimeString("en-US", {
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                            }),
+                            isme: item.senderId === userId,
+                            status: item.status,
+                        })),
+                    );
+                    setTimeout(() => {
+                        scrollToBottom();
+                    }, 100);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
         if (recipientId) {
             handleGetProfile(recipientId);
             handleGetChatHistory(Number(userId), recipientId);
         }
-    }, [recipientId]);
+    }, [recipientId, userId]);
     useEffect(() => {
         //emit event messageRead
         socket.emit("messageRead", { senderId: userId, recipientId });
-    }, [message, recipientId]);
+    }, [message, recipientId, userId]);
 
     useEffect(() => {
         if (userId) {
@@ -128,7 +154,7 @@ export default function ChatArea({ maxHeigh = "", recipientId, revalidate = () =
             socket.off("receive_message");
             socket.off("messageRead");
         };
-    }, [userId]);
+    }, [userId, revalidate]);
 
     const handleStoreChat = async (data: { recipientId: number; message: string; senderId: number }) => {
         try {
@@ -213,7 +239,13 @@ export default function ChatArea({ maxHeigh = "", recipientId, revalidate = () =
                 <>
                     <div className="sticky top-0 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4">
                         <div className="flex items-center gap-x-4">
-                            <img alt="" src={receiverDetails?.photoUrl} className="h-8 w-8 rounded-full bg-gray-50" />
+                            <Image
+                                height={32}
+                                width={32}
+                                alt=""
+                                src={receiverDetails?.photoUrl}
+                                className="h-8 w-8 rounded-full bg-gray-50"
+                            />
                             <div className="space-y-0">
                                 <p className="text-sm font-semibold leading-6 text-gray-900">{receiverDetails?.name}</p>
                                 <OnlineComponent />

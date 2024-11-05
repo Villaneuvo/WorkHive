@@ -15,7 +15,7 @@ export default function SearchComponent({ setCallback }: { setCallback: (search:
         return () => {
             clearTimeout(handler);
         };
-    }, [search]);
+    }, [search, setCallback]);
 
     return (
         <InputGroup>

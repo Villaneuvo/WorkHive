@@ -18,7 +18,7 @@ export default function RelatedJob({ params }: { params: { adminId: string } }) 
             setJobPosts(data);
         }
         fetchData();
-    }, []);
+    }, [params.adminId]);
 
     return (
         <>

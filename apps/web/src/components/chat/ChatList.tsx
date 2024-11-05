@@ -2,6 +2,7 @@
 import React from "react";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type ChatListProps = {
     list: Array<{
@@ -45,7 +46,9 @@ export default function ChatList({ list, maxHeigh }: ChatListProps) {
                         className="flex justify-between gap-x-6 py-4 pl-4 hover:cursor-pointer hover:bg-gray-200"
                     >
                         <div className="flex min-w-0 gap-x-4">
-                            <img
+                            <Image
+                                width={48}
+                                height={48}
                                 alt=""
                                 src={item.recipient.photoUrl}
                                 className="h-12 w-12 flex-none rounded-full bg-gray-50"

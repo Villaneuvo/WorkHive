@@ -14,9 +14,10 @@ export default function Hero() {
                                     <span className="text-reseda-green font-bold">WorkHive.com.</span>
                                 </h1>
                                 <p className="mt-6 text-lg leading-8 text-gray-600">
-                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Temporibus atque provident
-                                    nesciunt sunt? Quod neque excepturi nobis fugiat quo alias veritatis blanditiis sit
-                                    dolores! Tempora saepe rem tenetur fuga magnam.
+                                    Bergabunglah dengan jaringan talenta global WorkHive untuk terhubung dengan
+                                    perusahaan terkemuka dan temukan peluang kerja. Gunakan fitur pembuat CV,
+                                    portofolio, hingga temukan pekerjaan yang relevan dengan teknologi mutakhir kami
+                                    yang ada dalam satu platform.
                                 </p>
                                 <SearchBar />
                             </div>

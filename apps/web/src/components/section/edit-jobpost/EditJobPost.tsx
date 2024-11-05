@@ -53,7 +53,7 @@ export default function EditJobPost({ id, adminId }: { id: string; adminId: stri
             }
         }
         fetchJobPost();
-    }, []);
+    }, [adminId, id]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

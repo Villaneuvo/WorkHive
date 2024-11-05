@@ -52,7 +52,7 @@ export default function ChatWrapper({ maxHeigh = "" }: ChatWrapperProps) {
             handleGetChatHistory(session?.user?.id ? Number(session.user.id) : 0, Number(id));
             handleGetList(session?.user?.token || "");
         }
-    }, [session?.user?.id]);
+    }, [session?.user?.id, id, session?.user?.token]);
 
     return (
         <div

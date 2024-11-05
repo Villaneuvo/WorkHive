@@ -28,7 +28,7 @@ export default function SkillAssessmentDiscovery({ userId }: { userId: string })
             }
         }
         fetchData();
-    }, []);
+    }, [userId]);
 
     return (
         <div className="bg-white">

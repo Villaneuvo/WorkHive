@@ -11,6 +11,8 @@ type TextFieldProps = {
     name?: string;
     errorMessage?: string;
     addOn?: string;
+    min?: string;
+    max?: string;
 };
 
 export default function TextField({
@@ -22,6 +24,8 @@ export default function TextField({
     name = "",
     errorMessage = "",
     addOn = "",
+    min = "",
+    max = "",
 }: TextFieldProps) {
     return (
         <div>
