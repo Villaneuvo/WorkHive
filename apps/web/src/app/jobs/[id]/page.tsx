@@ -35,6 +35,7 @@ export default function DetailsJobsPage({ params }: { params: { id: string } }) 
             const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/jobposts/${params.id}`).catch((err) => {
                 console.error(err);
             });
+            console.log(res?.data);
             setJob(res?.data);
         }
         fetchData();
