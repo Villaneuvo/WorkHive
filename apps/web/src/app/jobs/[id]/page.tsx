@@ -10,25 +10,12 @@ import { otherRequiremnts, frontEndRequirement } from "@/utils/requirement-data"
 import Link from "next/link";
 import RelatedJob from "@/components/section/related-job/RelatedJob";
 import { IoBookmarkOutline } from "react-icons/io5";
-
-const dummyJob: any = {
-    id: "1",
-    title: "Frontend Engineer",
-    description:
-        "We are looking for a Frontend Engineer to join our team. You will be responsible for building the ‘client-side’ of our web applications. You should be able to translate our company and customer needs into functional and appealing interactive applications.",
-    type: "Full-time",
-    category: "Engineering",
-    cityLocation: "Jakarta",
-    provinceLocation: "DKI Jakarta",
-    admin: {
-        companyName: "PT. Hehe",
-    },
-    bannerUrl:
-        "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-};
+import { useSession } from "next-auth/react";
 
 export default function DetailsJobsPage({ params }: { params: { id: string } }) {
     const [job, setJob] = useState<Job | null>(null);
+    const { data: session, status } = useSession();
+    console.log("session", status);
 
     useEffect(() => {
         async function fetchData() {
@@ -40,6 +27,32 @@ export default function DetailsJobsPage({ params }: { params: { id: string } }) 
         }
         fetchData();
     }, [params.id]);
+
+    console.log(job);
+
+    const saveJobPost = async (jobId: number) => {
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/jobs/save`, {
+                jobId,
+                userId: session?.user?.id,
+            });
+
+            console.log(response);
+
+            if (response.status === 201) {
+                alert("Job saved successfully!");
+            } else {
+                alert(response.data.message || "Failed to save job.");
+            }
+        } catch (error) {
+            console.error("Error saving job:", error);
+            if (axios.isAxiosError(error) && error.response) {
+                alert(error.response.data?.message || "Failed to save job.");
+            } else {
+                alert("Failed to save job.");
+            }
+        }
+    };
 
     return (
         <div className="bg-white">
@@ -135,13 +148,13 @@ export default function DetailsJobsPage({ params }: { params: { id: string } }) 
                         <TabGroup>
                             <div className="border-b border-gray-200">
                                 <TabList className="-mb-px flex space-x-8">
-                                    <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
+                                    <Tab className="data-[selected]:border-reseda-green data-[selected]:text-reseda-green whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800">
                                         Persyaratan
                                     </Tab>
-                                    <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
+                                    <Tab className="data-[selected]:border-reseda-green data-[selected]:text-reseda-green whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800">
                                         Lokasi
                                     </Tab>
-                                    <Tab className="whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
+                                    <Tab className="data-[selected]:border-reseda-green data-[selected]:text-reseda-green whitespace-nowrap border-b-2 border-transparent py-6 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800">
                                         Lowongan Kerja Sejenis
                                     </Tab>
                                 </TabList>
