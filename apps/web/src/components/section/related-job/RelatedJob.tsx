@@ -50,10 +50,10 @@ export default function RelatedJob({ params }: { params: { adminId: string } }) 
                     </div>
                     <div className="my-auto items-end p-6">
                         <Link
-                            href="#"
+                            href={`/jobs/${jobPost.id}`}
                             className="bg-reseda-green hover:bg-reseda-green/70 rounded-md p-2 font-medium text-white transition delay-100 duration-300"
                         >
-                            Simpan
+                            Lamar
                         </Link>
                     </div>
                 </div>

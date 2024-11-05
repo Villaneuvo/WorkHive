@@ -62,7 +62,7 @@ export default function CreateJobPost({ adminId }: { adminId: string }) {
         };
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts`, data);
-            router.push(`/`); // TODO: Redirect to where?
+            router.push(`/dashboard/manage-jobs`); // TODO: Redirect to where?
         } catch (error) {
             console.error(error);
         }

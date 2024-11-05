@@ -41,15 +41,14 @@ export default function JobPostListTable({ adminId }: { adminId: string }) {
             setTotalEntries(response.data.pagination.totalItems);
         }
         fetchData();
-    }, [currPage, limit, category, search, sort]);
+    }, [currPage, limit, category, search, sort, adminId]);
 
     return (
         <div className="p-5">
             <div className="flex-row items-center justify-between space-x-2 space-y-2 md:flex">
                 <SearchComponent setCallback={setSearch} />
                 <div className="flex items-center justify-end space-x-4">
-                    {/* TODO: Router push kemana? */}
-                    <Button onClick={() => router.push(`/create-job-post`)}>Create Job Post</Button>
+                    <Button onClick={() => router.push(`/dashboard/manage-jobs/create`)}>Create Job Post</Button>
                     <Button onClick={() => (sort === "asc" ? setSort("desc") : setSort("asc"))}>
                         Sort By Due Date
                     </Button>
@@ -87,10 +86,10 @@ export default function JobPostListTable({ adminId }: { adminId: string }) {
                         </TableRow>
                     ) : (
                         jobPosts.map((jobPost: Job) => (
-                            <TableRow key={jobPost.title} href={`/${jobPost.id}`}>
+                            <TableRow key={jobPost.title} href={`/dashboard/manage-jobs/${jobPost.id}`}>
                                 <TableCell className="font-medium">{jobPost.title}</TableCell>
                                 <TableCell>{jobPost.category}</TableCell>
-                                <TableCell className="text-zinc-500">{jobPost.cityLocation}</TableCell>
+                                <TableCell>{jobPost.cityLocation}</TableCell>
                                 <TableCell>{formatCurrency(jobPost.salary)}</TableCell>
                                 <TableCell>{formatDate(jobPost.applicationDeadline)}</TableCell>
                                 <TableCell>{jobPost.jobApplications.length}</TableCell>

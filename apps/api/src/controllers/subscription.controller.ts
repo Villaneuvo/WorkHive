@@ -60,6 +60,7 @@ export async function getUserSubscription(req: Request, res: Response) {
             where: { id: +userId },
             include: {
                 subscription: true,
+                certificate: true,
             },
         });
         return res.status(200).json(user);

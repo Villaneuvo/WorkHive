@@ -235,7 +235,7 @@ async function main() {
             title: 'Software Engineer',
             description:
                 'We are looking for a skilled Software Engineer to join our team.',
-            category: 'Engineering',
+            category: 'Technology',
             bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1729155298/aws_publ0g.png',
             cityLocation: 'Kota Semarang',
             provinceLocation: 'Jawa Tengah',
@@ -254,7 +254,7 @@ async function main() {
             title: 'Data Scientist',
             description:
                 'Analyze and interpret complex data to help our business grow.',
-            category: 'Data Science',
+            category: 'Technology',
             bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1729155298/aws_publ0g.png',
             cityLocation: 'Kota Semarang',
             provinceLocation: 'Jawa Tengah',
@@ -274,7 +274,7 @@ async function main() {
             title: 'UI/UX Designer',
             description:
                 'We are seeking a creative UI/UX Designer to improve our product interfaces.',
-            category: 'Design',
+            category: 'Technology',
             bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png',
             cityLocation: 'Kota Semarang',
             provinceLocation: 'Jawa Tengah',
@@ -336,7 +336,7 @@ async function main() {
             title: 'Frontend Developer',
             description:
                 'We are seeking a talented Frontend Developer to create stunning web interfaces.',
-            category: 'Engineering',
+            category: 'Technology',
             bannerUrl: 'https://res.cloudinary.com/dkcur9nvf/image/upload/v1729155298/astra_ozapdd.png',
             cityLocation: 'Kota Semarang',
             provinceLocation: 'Jawa Tengah',
@@ -900,10 +900,11 @@ async function main() {
     await prisma.subscription.create({
         data: {
             userId: user1.id,
-            subscriptionType: "STANDARD",
+            subscriptionType: "PROFESSIONAL",
             startDate: new Date(),
             endDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),
             isActive: true,
+            isApproved: "APPROVED",
         },
     });
 

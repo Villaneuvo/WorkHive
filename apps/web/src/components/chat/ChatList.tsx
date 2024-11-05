@@ -1,15 +1,19 @@
 "use client";
 import React from "react";
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 
 type ChatListProps = {
     list: Array<{
-        imageUrl: string;
-        name: string;
-        lastSeen: string | null;
-        lastSeenDateTime?: string;
+        recipient: {
+            id: number;
+            photoUrl: string;
+            name: string;
+        };
+        message: string;
     }>;
     maxHeigh?: string;
+    onClick?: () => void;
 };
 
 const OnlineComponent = () => (
@@ -22,6 +26,8 @@ const OnlineComponent = () => (
 );
 
 export default function ChatList({ list, maxHeigh }: ChatListProps) {
+    const router = useRouter();
+
     return (
         <div
             className={clsx("col-span-3 overflow-y-scroll border-r border-gray-300")}
@@ -33,19 +39,22 @@ export default function ChatList({ list, maxHeigh }: ChatListProps) {
                 {list.map((item, index) => (
                     <li
                         key={index}
+                        onClick={() => {
+                            router.replace("/chat?id=" + item.recipient.id);
+                        }}
                         className="flex justify-between gap-x-6 py-4 pl-4 hover:cursor-pointer hover:bg-gray-200"
                     >
                         <div className="flex min-w-0 gap-x-4">
-                            <img alt="" src={item.imageUrl} className="h-12 w-12 flex-none rounded-full bg-gray-50" />
+                            <img
+                                alt=""
+                                src={item.recipient.photoUrl}
+                                className="h-12 w-12 flex-none rounded-full bg-gray-50"
+                            />
                             <div className="space-y-0">
-                                <p className="text-sm font-semibold leading-6 text-gray-900">{item.name}</p>
-                                {item.lastSeen ? (
-                                    <p className="mt-1 text-xs leading-5 text-gray-500">
-                                        Last seen <time dateTime={item.lastSeenDateTime}>{item.lastSeen}</time>
-                                    </p>
-                                ) : (
-                                    <OnlineComponent />
-                                )}
+                                <p className="text-sm font-semibold leading-6 text-gray-900">{item.recipient.name}</p>
+                                <p className="mt-1 text-xs leading-5 text-gray-500">
+                                    {item.message.length > 30 ? item.message.slice(0, 30) + "..." : item.message}
+                                </p>
                             </div>
                         </div>
                     </li>

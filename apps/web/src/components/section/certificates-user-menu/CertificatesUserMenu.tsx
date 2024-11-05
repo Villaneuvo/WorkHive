@@ -14,8 +14,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function CertificatesUserMenu() {
-    const userId = "1"; // TODO: ganti menjadi props
+export default function CertificatesUserMenu({ userId }: { userId: string }) {
     const [certificates, setCertificates] = useState<Certificate[]>([]);
     const [search, setSearch] = useState("");
     const [searchTitle, setSearchTitle] = useState("");
@@ -87,7 +86,7 @@ export default function CertificatesUserMenu() {
         }
     }
     return (
-        <div className="mx-auto max-w-screen-xl">
+        <div className="mx-auto max-w-screen-xl px-8">
             <div className="my-5">
                 <Subheading>Validate your certificate</Subheading>
                 <div className="mt-3 flex max-w-sm gap-2">

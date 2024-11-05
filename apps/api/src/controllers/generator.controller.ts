@@ -171,13 +171,15 @@ export async function postCV(req: Request, res: Response) {
 }
 
 export async function getCV(req: Request, res: Response) {
+    const userId = req.query.userId
+
     const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     try {
         const page = await browser.newPage();
-        const webUrl = `${process.env.BASE_URL_WEB}/cv`;
+        const webUrl = `${process.env.BASE_URL_WEB}/cv?userId=${userId}`;
 
         const response = await page.goto(webUrl, { waitUntil: "networkidle0" });
         if (!response || !response.ok()) {
@@ -269,7 +271,7 @@ export async function createOrUpdateCertificate(userId: number, skillAssessmentI
             });
         }
         const page = await browser.newPage();
-        const webUrl = `${process.env.BASE_URL_WEB}/certificate/${skillAssessmentId}`;
+        const webUrl = `${process.env.BASE_URL_WEB}/certificate/${skillAssessmentId}?userId=${userId}`;
 
         const response = await page.goto(webUrl, { waitUntil: "networkidle0" });
         if (!response || !response.ok()) {

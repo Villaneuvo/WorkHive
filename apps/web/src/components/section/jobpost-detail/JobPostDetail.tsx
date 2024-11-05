@@ -48,7 +48,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
         }
     };
     const handleEditJobPost = () => {
-        router.push(`/jobposts/${id}/edit`); // TODO: disesuaikan
+        router.push(`/dashboard/manage-jobs/${id}/edit`); // TODO: disesuaikan
     };
     const handleDeleteJobPost = async () => {
         try {
@@ -64,7 +64,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
         }
     };
     return (
-        <div className="p-2">
+        <div className="mx-auto mt-5 max-w-screen-xl px-8">
             <div className="flex flex-col items-center justify-between sm:flex-row">
                 <Subheading>Job Post Detail - {jobPost.title}</Subheading>
                 <div className="flex space-x-2">

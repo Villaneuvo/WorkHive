@@ -1,7 +1,7 @@
 "use client";
 import ChatWrapper from "@/components/chat/ChatWrapper";
-import Header from "@/components/section/header/Header";
 import Footer from "@/components/section/footer/Footer";
+import Header from "@/components/section/header/Header";
 
 export default function UserChatPage() {
     return (

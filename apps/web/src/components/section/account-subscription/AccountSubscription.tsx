@@ -26,7 +26,7 @@ export default function AccountSubscription({ userId }: { userId: string }) {
         fetchUserSubscription();
     }, [userId]);
     function handleClick() {
-        router.push(`/subsription/payment/${userId}`); // TODO: disesuaikan dengan path yang benar
+        router.push(`/dashboard/subscription/payment`); // TODO: disesuaikan dengan path yang benar
     }
     if (loading) return <p>Loading...</p>;
     return (

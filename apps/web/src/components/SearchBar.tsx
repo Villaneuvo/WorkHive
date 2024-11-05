@@ -8,6 +8,7 @@ import { reducer, initialState } from "../utils/reducer-search";
 import { fetchProviceLocation } from "../utils/fetch-province-location";
 import { SearchJobPosition } from "@/utils/interfaces";
 import { SearchBarLocationResult, SearchBarResultPosition } from "./SearchBarResult";
+import Link from "next/link";
 
 export default function SearchBar() {
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -120,13 +121,13 @@ export default function SearchBar() {
     return (
         <>
             <div className="mt-6 flex flex-col gap-y-5 sm:flex-row">
-                <div className="flex flex-col gap-x-0.5 gap-y-5 sm:flex-row sm:rounded-l-md sm:border sm:border-black/25 sm:bg-gray-100">
+                <div className="flex flex-col gap-y-5 sm:flex-row sm:rounded-l-md sm:border sm:border-black/25 sm:bg-gray-100">
                     <input
                         type="text"
                         value={positionInput}
                         placeholder="Posisi atau Perusahaan"
                         onChange={(e) => handleChangePositionInput(e.target.value)}
-                        className="focus:ring-reseda-green rounded-md bg-gray-100 bg-[url('/building-office.svg')] bg-[length:20px_20px] bg-[24px_50%] bg-no-repeat p-6 pl-12 text-sm text-gray-700 focus:outline-none focus:ring-2 sm:w-60 sm:rounded-none sm:rounded-l-md lg:w-72"
+                        className="focus:ring-reseda-green rounded-md bg-gray-100 bg-[url('/building-office.svg')] bg-[length:20px_20px] bg-[24px_50%] bg-no-repeat p-6 pl-12 text-sm text-gray-700 focus:outline-none focus:ring-2 sm:w-60 sm:rounded-none sm:rounded-l-md sm:border-black/25 lg:w-72"
                         onBlur={handleBlurSuggestions}
                         onFocus={handleFocusSuggestions}
                     />
@@ -143,7 +144,9 @@ export default function SearchBar() {
                 </div>
                 <button className="bg-reseda-green hover:bg-reseda-green/75 hidden gap-x-2 rounded-md p-6 sm:flex sm:rounded-none sm:rounded-r-md">
                     <MagnifyingGlassIcon className="h-5 w-5 text-white" />
-                    <span className="font-medium text-white">Cari</span>
+                    <Link href={"/jobs"} className="font-medium text-white">
+                        Cari
+                    </Link>
                 </button>
             </div>
 

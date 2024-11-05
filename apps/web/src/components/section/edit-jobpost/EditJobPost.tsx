@@ -71,7 +71,7 @@ export default function EditJobPost({ id, adminId }: { id: string; adminId: stri
         };
         try {
             await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/admin/${id}`, data);
-            router.push(`/jobposts/${id}`);
+            router.push(`/dashboard/manage-jobs/${id}`);
         } catch (error) {
             console.error(error);
         }

@@ -6,9 +6,9 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Badge } from "@/components/Badge";
 
-export default function SkillAssessmentDiscovery() {
-    const userId = "1"; // TODO: ganti menjadi props
+export default function SkillAssessmentDiscovery({ userId }: { userId: string }) {
     const [skillAssessment, setSkillAssessment] = useState<SkillAssessment[]>([]);
     const [user, setUser] = useState<Partial<User>>({});
 
@@ -32,19 +32,35 @@ export default function SkillAssessmentDiscovery() {
 
     return (
         <div className="bg-white">
-            <Container className="mx-10 my-5 rounded-lg bg-gray-300/25 p-5 xl:mx-auto">
+            <Container className="my-5 rounded-lg bg-gray-300/25 p-5 sm:mx-14 xl:mx-auto">
                 {/* Title Section */}
                 <div className="w-full">
                     <h3 className="text-2xl font-semibold text-gray-900">Skill Assessment</h3>
                     {user.subscription?.isActive ? (
-                        <p className="text-sm text-gray-500">
-                            Kuota Skill Assessment:{" "}
-                            {user.subscription?.subscriptionType === "STANDARD"
-                                ? user.subscription?.quotaAssessment || 0
-                                : "Tak Terbatas"}
-                        </p>
+                        <>
+                            <p className="text-sm text-gray-500">
+                                Skill Assessment Quota:{" "}
+                                {user.subscription?.subscriptionType === "STANDARD"
+                                    ? user.subscription?.quotaAssessment || 0
+                                    : "Unlimited"}
+                            </p>
+                            <p className="my-1 text-sm">
+                                Your Badge:{" "}
+                                {(user.certificate || []).length <= 2 ? (
+                                    <Badge color="yellow">Beginner</Badge>
+                                ) : (user.certificate || []).length <= 5 ? (
+                                    <Badge color="blue">Intermediate</Badge>
+                                ) : (user.certificate || []).length <= 10 ? (
+                                    <Badge color="purple">Advanced</Badge>
+                                ) : (user.certificate || []).length <= 20 ? (
+                                    <Badge color="green">Expert</Badge>
+                                ) : (
+                                    <Badge color="red">Master</Badge>
+                                )}
+                            </p>
+                        </>
                     ) : (
-                        "Berlangganan untuk mengikuti tes"
+                        <span className="text-sm">Subscribe to take the test and get a certificate</span>
                     )}
                     <p className="my-4 text-sm leading-relaxed lg:w-3/5">
                         Test your skill and get a job that suits you best with our skill assessment test. We provide a

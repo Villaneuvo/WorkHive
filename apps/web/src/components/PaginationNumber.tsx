@@ -16,7 +16,7 @@ export default function PaginationNumber({
     return (
         <div className="flex items-center justify-center space-x-2">
             <button
-                className="rounded bg-blue-500 px-3 py-1 text-white disabled:opacity-50"
+                className="bg-reseda-green rounded px-3 py-1 text-white disabled:opacity-50"
                 onClick={handlePrevPage}
                 disabled={currPage === 1}
             >
@@ -24,7 +24,7 @@ export default function PaginationNumber({
             </button>
             {PaginationNumberRow(totalPages, currPage, setCurrPage)}
             <button
-                className="rounded bg-blue-500 px-3 py-1 text-white disabled:opacity-50"
+                className="bg-reseda-green rounded px-3 py-1 text-white disabled:opacity-50"
                 onClick={handleNextPage}
                 disabled={currPage === totalPages || totalPages === 0}
             >
@@ -41,7 +41,7 @@ function PaginationNumberRow(totalPages: number, currPage: number, setCurrPage: 
             pageNumbers.push(
                 <button
                     key={i}
-                    className={`px-3 py-1 ${currPage === i ? "bg-blue-500 text-white" : "bg-white text-gray-700"} rounded border`}
+                    className={`px-3 py-1 ${currPage === i ? "bg-reseda-green text-white" : "bg-white text-gray-700"} rounded border`}
                     onClick={() => setCurrPage(i)}
                 >
                     {i}
@@ -53,7 +53,7 @@ function PaginationNumberRow(totalPages: number, currPage: number, setCurrPage: 
         pageNumbers.push(
             <button
                 key={1}
-                className={`px-3 py-1 ${currPage === 1 ? "bg-blue-500 text-white" : "bg-white text-gray-700"} rounded border`}
+                className={`px-3 py-1 ${currPage === 1 ? "bg-reseda-green text-white" : "bg-white text-gray-700"} rounded border`}
                 onClick={() => setCurrPage(1)}
             >
                 1
@@ -74,7 +74,7 @@ function PaginationNumberRow(totalPages: number, currPage: number, setCurrPage: 
             pageNumbers.push(
                 <button
                     key={i}
-                    className={`px-3 py-1 ${currPage === i ? "bg-blue-500 text-white" : "bg-white text-gray-700"} rounded border`}
+                    className={`px-3 py-1 ${currPage === i ? "bg-reseda-green text-white" : "bg-white text-gray-700"} rounded border`}
                     onClick={() => setCurrPage(i)}
                 >
                     {i}
@@ -93,7 +93,7 @@ function PaginationNumberRow(totalPages: number, currPage: number, setCurrPage: 
         pageNumbers.push(
             <button
                 key={totalPages}
-                className={`px-3 py-1 ${currPage === totalPages ? "bg-blue-500 text-white" : "bg-white text-gray-700"} rounded border`}
+                className={`px-3 py-1 ${currPage === totalPages ? "bg-reseda-green text-white" : "bg-white text-gray-700"} rounded border`}
                 onClick={() => setCurrPage(totalPages)}
             >
                 {totalPages}

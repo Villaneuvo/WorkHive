@@ -176,7 +176,7 @@ export default function PaymentPage({ userId }: { userId: string }) {
                         plain
                         onClick={() => {
                             setIsOpen(false);
-                            router.push("/"); // TODO: Redirect to subscription page
+                            router.push("/dashboard/subscription"); // TODO: Redirect to subscription page
                         }}
                     >
                         OK

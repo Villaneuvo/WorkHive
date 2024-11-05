@@ -2,13 +2,16 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
 
-const EndorsementForm: React.FC<{ userId: number }> = ({ userId }) => {
+const EndorsementForm = () => {
+    const [userId, setUserId] = useState("");
     const [text, setText] = useState("");
     const [expiresAt, setExpiresAt] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
-    const [isAnonymous, setIsAnonymous] = useState(false); // New state for anonymity
+    const [isAnonymous, setIsAnonymous] = useState(false);
+    const { data: session } = useSession();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,14 +25,13 @@ const EndorsementForm: React.FC<{ userId: number }> = ({ userId }) => {
 
         try {
             const data: any = {
-                userId,
+                userId: Number(userId),
                 text,
                 expiresAt,
             };
 
-            // Only add endorserId if not anonymous
             if (!isAnonymous) {
-                data.endorserId = 2; // Replace with actual endorser ID logic
+                data.endorserId = session?.user.id;
             }
 
             await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/endorsement`, data);
@@ -44,11 +46,24 @@ const EndorsementForm: React.FC<{ userId: number }> = ({ userId }) => {
     };
 
     return (
-        <div className="mx-auto mt-6 max-w-lg rounded-lg bg-white p-4 shadow-md">
+        <div className="mx-auto mt-10 max-w-lg rounded-lg bg-white p-4 shadow-md">
             <h2 className="text-center text-2xl font-semibold">Endorse User</h2>
             {error && <p className="text-center text-red-500">{error}</p>}
             {success && <p className="text-center text-green-500">{success}</p>}
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+                <label htmlFor="userId" className="block">
+                    Input User ID to endorse
+                </label>
+                <input
+                    type="number"
+                    value={userId}
+                    onChange={(e) => {
+                        const value = e.target.value;
+                        setUserId(value === "" ? "" : value); // Keep as an empty string if cleared
+                    }}
+                    required
+                    className="focus:ring-reseda-green no-arrows w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2"
+                />
                 <label htmlFor="text" className="block">
                     Endorsement Text
                 </label>

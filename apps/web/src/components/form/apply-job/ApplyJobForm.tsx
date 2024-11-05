@@ -4,8 +4,10 @@ import { Button } from "@/components/Button";
 import TextField from "@/components/TextField";
 import UploadFile from "@/components/UploadFile";
 import { MAX_FILE_SIZE } from "@/utils/const";
+import { applyJob } from "@/utils/service/jobs";
 import { FormikValues, useFormik } from "formik";
 import { withZodSchema } from "formik-validator-zod";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { z } from "zod";
@@ -20,16 +22,34 @@ const ApplyJobFormSchema = z.object({
 
 type ApplyJobFormSchemaType = z.infer<typeof ApplyJobFormSchema>;
 
-export default function ApplyJobForm() {
+export default function ApplyJobForm({ jobId }: { jobId: number }) {
+    const { data: session } = useSession();
     const router = useRouter();
+    const [isLoading, setIsLoading] = React.useState(false);
     const [message, setMessage] = React.useState<{
         content: string;
         type: "success" | "error";
     }>({
-        content: "success apply job",
+        content: "",
         type: "success",
     });
-    const handleSubmit = async (values: FormikValues) => {};
+    const handleSubmit = async (values: FormikValues) => {
+        try {
+            const res = await applyJob({
+                jobId: jobId,
+                userId: Number(session?.user.id),
+                cv: values.cv,
+                expectedSalary: values.expected_salary,
+            });
+            if (res?.data) {
+                setMessage({ content: "Apply job success", type: "success" });
+                formik.resetForm();
+            }
+        } catch (e) {
+            console.log(e);
+            setMessage({ content: "Apply job failed", type: "error" });
+        }
+    };
     const formik = useFormik<ApplyJobFormSchemaType>({
         initialValues: {
             cv: null,
@@ -43,6 +63,7 @@ export default function ApplyJobForm() {
             {message.content ? <Alert message={message.content} type={message.type} /> : null}
             <form onSubmit={formik.handleSubmit} className="space-y-4 md:space-y-6">
                 <UploadFile
+                    key={formik.values.cv}
                     name="cv"
                     label="Upload CV"
                     helperText={`File must be in PDF format and less than ${MAX_FILE_SIZE / 1000000}MB`}
@@ -72,10 +93,10 @@ export default function ApplyJobForm() {
                 <div className="flex justify-end gap-2">
                     <Button
                         type="button"
+                        color="dark/white"
                         onClick={() => {
                             router.back();
                         }}
-                        variant="outline"
                     >
                         Cancel
                     </Button>
