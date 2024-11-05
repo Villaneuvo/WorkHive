@@ -41,13 +41,6 @@ const navigation = [
         role: ["ADMIN"],
     },
     {
-        name: "Profile",
-        href: "/dashboard/profile",
-        icon: UserIcon,
-        current: false,
-        role: ["ADMIN", "USER", "DEVELOPER"],
-    },
-    {
         name: "Chat",
         href: "/dashboard/chat",
         icon: ChatBubbleBottomCenterTextIcon,
