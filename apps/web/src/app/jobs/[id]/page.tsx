@@ -3,7 +3,7 @@
 import { Job } from "@/utils/interfaces";
 import { useEffect, useState } from "react";
 import { Fragment } from "react";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+import { Button, Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import axios from "axios";
 import Image from "next/image";
 import { otherRequiremnts, frontEndRequirement } from "@/utils/requirement-data";
@@ -19,8 +19,11 @@ export default function DetailsJobsPage({ params }: { params: { id: string } }) 
 
     useEffect(() => {
         async function fetchData() {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/jobposts/${params.id}`);
-            setJob(res.data);
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/jobposts/${params.id}`).catch((err) => {
+                console.error(err);
+            });
+            console.log(res?.data);
+            setJob(res?.data);
         }
         fetchData();
     }, [params.id]);
@@ -71,81 +74,71 @@ export default function DetailsJobsPage({ params }: { params: { id: string } }) 
 
                     {/* Product details */}
                     <div className="mx-auto mt-14 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
-                        <div className="flex flex-col-reverse">
-                            <div className="mt-4">
-                                <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                                    {job?.title}
-                                </h1>
+                        <div className="sticky top-2 h-fit">
+                            <div className="flex flex-col-reverse">
+                                <div className="mt-4">
+                                    <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+                                        {job?.title}
+                                    </h1>
 
-                                <p className="mt-2 text-sm text-gray-500">{job?.admin?.companyName}</p>
+                                    <p className="mt-2 text-sm text-gray-500">{job?.admin?.companyName}</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <p className="mt-6 text-gray-500">{job?.description}</p>
+                            <p className="mt-6 text-gray-500">{job?.description}</p>
 
-                        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                            {status !== "authenticated" ? (
-                                <>
-                                    <Link
-                                        href={"/login"}
-                                        className="bg-reseda-green hover:bg-reseda-green/70 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white transition delay-100 duration-300"
-                                    >
-                                        Lamar Pekerjaan
-                                    </Link>
-                                    <Link
-                                        href={"/login"}
-                                        type="button"
-                                        className="flex w-full items-center justify-center gap-x-2 rounded-md bg-gray-400 px-8 py-3 font-normal text-white transition delay-100 duration-300 hover:bg-gray-500"
-                                    >
-                                        <IoBookmarkOutline className="h-5 w-5" />
-                                        Simpan
-                                    </Link>
-                                </>
-                            ) : (
-                                <>
-                                    <Link
-                                        href={`/jobs/${params.id}/apply`}
-                                        className="bg-reseda-green hover:bg-reseda-green/70 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white transition delay-100 duration-300"
-                                    >
-                                        Lamar Pekerjaan
-                                    </Link>
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            saveJobPost(Number(job?.id));
-                                        }}
-                                        type="button"
-                                        className="flex w-full items-center justify-center gap-x-2 rounded-md bg-gray-400 px-8 py-3 font-normal text-white transition delay-100 duration-300 hover:bg-gray-500"
-                                    >
-                                        <IoBookmarkOutline className="h-5 w-5" />
-                                        Simpan
-                                    </button>
-                                </>
-                            )}
-                        </div>
+                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+                                <button
+                                    type="button"
+                                    className="bg-reseda-green hover:bg-reseda-green/70 flex w-full items-center justify-center rounded-md border border-transparent px-8 py-3 text-base font-medium text-white transition delay-100 duration-300"
+                                >
+                                    Lamar Pekerjaan
+                                </button>
+                                <button
+                                    type="button"
+                                    className="flex w-full items-center justify-center gap-x-2 rounded-md bg-gray-400 px-8 py-3 font-normal text-white transition delay-100 duration-300 hover:bg-gray-500"
+                                >
+                                    <IoBookmarkOutline className="h-5 w-5" />
+                                    Simpan
+                                </button>
+                            </div>
 
-                        <div className="mt-10 border-t border-gray-200 pt-5">
-                            <h3 className="text-reseda-green mb-5 text-xl font-semibold">Tentang Perushaan</h3>
-                            <div className="mb-5 flex overflow-hidden rounded-lg border border-gray-900/15 bg-white shadow-lg">
-                                <div className="ml-5 mt-5 h-fit w-fit overflow-hidden rounded-md border border-gray-900/25 bg-white p-5">
-                                    <Image
-                                        width={60}
-                                        height={60}
-                                        alt="hehe"
-                                        src={job?.bannerUrl || "/default-banner.jpg"}
-                                        className="group-hover:opacity-75"
-                                    />
-                                </div>
-                                <div className="flex max-w-40 flex-col justify-center p-6 text-sm">
-                                    <span className="text-reseda-green font-semibold">{job?.admin?.companyName}</span>
-                                </div>
-                                <div className="my-auto flex w-fit justify-end p-6">
-                                    <Link
-                                        href={`/company/${job?.adminId}`}
-                                        className="bg-reseda-green hover:bg-reseda-green/70 rounded-md p-3 text-sm font-medium text-white transition delay-100 duration-300"
-                                    >
-                                        Lihat Perushaaan
-                                    </Link>
+                            <div className="mt-10 border-t border-gray-200 pt-5">
+                                <h3 className="text-reseda-green mb-5 text-xl font-semibold">Tentang Perushaan</h3>
+                                <div className="mb-5 flex overflow-hidden rounded-lg border border-gray-900/15 bg-white shadow-lg">
+                                    <div className="ml-5 mt-5 h-fit w-fit overflow-hidden rounded-md border border-gray-900/25 bg-white p-5">
+                                        <Image
+                                            width={60}
+                                            height={60}
+                                            alt="hehe"
+                                            src={
+                                                job?.bannerUrl ||
+                                                "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                            }
+                                            className="group-hover:opacity-75"
+                                        />
+                                    </div>
+                                    <div className="flex max-w-40 flex-col justify-center p-6 text-sm">
+                                        <span className="text-reseda-green font-semibold">
+                                            {job?.admin?.companyName}
+                                        </span>
+                                    </div>
+                                    <div className="my-auto flex w-fit justify-end p-6">
+                                        <div className="flex flex-col">
+                                            <Link
+                                                href="#"
+                                                className="bg-reseda-green hover:bg-reseda-green/70 rounded-md p-3 text-sm font-medium text-white transition delay-100 duration-300"
+                                            >
+                                                Lihat Perushaaan
+                                            </Link>
+                                            <Link
+                                                className="mt-2 text-center underline"
+                                                href={`/chat?id=${job?.adminId}`}
+                                            >
+                                                Hubungi Kami
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
