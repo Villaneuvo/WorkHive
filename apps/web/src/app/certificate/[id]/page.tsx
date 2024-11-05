@@ -5,9 +5,11 @@ import { QRCodeSVG } from "qrcode.react";
 import axios from "axios";
 import { Certificate } from "@/utils/interfaces";
 import { formatDate, formatDateExpiredDateCV } from "@/utils/helpers";
+import { useSearchParams } from "next/navigation";
 
 export default function CertificateTemplate({ params }: { params: { id: string } }) {
-    const userId = "1"; // TODO: ambil dari NextAUTH
+    const searchParams = useSearchParams();
+    const userId = searchParams.get("userId");
     const skillAssessmentId = params.id;
     const [certificate, setCertificate] = useState<Partial<Certificate>>({});
     useEffect(() => {

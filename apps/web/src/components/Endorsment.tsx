@@ -2,11 +2,14 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaSquareXTwitter } from "react-icons/fa6";
-import { FaLinkedin } from "react-icons/fa6";
+import Link from "next/link";
+import { FaSquareXTwitter, FaLinkedin } from "react-icons/fa6";
+import { useSession } from "next-auth/react";
 
-const EndorsmentPage: React.FC<{ userId: number }> = ({ userId }) => {
+const EndorsmentPage = () => {
     const [endorsements, setEndorsements] = useState<any[]>([]);
+    const { data: session } = useSession();
+    const userId = session?.user.id;
 
     useEffect(() => {
         const fetchEndorsements = async () => {
@@ -37,14 +40,13 @@ const EndorsmentPage: React.FC<{ userId: number }> = ({ userId }) => {
 
         if (type === "twitter") {
             const twitterUrl = `https://twitter.com/intent/tweet?text=${endorsementText}&url=${encodeURIComponent(window.location.href)}`;
-
             window.open(twitterUrl, "_blank");
             return;
         }
     };
 
     return (
-        <div className="mx-auto mt-6 max-w-3xl rounded-lg bg-white p-6 shadow-md">
+        <div className="relative mx-auto mt-10 max-w-3xl rounded-lg bg-white p-6 shadow-md">
             <h3 className="mb-4 text-center text-3xl font-semibold">Endorsements</h3>
             <ul className="space-y-4">
                 {endorsements.length > 0 ? (
@@ -78,6 +80,14 @@ const EndorsmentPage: React.FC<{ userId: number }> = ({ userId }) => {
                     <li className="text-center text-gray-500">No endorsements available.</li>
                 )}
             </ul>
+
+            {/* Create Endorse Button */}
+            <Link
+                href={`/dashboard/endorsement/form`}
+                className="bg-reseda-green hover:bg-reseda-green/75 fixed bottom-5 right-5 rounded-md p-4 text-white shadow-lg transition duration-300"
+            >
+                Endorse User
+            </Link>
         </div>
     );
 };

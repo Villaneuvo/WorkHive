@@ -47,14 +47,14 @@ export default function CVForm({ userId }: { userId: string }) {
         };
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/generator/cv/${userId}`, data);
-            window.open(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/generator/cv`, "_blank");
+            window.open(`${process.env.NEXT_PUBLIC_BASE_URL_API}/api/v1/generator/cv?userId=${userId}`, "_blank");
         } catch (error) {
             console.error(error);
         }
     }
     if (loading) return <p>Loading...</p>;
     return (
-        <div className="mx-auto max-w-lg rounded-lg bg-white p-6 shadow-md">
+        <div className="mx-auto max-w-screen-lg rounded-lg bg-white p-6 shadow-md">
             <h2 className="mb-6 text-2xl font-semibold">Isi Detail CV Anda</h2>
             <form className="space-y-4" onSubmit={handleSubmit}>
                 {/* User Info */}

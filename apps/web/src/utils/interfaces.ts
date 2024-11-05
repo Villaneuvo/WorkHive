@@ -10,6 +10,7 @@ export interface User {
     updatedAt: string;
     subscription: Subscription;
     cv: CV;
+    certificate: Certificate[];
 }
 
 export interface Job {
@@ -151,4 +152,9 @@ export interface Certificate {
     user: User;
     skillAssessmentId: number;
     skillAssessment: SkillAssessment;
+}
+
+export interface SessionUser {
+    id: string;
+    role: string;
 }

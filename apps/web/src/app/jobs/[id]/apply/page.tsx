@@ -1,7 +1,7 @@
 import ApplyJobForm from "@/components/form/apply-job/ApplyJobForm";
 import Image from "next/image";
 
-export default function ApplyJobPage() {
+export default function ApplyJobPage({ params }: { params: { id: string } }) {
     return (
         <div className="container my-5">
             <div className="grid grid-cols-2 gap-10">
@@ -13,7 +13,7 @@ export default function ApplyJobPage() {
                         <h1 className="text-2xl font-bold">Judul Job</h1>
                         <p>Deskripsi Job</p>
                     </div>
-                    <ApplyJobForm />
+                    <ApplyJobForm jobId={Number(params?.id)} />
                 </div>
             </div>
         </div>

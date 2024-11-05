@@ -1,6 +1,6 @@
 import { Dialog, DialogPanel, Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/react";
 import { BuildingOfficeIcon, ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import Image from "next/image";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
@@ -21,12 +21,6 @@ const jobSeekerNavigation = [
     },
 ];
 
-const navigation = [
-    { name: "Pricing", href: "#" },
-    { name: "Testimonials", href: "#" },
-    { name: "For Employers", href: "#" },
-];
-
 export default function MobileHeader({
     open,
     setIsOpen,
@@ -34,6 +28,7 @@ export default function MobileHeader({
     open: boolean;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+    const { data: session, status } = useSession();
     return (
         <Dialog open={open} onClose={() => setIsOpen(false)} className="relative z-10">
             <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -72,16 +67,29 @@ export default function MobileHeader({
                     </Disclosure>
 
                     <div className="flex flex-col">
-                        {navigation.map((item, index) => (
+                        <Link
+                            href={status === "authenticated" ? "/dashboard/subscription" : "/login"}
+                            className="hover:text-reseda-green group p-5 transition duration-300 hover:bg-gray-50"
+                        >
+                            Pricing
+                            <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-24"></span>
+                        </Link>
+                        <Link
+                            href={"/skill-assessment"}
+                            className="hover:text-reseda-green group p-5 transition duration-300 hover:bg-gray-50"
+                        >
+                            Skill Assessment
+                            <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-24"></span>
+                        </Link>
+                        {status === "authenticated" ? null : (
                             <Link
-                                key={index}
-                                href={item.href}
+                                href="/admin-register"
                                 className="hover:text-reseda-green group p-5 transition duration-300 hover:bg-gray-50"
                             >
-                                {item.name}
+                                For Employers
                                 <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-24"></span>
                             </Link>
-                        ))}
+                        )}
                     </div>
                 </DialogPanel>
             </div>

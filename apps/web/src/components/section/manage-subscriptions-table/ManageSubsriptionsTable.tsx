@@ -86,7 +86,7 @@ export default function ManageSubsriptionsTable() {
         }
     }
     return (
-        <div>
+        <div className="mt-8 px-8">
             <div className="flex-row items-center justify-between space-x-2 space-y-2 md:flex">
                 <SearchComponent setCallback={setSearch} />
                 <Button onClick={() => (sort === "asc" ? setSort("desc") : setSort("asc"))}>Sort Approve Status</Button>

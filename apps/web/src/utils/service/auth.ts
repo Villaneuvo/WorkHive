@@ -8,6 +8,13 @@ type RegisterPayload = {
     password: string;
 };
 
+type AdminRegisterPayload = {
+    email: string;
+    companyName: string;
+    phoneNumber: string;
+    password: string;
+};
+
 export const loginUser = async (payload: { email: string; password: string }) => {
     try {
         const res = await instance.post(`${baseURL}/auth/login`, payload);
@@ -20,6 +27,15 @@ export const loginUser = async (payload: { email: string; password: string }) =>
 export const registerUser = async (payload: RegisterPayload) => {
     try {
         const res = await instance.post(`${baseURL}/auth/register`, payload);
+        return await Promise.resolve(res.data);
+    } catch (err) {
+        return await Promise.reject(err);
+    }
+};
+
+export const registerAdmin = async (payload: AdminRegisterPayload) => {
+    try {
+        const res = await instance.post(`${baseURL}/auth/admin/register`, payload);
         return await Promise.resolve(res.data);
     } catch (err) {
         return await Promise.reject(err);

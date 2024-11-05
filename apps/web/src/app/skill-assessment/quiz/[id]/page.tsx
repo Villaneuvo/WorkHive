@@ -138,7 +138,7 @@ export default function SkillAssessmentQuizPage({ params }: { params: { id: stri
                 <TestDetail skillAssessment={skillAssessment!} setIsOpen={setIsOpen} />
             ) : (
                 <div>
-                    <Container className="my-5 rounded-lg bg-zinc-100 p-5">
+                    <Container className="my-5 rounded-lg bg-gray-300/25 p-5 sm:mx-14 xl:mx-auto">
                         {isTimeUp ? (
                             <TimesUp />
                         ) : (

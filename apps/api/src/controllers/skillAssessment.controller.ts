@@ -151,3 +151,48 @@ export async function submitSkillAssessmentAnswers(req: Request, res: Response) 
         res.status(500).json({ message: "Error submitting assessment answers", error });
     }
 }
+
+export const createSkillAssessment = async (req: Request, res: Response) => {
+    try {
+        const { skillName, description, developerId } = req.body;
+        const skillAssessment = await prisma.skillAssessment.create({
+            data: {
+                skillName,
+                description,
+                developerId,
+            },
+        });
+        res.status(201).json(skillAssessment);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to create skill assessment" });
+    }
+};
+
+export const addQuestion = async (req: Request, res: Response) => {
+    try {
+        const { skillAssessmentId, questionText, correctAnswerId, choices } = req.body;
+
+        const questionsCount = await prisma.question.count({
+            where: { skillAssessmentId },
+        });
+        if (questionsCount >= 25) {
+            return res.status(400).json({ error: "Maximum of 25 questions allowed" });
+        }
+
+        const question = await prisma.question.create({
+            data: {
+                questionText,
+                correctAnswerId,
+                skillAssessmentId,
+                choices: {
+                    create: choices.map((choice: string) => ({ text: choice })),
+                },
+            },
+            include: { choices: true },
+        });
+
+        res.status(201).json(question);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to add question" });
+    }
+};

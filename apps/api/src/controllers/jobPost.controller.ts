@@ -2,6 +2,19 @@ import prisma from "@/prisma";
 import { createJobPostSchema, updateJobPostSchema } from "@/schemas/jobPost.schema";
 import { Request, Response } from "express";
 import { ZodError } from "zod";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/"); // Folder to save the files in
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(null, uniqueSuffix + "-" + file.originalname); // Ensures unique filenames
+    },
+});
+
+export const upload = multer({ storage: storage });
 
 export async function getAllPosts(req: Request, res: Response) {
     try {
@@ -14,6 +27,7 @@ export async function getAllPosts(req: Request, res: Response) {
         const provinceLocation = req.query.provinceLocation as string;
 
         const whereClause: any = {};
+        whereClause.published = true;
 
         if (title) {
             whereClause.title = title;
@@ -454,5 +468,78 @@ export const saveJobPost = async (req: Request, res: Response) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Unable to save job post." });
+    }
+};
+
+export const getSavedJobs = async (req: Request, res: Response) => {
+    const userId = parseInt(req.params.userId);
+
+    try {
+        const savedJobs = await prisma.jobSaved.findMany({
+            where: { userId },
+            include: {
+                jobPost: {
+                    select: {
+                        id: true,
+                        title: true,
+                        description: true,
+                        bannerUrl: true,
+                        category: true,
+                        cityLocation: true,
+                        provinceLocation: true,
+                        type: true,
+                        salary: true,
+                    },
+                },
+            },
+        });
+
+        res.status(200).json(savedJobs);
+    } catch (error) {
+        console.error("Error fetching saved jobs:", error);
+        res.status(500).json({ message: "Error fetching saved jobs" });
+    }
+};
+
+export const applyJob = async (req: Request, res: Response) => {
+    // const parsedData = applyJobSchema.parse(req.body);
+    const { userId, jobId, expectedSalary } = req.body;
+    const cvFile = req.file; // Get the uploaded file from multer
+
+    if (!cvFile) {
+        return res.status(400).json({ message: "CV file is required." });
+    }
+
+    try {
+        // Check if user has already applied for the job
+        const existingApplication = await prisma.jobApplication.findFirst({
+            where: { userId: Number(userId), jobId: Number(jobId) },
+        });
+
+        if (existingApplication) {
+            return res.status(409).json({ message: "Job already applied." });
+        }
+
+        // Construct the CV file URL
+        const cvUrl = `${req.protocol}://${req.get("host")}/uploads/${cvFile.filename}`;
+
+        // Create the new job application
+        const newApplication = await prisma.jobApplication.create({
+            data: {
+                userId: Number(userId),
+                jobId: Number(jobId),
+                expectedSalary: parseFloat(expectedSalary),
+                cvUrl, // Save the file URL to the database
+                status: "PENDING",
+            },
+        });
+
+        res.status(201).json({
+            message: "Job application successful.",
+            data: newApplication,
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Unable to apply for the job." });
     }
 };

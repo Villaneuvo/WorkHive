@@ -14,17 +14,17 @@ const employers = [
 ];
 
 const workHive = [
-    { name: "Tentang Kami", href: "#" },
-    { name: "Syarat dan Ketentuan", href: "#" },
-    { name: "Frequently Ask Question", href: "#" },
-    { name: "Rekomendasi Lowongan", href: "#" },
+    { name: "Tentang Kami", href: "https://www.cake.me/about" },
+    { name: "Syarat dan Ketentuan", href: "https://www.cake.me/terms-of-service" },
+    { name: "Frequently Ask Question", href: "#faq" },
+    { name: "Rekomendasi Lowongan", href: "#jobs-recomendation" },
 ];
 
 const socialMedia = [
-    { name: "Facebook", href: "#" },
-    { name: "Instagram", href: "#" },
-    { name: "Twitter", href: "#" },
-    { name: "LinkedIn", href: "#" },
+    { name: "Facebook", href: "https://www.facebook.com" },
+    { name: "Instagram", href: "https://www.instagram.com" },
+    { name: "Twitter", href: "https://www.x.com" },
+    { name: "LinkedIn", href: "https://www.linkedin.com" },
 ];
 
 export const Footer = () => {

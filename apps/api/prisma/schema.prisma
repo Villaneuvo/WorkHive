@@ -37,6 +37,9 @@ model User {
   cv                    CV?
   certificate           Certificate[]
   ratings               CompanyRating[]
+
+  sentChats     Chat[] @relation("SenderChats")
+  receivedChats Chat[] @relation("RecipientChats")
 }
 
 model Profile {
@@ -65,6 +68,17 @@ model Admin {
   companyRating       Float?          @default(0.0)
   totalReviews        Int             @default(0)
   ratings             CompanyRating[]
+}
+
+model Chat {
+  id          Int      @id @default(autoincrement())
+  senderId    Int
+  recipientId Int
+  message     String
+  timestamp   DateTime @default(now())
+  status      String   @default("terkirim") // "terkirim" atau "dibaca"
+  sender      User     @relation("SenderChats", fields: [senderId], references: [id])
+  recipient   User     @relation("RecipientChats", fields: [recipientId], references: [id])
 }
 
 model CompanyRating {
@@ -131,6 +145,25 @@ model JobApplication {
   cvUrl          String
   expectedSalary Float
   createdAt      DateTime          @default(now())
+
+  InterviewSchedule InterviewSchedule[]
+}
+
+model InterviewSchedule {
+  id               Int             @id @default(autoincrement())
+  jobApplicationId Int
+  interviewDate    DateTime // Tanggal dan waktu wawancara
+  status           InterviewStatus @default(SCHEDULED) // Status wawancara
+  createdAt        DateTime        @default(now()) // Waktu pembuatan jadwal
+  updatedAt        DateTime        @updatedAt // Waktu terakhir diperbarui
+  JobApplication   JobApplication  @relation(fields: [jobApplicationId], references: [id])
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
 }
 
 model Subscription {

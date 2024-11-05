@@ -42,8 +42,8 @@ const leftNavigation = {
         },
     ],
     webFeature: [
-        { name: "Pricing", href: "#" },
-        { name: "Testimonials", href: "#" },
+        { name: "Pricing", href: "/dashboard/subscription" },
+        { name: "Skill Assessment", href: "/skill-assessment" },
     ],
 };
 
@@ -53,6 +53,7 @@ const rightNavigation = [
 ];
 
 const userNavigation = [
+    { name: "Dashboard", href: "/dashboard" },
     { name: "Chat", href: "/chat" },
     { name: "Sign out", href: "/" },
 ];
@@ -60,13 +61,13 @@ const userNavigation = [
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
     const { data: session, status } = useSession();
-
+    console.log(session);
     const handleSignOut = () => {
         signOut({ callbackUrl: "/" });
     };
 
     return (
-        <header className={`${!isOpen ? "shadow-[rgba(0,0,15,0.15)_0px_2px_4px_0px]" : "none"} py-2`}>
+        <header className={`${!isOpen ? "shadow-[rgba(0,0,15,0.15)_0px_2px_4px_0px]" : "none"} py-6`}>
             <nav className="max-w-8xl mx-auto flex justify-between px-6 py-0 text-sm text-gray-700 lg:px-8">
                 <div className="flex items-center">
                     <Link href={"/"}>
@@ -77,7 +78,6 @@ export default function Header() {
                         <Popover className="relative">
                             <PopoverButton className="hover:text-reseda-green group flex items-center rounded-md p-2 leading-6 transition delay-100 duration-300 hover:bg-gray-200">
                                 For Jobseeker
-                                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-500 group-data-[open]:rotate-180" />
                                 <ChevronDownIcon className="h-5 w-5 flex-none text-gray-500 group-data-[open]:rotate-180" />
                             </PopoverButton>
                             <PopoverPanel
@@ -108,7 +108,7 @@ export default function Header() {
                         {leftNavigation.webFeature.map((item) => (
                             <Link
                                 key={item.name}
-                                href={item.href}
+                                href={status === "authenticated" ? item.href : "/login"}
                                 className="hover:text-reseda-green group p-2 transition duration-300"
                             >
                                 {item.name}
@@ -119,46 +119,48 @@ export default function Header() {
                 </div>
 
                 <div className="flex items-center gap-x-8">
-                    <Link href="#" className="hover:text-reseda-green group hidden transition duration-300 lg:block">
-                        For Employers
-                        <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-full"></span>
-                    </Link>
                     {status === "authenticated" ? (
                         <Menu as="div" className="relative">
                             <MenuButton className="-m-1.5 flex items-center p-1.5">
                                 <span className="sr-only">Open user menu</span>
-                                <img
+                                <Image
                                     alt=""
-                                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                    width={32}
+                                    height={32}
+                                    src="https://res.cloudinary.com/dkcur9nvf/image/upload/v1730362532/g6pjkjaipvie2rsz2lsk.jpg"
                                     className="h-8 w-8 rounded-full bg-gray-50"
                                 />
-                                <span className="hidden lg:flex lg:items-center">
+                                <span className="group hidden lg:flex lg:items-center">
                                     <span
                                         aria-hidden="true"
-                                        className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                                        className="text-gray-00 ml-4 text-sm font-semibold leading-6"
                                     >
                                         {session?.user?.name}
                                     </span>
-                                    <ChevronDownIcon aria-hidden="true" className="ml-2 h-5 w-5 text-gray-400" />
+                                    <ChevronDownIcon
+                                        aria-hidden="true"
+                                        className="ml-2 h-5 w-5 text-gray-400 group-data-[open]:rotate-180"
+                                    />
                                 </span>
                             </MenuButton>
                             <MenuItems
                                 transition
-                                className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                                className="absolute right-0 z-10 mt-5 w-32 max-w-sm overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
                             >
                                 {userNavigation.map((item) => (
                                     <MenuItem key={item.name}>
                                         {item.name === "Sign out" ? (
-                                            <button
+                                            <Link
+                                                href={"#"}
                                                 onClick={handleSignOut}
-                                                className="block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-gray-50"
+                                                className="group relative flex items-center gap-x-4 p-4 text-sm font-medium leading-6 text-gray-900 hover:bg-gray-50"
                                             >
                                                 {item.name}
-                                            </button>
+                                            </Link>
                                         ) : (
                                             <Link
                                                 href={item.href}
-                                                className="block px-3 py-1 text-sm leading-6 text-gray-900 data-[focus]:bg-gray-50"
+                                                className="group relative flex items-center gap-x-4 p-4 text-sm font-medium leading-6 text-gray-900 hover:bg-gray-50"
                                             >
                                                 {item.name}
                                             </Link>
@@ -169,6 +171,13 @@ export default function Header() {
                         </Menu>
                     ) : (
                         <>
+                            <Link
+                                href="/admin-register"
+                                className="hover:text-reseda-green group hidden transition duration-300 lg:block"
+                            >
+                                For Employers
+                                <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-full"></span>
+                            </Link>
                             {rightNavigation.map((item) => (
                                 <Link
                                     className={`${item.name === "Sign in" ? "text-reseda-green rounded-md px-4 py-2 transition delay-100 duration-300 hover:bg-gray-200" : item.name === "Sign up" ? "bg-reseda-green hover:bg-reseda-green/75 rounded-md px-4 py-2 text-white transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" : "hover:text-reseda-green group transition duration-300 hover:underline hover:underline-offset-4"}`}
