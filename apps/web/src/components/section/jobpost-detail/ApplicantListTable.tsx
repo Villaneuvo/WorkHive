@@ -44,7 +44,7 @@ export default function ApplicantListTable({ jobId }: { jobId: string }) {
             }
         }
         fetchJobApplications();
-    }, [searchName, filterAge, filterSalary, filterEducation, sort, currPage]);
+    }, [searchName, filterAge, filterSalary, filterEducation, sort, currPage, jobId]);
 
     function getBadgeStyle(status: string) {
         switch (status) {

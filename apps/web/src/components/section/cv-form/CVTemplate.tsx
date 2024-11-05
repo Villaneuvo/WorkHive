@@ -31,7 +31,7 @@ export default function CVTemplateATS({ userId }: { userId: string }) {
             setLoading(false);
         }
         fetchData();
-    }, [userId]);
+    }, [userId, user.cv]);
     if (loading || user.cv == undefined || !userId) return <p>Loading...</p>;
     return (
         <div className="mx-auto max-w-2xl bg-white p-4 text-gray-900" style={{ fontFamily: "Arial, sans-serif" }}>

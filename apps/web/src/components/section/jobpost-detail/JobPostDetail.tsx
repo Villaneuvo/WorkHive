@@ -34,7 +34,7 @@ export default function JobPostDetail({ id, adminId }: { id: string; adminId: st
             }
         }
         fetchJobPost();
-    }, []);
+    }, [adminId, id]);
     const handleTogglePublish = async (changePublish: boolean) => {
         try {
             const bodyRequest = {

@@ -13,7 +13,7 @@ export default function RedirectWithInfo({ time, url }: { time: number; url: str
             router.replace(url);
         }, time);
         return () => clearInterval(interval);
-    }, [time]);
+    }, [time, router, url]);
     return (
         <div className="text-center">
             <div className="mb-2">

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import React from "react";
 import { TouchTarget } from "./Button";
 import { Link } from "./Link";
+import Image from "next/image";
 
 type AvatarProps = {
     src?: string | null;
@@ -52,7 +53,7 @@ export function Avatar({
                     </text>
                 </svg>
             )}
-            {src && <img src={src} alt={alt} />}
+            {src && <Image height={32} width={32} src={src} alt={alt} />}
         </span>
     );
 }

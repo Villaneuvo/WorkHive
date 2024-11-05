@@ -45,7 +45,7 @@ export default function LoginForm() {
                 content: "Account created successfully",
             });
         }
-    }, [status, router]);
+    }, [status, router, register]);
 
     async function handleSubmit(values: FormikValues) {
         try {

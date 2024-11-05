@@ -24,8 +24,8 @@ export default function CertificateTemplate({ params }: { params: { id: string }
             }
         }
         fetchData();
-    }, []);
-    if (certificate == undefined) return <div>You Don't Have The Certificate</div>;
+    }, [skillAssessmentId, userId]);
+    if (certificate == undefined) return <div>{`You Don't Have The Certificate`}</div>;
     return (
         <div className="flex h-screen w-full items-center justify-center bg-gray-100 p-4">
             <div className="border-reseda-green relative h-[600px] w-[800px] rounded-lg border-4 bg-white p-10">

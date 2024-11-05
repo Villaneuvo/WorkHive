@@ -12,6 +12,7 @@ type ModalFormInterviewProps = {
     list: any;
 };
 
+// eslint-disable-next-line react/display-name
 const ModalFormInterview = forwardRef<HTMLFormElement, ModalFormInterviewProps>(
     ({ isOpen, onClose, onSubmit, formik, list }, ref) => {
         return (
@@ -34,6 +35,7 @@ const statislist = [
     { value: "CANCELLED", label: "Cancelled" },
 ];
 
+// eslint-disable-next-line react/display-name
 const ModalComponent = forwardRef<HTMLFormElement, ModalFormInterviewProps>((props, ref) => {
     const { isOpen, onClose, onSubmit, formik, list } = props;
     console.log(list);
