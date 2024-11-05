@@ -11,24 +11,35 @@ datasource db {
 }
 
 model User {
-  id               Int                     @id @default(autoincrement())
-  email            String                  @unique
-  password         String
-  name             String                  @default("User")
-  role             Role                    @default(USER)
-  createdAt        DateTime                @default(now())
-  updatedAt        DateTime                @updatedAt
-  verified         Boolean                 @default(false)
-  profile          Profile?
-  subscriptions    Subscription[]
-  jobApplications  JobApplication[]
-  skillAssessments SkillAssessmentResult[]
-  cvUrl            String?
-  applications     ApplyList[]
-  jobSaved         JobSaved[]
-  skillBadges      SkillBadge[]
-  Admin            Admin?
-  Developer        Developer?
+  id                    Int                     @id @default(autoincrement())
+  email                 String                  @unique
+  password              String
+  name                  String                  @default("User")
+  age                   Int?
+  educationalBackground EducationalBackground?
+  photoUrl              String?                 @default("http://res.cloudinary.com/dkcur9nvf/image/upload/v1730362532/g6pjkjaipvie2rsz2lsk.jpg")
+  role                  Role                    @default(USER)
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  verified              Boolean                 @default(false)
+  profile               Profile?
+  subscription          Subscription?
+  jobApplications       JobApplication[]
+  SkillAssessmentResult SkillAssessmentResult[]
+  cvUrl                 String?
+  applications          ApplyList[]
+  jobSaved              JobSaved[]
+  skillBadges           SkillBadge[]
+  endorsements          Endorsement[]           @relation("UserEndorsements")
+  endorsementsGiven     Endorsement[]           @relation("EndorserUser")
+  Admin                 Admin?
+  Developer             Developer?
+  cv                    CV?
+  certificate           Certificate[]
+  ratings               CompanyRating[]
+
+  sentChats     Chat[] @relation("SenderChats")
+  receivedChats Chat[] @relation("RecipientChats")
 }
 
 model Profile {
@@ -44,12 +55,55 @@ model Profile {
 }
 
 model Admin {
-  id          Int       @id @default(autoincrement())
-  userId      Int       @unique
-  user        User      @relation(fields: [userId], references: [id])
-  companyName String
-  phoneNumber String
-  jobs        JobPost[]
+  id                  Int             @id @default(autoincrement())
+  userId              Int             @unique
+  user                User            @relation(fields: [userId], references: [id])
+  companyName         String
+  companyDescription  String?         @db.Text
+  companyBannerImg    String?
+  companyCityLocation String?
+  companyProvince     String?
+  phoneNumber         String
+  jobs                JobPost[]
+  companyRating       Float?          @default(0.0)
+  totalReviews        Int             @default(0)
+  ratings             CompanyRating[]
+}
+
+model Chat {
+  id          Int      @id @default(autoincrement())
+  senderId    Int
+  recipientId Int
+  message     String
+  timestamp   DateTime @default(now())
+  status      String   @default("terkirim") // "terkirim" atau "dibaca"
+  sender      User     @relation("SenderChats", fields: [senderId], references: [id])
+  recipient   User     @relation("RecipientChats", fields: [recipientId], references: [id])
+}
+
+model CompanyRating {
+  id        Int      @id @default(autoincrement())
+  adminId   Int
+  userId    Int?
+  rating    Int
+  createdAt DateTime @default(now())
+  admin     Admin    @relation(fields: [adminId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+model Endorsement {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  endorserId Int?
+  text       String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  isExpired  Boolean  @default(false)
+  user       User     @relation("UserEndorsements", fields: [userId], references: [id])
+  endorser   User?    @relation("EndorserUser", fields: [endorserId], references: [id])
+
+  @@index([userId])
+  @@index([endorserId])
 }
 
 model JobPost {
@@ -59,11 +113,14 @@ model JobPost {
   bannerUrl           String?
   category            String
   cityLocation        String
+  provinceLocation    String
+  type                String
   salary              Float?
   applicationDeadline DateTime
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
   adminId             Int
+  published           Boolean          @default(false)
   admin               Admin            @relation(fields: [adminId], references: [id])
   jobApplications     JobApplication[]
   tags                JobTag[]
@@ -75,66 +132,144 @@ model JobTag {
   id        Int     @id @default(autoincrement())
   name      String
   jobPostId Int
-  jobPost   JobPost @relation(fields: [jobPostId], references: [id])
+  jobPost   JobPost @relation(fields: [jobPostId], references: [id], onDelete: Cascade)
 }
 
 model JobApplication {
   id             Int               @id @default(autoincrement())
   jobId          Int
   userId         Int
-  job            JobPost           @relation(fields: [jobId], references: [id])
-  user           User              @relation(fields: [userId], references: [id])
+  job            JobPost           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   status         ApplicationStatus @default(PENDING)
   cvUrl          String
   expectedSalary Float
   createdAt      DateTime          @default(now())
+
+  InterviewSchedule InterviewSchedule[]
+}
+
+model InterviewSchedule {
+  id               Int             @id @default(autoincrement())
+  jobApplicationId Int
+  interviewDate    DateTime // Tanggal dan waktu wawancara
+  status           InterviewStatus @default(SCHEDULED) // Status wawancara
+  createdAt        DateTime        @default(now()) // Waktu pembuatan jadwal
+  updatedAt        DateTime        @updatedAt // Waktu terakhir diperbarui
+  JobApplication   JobApplication  @relation(fields: [jobApplicationId], references: [id])
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
 }
 
 model Subscription {
-  id               Int              @id @default(autoincrement())
-  userId           Int
-  user             User             @relation(fields: [userId], references: [id])
+  id               Int                      @id @default(autoincrement())
+  userId           Int                      @unique
+  user             User?                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   subscriptionType SubscriptionType
-  startDate        DateTime         @default(now())
+  quotaAssessment  Int?
+  transferProof    String?
+  paymentId        String?                  @unique
+  startDate        DateTime                 @default(now())
   endDate          DateTime
-  isActive         Boolean          @default(true)
-  Developer        Developer?       @relation(fields: [developerId], references: [id])
+  isActive         Boolean                  @default(false)
+  isApproved       ApproveSubscriptionType?
+  Developer        Developer?               @relation(fields: [developerId], references: [id])
   developerId      Int?
+}
+
+model CV {
+  id          Int            @id @default(autoincrement())
+  userId      Int            @unique
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cvUrl       String?
+  phoneNumber String
+  education   EducationCV?
+  experiences ExperienceCV[]
+  skills      String
+}
+
+model EducationCV {
+  id             Int                   @id @default(autoincrement())
+  cvId           Int                   @unique
+  cv             CV                    @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  education      EducationalBackground
+  institution    String
+  major          String?
+  finalGrade     String
+  graduationDate String
+}
+
+model ExperienceCV {
+  id            Int     @id @default(autoincrement())
+  cvId          Int
+  cv            CV      @relation(fields: [cvId], references: [id], onDelete: Cascade)
+  position      String
+  company       String
+  workingPeriod String
+  description   String? @db.Text
+}
+
+model Certificate {
+  id                Int               @id @default(autoincrement())
+  title             String
+  status            CertificateStatus
+  completionDate    DateTime
+  expiredDate       DateTime
+  pdfUrl            String?
+  verificationCode  String            @unique
+  userId            Int
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skillAssessmentId Int
+  skillAssessment   SkillAssessment   @relation(fields: [skillAssessmentId], references: [id])
 }
 
 model SkillAssessment {
   id                    Int                     @id @default(autoincrement())
   skillName             String
+  description           String
   questions             Question[]
   SkillAssessmentResult SkillAssessmentResult[]
   Developer             Developer?              @relation(fields: [developerId], references: [id])
   developerId           Int?
+  certificate           Certificate[]
 }
 
 model Question {
-  id                Int             @id @default(autoincrement())
-  content           String
-  skillAssessmentId Int
-  skillAssessment   SkillAssessment @relation(fields: [skillAssessmentId], references: [id])
+  id                Int              @id @default(autoincrement())
+  questionText      String
+  choices           Choice[]
+  correctAnswerId   Int // Referensi ke Choice.id yang benar
+  SkillAssessment   SkillAssessment? @relation(fields: [skillAssessmentId], references: [id])
+  skillAssessmentId Int?
+}
+
+model Choice {
+  id         Int      @id @default(autoincrement())
+  text       String
+  question   Question @relation(fields: [questionId], references: [id])
+  questionId Int
 }
 
 model SkillAssessmentResult {
-  id           Int             @id @default(autoincrement())
-  userId       Int
-  assessmentId Int
-  user         User            @relation(fields: [userId], references: [id])
-  assessment   SkillAssessment @relation(fields: [assessmentId], references: [id])
-  score        Int
-  passed       Boolean
-  createdAt    DateTime        @default(now())
+  id                Int             @id @default(autoincrement())
+  score             Int // Nilai assessment
+  passed            Boolean // True jika score >= 75
+  userId            Int
+  SkillAssessment   SkillAssessment @relation(fields: [skillAssessmentId], references: [id])
+  skillAssessmentId Int
+  User              User            @relation(fields: [userId], references: [id])
 }
 
 model SkillBadge {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  badgeName String
-  createdAt DateTime @default(now())
+  id     Int    @id @default(autoincrement())
+  badge  String // Nama atau deskripsi badge
+  userId Int
+  User   User   @relation(fields: [userId], references: [id])
 }
 
 model ApplyList {
@@ -142,8 +277,8 @@ model ApplyList {
   userId    Int
   jobPostId Int
   status    ApplyStatus
-  jobPost   JobPost     @relation(fields: [jobPostId], references: [id])
-  user      User        @relation(fields: [userId], references: [id])
+  jobPost   JobPost     @relation(fields: [jobPostId], references: [id], onDelete: Cascade)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
@@ -160,8 +295,8 @@ model JobSaved {
   id      Int      @id @default(autoincrement())
   userId  Int
   jobId   Int
-  user    User     @relation(fields: [userId], references: [id])
-  jobPost JobPost  @relation(fields: [jobId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobPost JobPost  @relation(fields: [jobId], references: [id], onDelete: Cascade)
   savedAt DateTime @default(now())
 }
 
@@ -188,4 +323,25 @@ enum ApplyStatus {
   REVIEWING
   ACCEPTED
   REJECTED
+}
+
+enum EducationalBackground {
+  SD
+  SMP
+  SMA
+  D3
+  S1
+  S2
+  S3
+}
+
+enum ApproveSubscriptionType {
+  APPROVED
+  REJECTED
+  PENDING
+}
+
+enum CertificateStatus {
+  ACTIVE
+  EXPIRED
 }

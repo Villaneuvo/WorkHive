@@ -1,103 +1,104 @@
 "use client";
 
-import Link from "next/link";
-import { Popover, PopoverButton, PopoverBackdrop, PopoverPanel, PopoverGroup } from "@headlessui/react";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import {
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+    Popover,
+    PopoverButton,
+    PopoverGroup,
+    PopoverPanel,
+} from "@headlessui/react";
+import {
+    Bars3Icon,
+    BuildingOfficeIcon,
+    ChevronDownIcon,
+    MagnifyingGlassIcon,
+    XMarkIcon,
+} from "@heroicons/react/20/solid";
 import Image from "next/image";
-
-// function MobileNavLink({ href, children }: { href: string; children: React.ReactNode }) {
-//     return (
-//         <PopoverButton as={Link} href={href} className="block w-full p-2">
-//             {children}
-//         </PopoverButton>
-//     );
-// }
-
-// function MobileNavIcon({ open }: { open: boolean }) {
-//     return (
-//         <svg
-//             aria-hidden="true"
-//             className="h-3.5 w-3.5 overflow-visible stroke-slate-700"
-//             fill="none"
-//             strokeWidth={2}
-//             strokeLinecap="round"
-//         >
-//             <path
-//                 d="M0 1H14M0 7H14M0 13H14"
-//                 className={clsx('origin-center transition', open && 'scale-90 opacity-0')}
-//             />
-//             <path
-//                 d="M2 2L12 12M12 2L2 12"
-//                 className={clsx('origin-center transition', !open && 'scale-90 opacity-0')}
-//             />
-//         </svg>
-//     );
-// }
-
-// function MobileNavigation() {
-//     return (
-//         <Popover>
-//             <PopoverButton
-//                 className="ui-not-focus-visible:outline-none relative z-10 flex h-8 w-8 items-center justify-center"
-//                 aria-label="Toggle Navigation"
-//             >
-//                 {({ open }) => <MobileNavIcon open={open} />}
-//             </PopoverButton>
-//             <PopoverBackdrop
-//                 transition
-//                 className="fixed inset-0 bg-slate-300/50 duration-150 data-[closed]:opacity-0 data-[enter]:ease-out data-[leave]:ease-in"
-//             />
-//             <PopoverPanel
-//                 transition
-//                 className="absolute inset-x-0 top-full mt-4 flex origin-top flex-col rounded-2xl bg-white p-4 text-lg tracking-tight text-slate-900 shadow-xl ring-1 ring-slate-900/5 data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:duration-150 data-[leave]:duration-100 data-[enter]:ease-out data-[leave]:ease-in"
-//             >
-//                 <MobileNavLink href="#features">Features</MobileNavLink>
-//                 <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
-//                 <MobileNavLink href="#pricing">Pricing</MobileNavLink>
-//                 <hr className="m-2 border-slate-300/40" />
-//                 <MobileNavLink href="/login">Sign in</MobileNavLink>
-//             </PopoverPanel>
-//         </Popover>
-//     );
-// }
+import Link from "next/link";
+import { useState } from "react";
+import MobileHeader from "./MobileHeader";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const leftNavigation = {
     jobseeker: [
-        { image: "", name: "Cari Lowongan ", href: "#" },
-        { image: "", name: "Cari Perusahaan", href: "#" },
+        {
+            image: MagnifyingGlassIcon,
+            alt: "a magnifier icon",
+            name: "Cari Lowongan",
+            desc: "Temukan lowongan impian dari berbagai industri",
+            href: "/jobs",
+        },
+        {
+            image: BuildingOfficeIcon,
+            alt: "an office building icon",
+            name: "Cari Perusahaan",
+            desc: "Temukan lowongan dari perusahaan impianmu",
+            href: "/company",
+        },
     ],
     webFeature: [
-        { name: "Pricing", href: "#" },
-        { name: "Testimonials", href: "#" },
+        { name: "Pricing", href: "/dashboard/subscription" },
+        { name: "Skill Assessment", href: "/skill-assessment" },
     ],
 };
 
 const rightNavigation = [
-    { name: "For Employers", href: "/employers" },
     { name: "Sign in", href: "/login" },
     { name: "Sign up", href: "/register" },
 ];
 
+const userNavigation = [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Chat", href: "/chat" },
+    { name: "Sign out", href: "/" },
+];
+
 export default function Header() {
+    const [isOpen, setIsOpen] = useState(false);
+    const { data: session, status } = useSession();
+    console.log(session);
+    const handleSignOut = () => {
+        signOut({ callbackUrl: "/" });
+    };
+
     return (
-        <header className="py-10">
-            <nav className="max-w-8xl mx-auto flex justify-between text-sm text-gray-700">
+        <header className={`${!isOpen ? "shadow-[rgba(0,0,15,0.15)_0px_2px_4px_0px]" : "none"} py-6`}>
+            <nav className="max-w-8xl mx-auto flex justify-between px-6 py-0 text-sm text-gray-700 lg:px-8">
                 <div className="flex items-center">
-                    <Link href={"#"}>
+                    <Link href={"/"}>
                         <Image src="/logo.svg" alt="logo" width={120} height={120} />
                     </Link>
-                    <PopoverGroup className="hidden lg:flex lg:gap-x-8">
-                        <Popover>
-                            <PopoverButton className="flex items-center">
-                                For Jobseeker
-                                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-500" />
-                            </PopoverButton>
 
-                            <PopoverPanel transition>
+                    <PopoverGroup className="hidden lg:flex lg:gap-x-8">
+                        <Popover className="relative">
+                            <PopoverButton className="hover:text-reseda-green group flex items-center rounded-md p-2 leading-6 transition delay-100 duration-300 hover:bg-gray-200">
+                                For Jobseeker
+                                <ChevronDownIcon className="h-5 w-5 flex-none text-gray-500 group-data-[open]:rotate-180" />
+                            </PopoverButton>
+                            <PopoverPanel
+                                className="absolute -left-8 top-full z-10 mt-5 w-screen max-w-sm overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                                transition
+                            >
                                 <div className="p-4">
                                     {leftNavigation.jobseeker.map((item) => (
-                                        <div key={item.name}>
-                                            <Link href={item.href}>{item.name}</Link>
+                                        <div
+                                            key={item.name}
+                                            className="group relative flex items-center gap-x-4 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                                        >
+                                            <div>
+                                                <item.image className="text-reseda-green h-5 w-5" />
+                                            </div>
+                                            <div className="flex flex-col gap-y-2">
+                                                <Link href={item.href} className="block font-semibold text-gray-900">
+                                                    {item.name}
+                                                </Link>
+                                                <span className="text-xs">{item.desc}</span>
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
@@ -105,24 +106,100 @@ export default function Header() {
                         </Popover>
 
                         {leftNavigation.webFeature.map((item) => (
-                            <Link key={item.name} href={item.href}>
+                            <Link
+                                key={item.name}
+                                href={status === "authenticated" ? item.href : "/login"}
+                                className="hover:text-reseda-green group p-2 transition duration-300"
+                            >
                                 {item.name}
+                                <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-full"></span>
                             </Link>
                         ))}
                     </PopoverGroup>
                 </div>
 
                 <div className="flex items-center gap-x-8">
-                    {rightNavigation.map((item) => (
-                        <Link
-                            className={`${item.name === "Sign in" ? "text-reseda-green" : item.name === "Sign up" ? "transititon bg-reseda-green hover:bg-reseda-green/75 rounded-md px-4 py-2 text-white delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" : ""}`}
-                            key={item.name}
-                            href={item.href}
-                        >
-                            {item.name}
-                        </Link>
-                    ))}
+                    {status === "authenticated" ? (
+                        <Menu as="div" className="relative">
+                            <MenuButton className="-m-1.5 flex items-center p-1.5">
+                                <span className="sr-only">Open user menu</span>
+                                <Image
+                                    alt=""
+                                    width={32}
+                                    height={32}
+                                    src="https://res.cloudinary.com/dkcur9nvf/image/upload/v1730362532/g6pjkjaipvie2rsz2lsk.jpg"
+                                    className="h-8 w-8 rounded-full bg-gray-50"
+                                />
+                                <span className="group hidden lg:flex lg:items-center">
+                                    <span
+                                        aria-hidden="true"
+                                        className="text-gray-00 ml-4 text-sm font-semibold leading-6"
+                                    >
+                                        {session?.user?.name}
+                                    </span>
+                                    <ChevronDownIcon
+                                        aria-hidden="true"
+                                        className="ml-2 h-5 w-5 text-gray-400 group-data-[open]:rotate-180"
+                                    />
+                                </span>
+                            </MenuButton>
+                            <MenuItems
+                                transition
+                                className="absolute right-0 z-10 mt-5 w-32 max-w-sm overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                            >
+                                {userNavigation.map((item) => (
+                                    <MenuItem key={item.name}>
+                                        {item.name === "Sign out" ? (
+                                            <Link
+                                                href={"#"}
+                                                onClick={handleSignOut}
+                                                className="group relative flex items-center gap-x-4 p-4 text-sm font-medium leading-6 text-gray-900 hover:bg-gray-50"
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                href={item.href}
+                                                className="group relative flex items-center gap-x-4 p-4 text-sm font-medium leading-6 text-gray-900 hover:bg-gray-50"
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        )}
+                                    </MenuItem>
+                                ))}
+                            </MenuItems>
+                        </Menu>
+                    ) : (
+                        <>
+                            <Link
+                                href="/admin-register"
+                                className="hover:text-reseda-green group hidden transition duration-300 lg:block"
+                            >
+                                For Employers
+                                <span className="bg-reseda-green block h-0.5 max-w-0 transition-all duration-500 group-hover:max-w-full"></span>
+                            </Link>
+                            {rightNavigation.map((item) => (
+                                <Link
+                                    className={`${item.name === "Sign in" ? "text-reseda-green rounded-md px-4 py-2 transition delay-100 duration-300 hover:bg-gray-200" : item.name === "Sign up" ? "bg-reseda-green hover:bg-reseda-green/75 rounded-md px-4 py-2 text-white transition delay-100 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110" : "hover:text-reseda-green group transition duration-300 hover:underline hover:underline-offset-4"}`}
+                                    key={item.name}
+                                    href={item.href}
+                                >
+                                    {item.name}
+                                </Link>
+                            ))}
+                        </>
+                    )}
+                    <div className="flex lg:hidden">
+                        <button type="button" onClick={() => setIsOpen(true)}>
+                            {!isOpen ? (
+                                <Bars3Icon className="animate-pulse-once h-6 w-6 text-gray-700" />
+                            ) : (
+                                <XMarkIcon className={`${isOpen ? "animate-spin-once" : ""} h-6 w-6 text-gray-700`} />
+                            )}
+                        </button>
+                    </div>
                 </div>
+                {isOpen && <MobileHeader open={isOpen} setIsOpen={setIsOpen} />}
             </nav>
         </header>
     );

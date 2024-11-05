@@ -1,68 +1,43 @@
-import express, {
-  json,
-  urlencoded,
-  Express,
-  Request,
-  Response,
-  NextFunction,
-  Router,
-} from 'express';
-import cors from 'cors';
-import { PORT } from './config';
-import { SampleRouter } from './routers/sample.router';
+import cors from "cors";
+import express from "express";
+import { errorMiddleware } from "./middlewares/error.middleware";
+import authRoutes from "./routers/auth.router";
+import generatorRouter from "./routers/generator.router";
+import jobApplicationRoutes from "./routers/jobApplication.router";
+import jobPostRoutes from "./routers/jobPost.router";
+import skillAssessmentRouter from "./routers/skillAssessment.router";
+import subscriptionRouter from "./routers/subscription.router";
+import companyRouter from './routers/company.router';
+import endorsmentRouter from './routers/endorsment.router'
+import userRouter from "./routers/user.router"
+import interviewRouter from "./routers/interview.router";
+import chatsRouter from "./routers/chat.router";
+import path from "path";
 
-export default class App {
-  private app: Express;
+const app = express();
 
-  constructor() {
-    this.app = express();
-    this.configure();
-    this.routes();
-    this.handleError();
-  }
+app.use(express.json());
+app.use(
+    cors({
+        origin: "*",
+        methods: "GET,POST,PUT,DELETE",
+        credentials: true,
+    }),
+);
 
-  private configure(): void {
-    this.app.use(cors());
-    this.app.use(json());
-    this.app.use(urlencoded({ extended: true }));
-  }
+app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
-  private handleError(): void {
-    // not found
-    this.app.use((req: Request, res: Response, next: NextFunction) => {
-      if (req.path.includes('/api/')) {
-        res.status(404).send('Not found !');
-      } else {
-        next();
-      }
-    });
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/jobposts", jobPostRoutes);
+app.use("/api/v1/jobapplications", jobApplicationRoutes);
+app.use("/api/v1/skill-assessment", skillAssessmentRouter);
+app.use("/api/v1/subscriptions", subscriptionRouter);
+app.use("/api/v1/generator", generatorRouter);
+app.use('/api/v1/company', companyRouter);
+app.use('/api/v1/endorsement', endorsmentRouter);
+app.use('/api/v1/users', userRouter);
+app.use("/api/v1/chat", chatsRouter);
+app.use("/api/v1/interview-schedule", interviewRouter);
+app.use(errorMiddleware);
 
-    // error
-    this.app.use(
-      (err: Error, req: Request, res: Response, next: NextFunction) => {
-        if (req.path.includes('/api/')) {
-          console.error('Error : ', err.stack);
-          res.status(500).send('Error !');
-        } else {
-          next();
-        }
-      },
-    );
-  }
-
-  private routes(): void {
-    const sampleRouter = new SampleRouter();
-
-    this.app.get('/api', (req: Request, res: Response) => {
-      res.send(`Hello, Purwadhika Student API!`);
-    });
-
-    this.app.use('/api/samples', sampleRouter.getRouter());
-  }
-
-  public start(): void {
-    this.app.listen(PORT, () => {
-      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
-    });
-  }
-}
+export default app;
